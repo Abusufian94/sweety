@@ -129,11 +129,13 @@ $('#onsign').click(function(){
              success: function(data){
                 // alert(data);
              // var perform= data.changedone;
-  console.log(data.success);
-    localStorage.setItem("token", JSON.stringify(data.success.token))
+  console.log(dataLayer.success);
+    localStorage.setItem("loginUser", JSON.stringify(data.success));
+    localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
+    localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
     setCookie('token',data.success.token,'10');
 
- //  window.location.replace("{{ url('/profile') }}");
+   window.location.replace("{{ url('/profile') }}");
      //  alert(perform.product_name);
                // jQuery('.alert').html(result.success);
              }

@@ -19,6 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/style.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.css')}}">
 
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -439,7 +440,7 @@
 					<li>
 						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="vendors/images/coming-soon.png" alt="" width="25"></span>
+							<span class="mtext">Landing Page <img src="{{asset('deskapp/vendors/images/coming-soon.png')}}" alt="" width="25"></span>
 						</a>
 					</li>
 				</ul>
@@ -454,5 +455,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js')}}"></script>
+		<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
+	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
 </body>
 </html>
