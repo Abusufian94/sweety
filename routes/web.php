@@ -15,5 +15,7 @@ Route::get('/', function () {
     return view('login');
 });
 
-Route::get('profile', 'webController@profile');
+Route::get('admin/dashboard', 'webController@profile');
+Route::get('retail/dashboard', 'webController@profile2');
+Route::get('warehouse/dashboard', 'webController@profile3');
 Route::get('logout', 'webController@logout');

@@ -58,24 +58,37 @@ return view('admin.profile');
      // return env('BASE_API_URL').$url;
     
       $client = new GuzzleHttp\Client();
-$res = $client->request('get', env('BASE_API_URL').$url, [
-    'headers' => [
+      $res = $client->request('get', env('BASE_API_URL').$url, [
+     'headers' => [
                'Authorization' => 'Bearer ' . $_COOKIE['token'],
                'Accept' =>'application/json',
           ]
-]);
- return redirect('/login');
-//echo $res->getBody();
-
+              ]);
+      return redirect('/login');
 
     }
       
-      catch(\Exception $e)
-      {
+    catch(\Exception $e) 
+    {
           die($e->getMessage());
-      }
-
     }
+
+  }
+
+    public function profile2(Request $request)
+    {
+     return view('retail.profile2');
+    }
+
+    public function profile3(Request $request)
+    {
+     return view('retail.profile2');
+    }
+    
+      
+     
+
+
   
 
 

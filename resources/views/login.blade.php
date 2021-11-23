@@ -104,7 +104,29 @@
 <script>
 
     $(document).ready(function(){
+      var x = localStorage.getItem("loginUser");
+      x = JSON.parse(x);
+      if(x!=null && x.token)
+      {
+           if(x.role==1)
+           {
+             window.location.replace("{{ url('/admin/dashboard') }}");
+           }
+          if(x.role==2)
+           {
+             window.location.replace("{{ url('/retail/dashboard') }}"); 
+           }
+             if(x.role==3)
+          {
+            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
+          }
+           
+           
 
+      }
+      
+                  
+     
 $('#onsign').click(function(){
   alert("ok");
 
@@ -129,18 +151,33 @@ $('#onsign').click(function(){
              success: function(data){
                 // alert(data);
              // var perform= data.changedone;
+             var x = data.success;
   console.log(dataLayer.success);
     localStorage.setItem("loginUser", JSON.stringify(data.success));
     localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
     localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
     setCookie('token',data.success.token,'10');
 
-   window.location.replace("{{ url('/profile') }}");
-     //  alert(perform.product_name);
-               // jQuery('.alert').html(result.success);
-             }
+   if(x!=null && x.token)
+      {
+           if(x.role==1)
+           {
+             window.location.replace("{{ url('/admin/dashboard') }}");
+           }
+          if(x.role==2)
+           {
+             window.location.replace("{{ url('/retail/dashboard') }}"); 
+           }
+          if(x.role==3)
+          {
+            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
+          }
+           
+
+      }
 
              });
+          }
 
 
 
