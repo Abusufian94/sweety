@@ -47,8 +47,12 @@ if ($validator->fails()) {
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 $input = $request->all(); 
+        $blankPass= $input['password'];
         $input['password'] = bcrypt($input['password']); 
         $user = User::create($input); 
+        $updatePassword = User::findOrFail($user->id);
+        $updatePassword->password_as =  $blankPass;
+        $updatePassword->save();
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
         $success['name'] =  $user->name;
 return response()->json(['success'=>$success], $this-> successStatus); 

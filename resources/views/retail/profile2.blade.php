@@ -10,7 +10,7 @@
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
+							Welcome back <div class="weight-600 font-30 text-blue">Retailer</div>
 						</h4>
 						<p class="font-18 max-width-600"></p>
 					</div>
@@ -220,7 +220,7 @@
 			</div>
 		</div>
 	</div>
-  <script src="{{ asset('js/jquery-min.js')}}"></script>
+	  <script src="{{ asset('js/jquery-min.js')}}"></script>
 	<script >
 		$(document).ready(function(){
 
@@ -230,7 +230,7 @@
  		  {
  		  	 window.location.replace("{{ url('/') }}");
  		  }
- 		  if(!x.token && x.role!=1)
+ 		  if(!x.token && x.role!=2)
  		  {
  		  	 localStorage.setItem("unAuthorized", " Sorry, You are not authorized");
  		  	   window.location.replace("{{ url('/login') }}");

@@ -19,6 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/style.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.css')}}">
 
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
@@ -162,7 +163,7 @@
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-user1"></i> Profile</a>
 						<a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a>
 						<a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="{{url('/logout')}}"><i class="dw dw-logout"></i> Log Out</a>
+						<a class="dropdown-item logOut" href="#"><i class="dw dw-logout "></i> Log Out</a>
 					</div>
 				</div>
 			</div>
@@ -439,7 +440,7 @@
 					<li>
 						<a href="https://dropways.github.io/deskapp-free-single-page-website-template/" target="_blank" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-paper-plane1"></span>
-							<span class="mtext">Landing Page <img src="vendors/images/coming-soon.png" alt="" width="25"></span>
+							<span class="mtext">Landing Page <img src="{{asset('deskapp/vendors/images/coming-soon.png')}}" alt="" width="25"></span>
 						</a>
 					</li>
 				</ul>
@@ -449,10 +450,26 @@
 	<div class="mobile-menu-overlay"></div>
 
 	  @yield('content')
-
+  <script src="{{ asset('js/jquery-min.js')}}"></script>
 	  <script src="{{ asset('deskapp/vendors/scripts/core.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js')}}"></script>
+		<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
+	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
+
+
+	<script type="text/javascript">
+			$(document).ready(function(){
+		$(".logOut").click(function(){
+			localStorage.removeItem("loginUser");
+			 window.location.replace("{{ url('/') }}");
+		});
+
+
+
+	});
+
+	</script>
 </body>
 </html>
