@@ -50,6 +50,8 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $updatePassword = User::findOrFail($user->id);
+        $updatePassword->password_as = $request->password;
+        $updatePassword->status = 1;
         $updatePassword->save();
         $success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
@@ -67,7 +69,60 @@ class UserController extends Controller
         return response()->json(['stat'=>true,'message'=>"user profile has been fetch succsssfully","data"=>$response_array]);
     }
 
+   public function updatewarehouse(Request $request)
+   {
+    $validator = Validator::make($request->all(), [
+        'w_id' => 'required'
+    ]);
+    if ($validator->fails()) {
+            return response()->json(['stat'=>false,'message'=>"Please fill the mendatory fields",'error'=>$validator->errors(),"data"=>[]], 400);
+        }
+        try{
+            $user = User::where('roles',3)->where('id',$request->w_id)->first();
+            if($user)
+            {
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->password=bcrypt($request->password);
+                $user->password_as = $request->password;
+                $user->save();
+                $success['token'] =  $user->createToken('MyApp')-> accessToken;
+                $success['name'] =  $user->name;
+                return response()->json(['stat'=>true,'message'=>"User account has been created successfully ",'data'=>$success], $this-> successStatus);
+            }
+            else
+            {
+                return response()->json(['stat'=>false,'message'=>"Ware house id is not found ",'data'=>[]], 404);
+            }
 
+        }
+        catch(\Exception $ex){
+            return response()->json(["stat"=>false,"message"=>"somthing wrong"],400);
+        }
+
+
+   }
+
+   public function deletewarehouse(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            'w_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat'=>false,'message'=>"Please fill the mendatory fields",'error'=>$validator->errors(),"data"=>[]], 400);
+        }
+        $user=User::find($request->w_id);
+        //echo"<pre>";print_r($user);exit;
+        if(!empty($user))
+        {
+            $user=$user->delete();
+            return response()->json(['stat'=>true,'message'=>"Warehouse has been removed","data"=>[]],200);
+        }
+        else
+        {
+            return response()->json(['stat'=>true,'message'=>"Warehouse Id not found","data"=>[]],404);
+        }
+   }
     public function logout(Request $request)
     {
         $user = Auth::user();

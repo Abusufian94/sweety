@@ -42,7 +42,7 @@
       </div>
       <div class="login-menu">
         <ul>
-         
+
         </ul>
       </div>
     </div>
@@ -58,8 +58,8 @@
             <div class="login-title">
               <h2 class="text-center text-primary">Login To Sweety</h2>
             </div>
-           
-             
+
+
               <div class="input-group custom">
                 <input type="email" class="form-control form-control-lg" placeholder="email" name="email" id="email">
                 <div class="input-group-append custom">
@@ -72,7 +72,7 @@
                   <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
                 </div>
               </div>
-           
+
               <div class="row">
                 <div class="col-sm-12">
                   <div class="input-group mb-0">
@@ -82,10 +82,10 @@
                     -->
                     <button class="btn btn-primary btn-lg btn-block" href="#" id="onsign">Sign In</button>
                   </div>
-               
+
                 </div>
               </div>
-            
+
           </div>
         </div>
       </div>
@@ -114,26 +114,26 @@
            }
           if(x.role==2)
            {
-             window.location.replace("{{ url('/retail/dashboard') }}"); 
+             window.location.replace("{{ url('/retail/dashboard') }}");
            }
              if(x.role==3)
           {
-            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
+            window.location.replace("{{ url('/warehouse/dashboard') }}");
           }
-           
-           
+
+
 
       }
-      
-                  
-     
+
+
+
 $('#onsign').click(function(){
   alert("ok");
 
 
   var email = $('#email').val();
   var password = $('#password').val();
- 
+
 
  $.ajax({
   headers: {
@@ -166,18 +166,18 @@ $('#onsign').click(function(){
            }
           if(x.role==2)
            {
-             window.location.replace("{{ url('/retail/dashboard') }}"); 
+             window.location.replace("{{ url('/retail/dashboard') }}");
            }
           if(x.role==3)
           {
-            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
+            window.location.replace("{{ url('/warehouse/dashboard') }}");
           }
-           
+
 
       }
 
-             });
-          }
+             }
+          });
 
 
 
