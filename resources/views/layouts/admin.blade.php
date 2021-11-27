@@ -457,7 +457,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js')}}"></script>
 		<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
 	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
-	
+
 
 	<script type="text/javascript">
 			$(document).ready(function(){
@@ -466,7 +466,7 @@
 			 window.location.replace("{{ url('/') }}");
 		});
 
-	
+
 
 	});
 
