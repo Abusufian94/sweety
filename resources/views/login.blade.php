@@ -112,15 +112,10 @@
            {
              window.location.replace("{{ url('/admin/dashboard') }}");
            }
-          if(x.role==2)
+           else
            {
              window.location.replace("{{ url('/retail/dashboard') }}"); 
            }
-             if(x.role==3)
-          {
-            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
-          }
-           
            
 
       }
@@ -151,7 +146,7 @@ $('#onsign').click(function(){
              success: function(data){
                 // alert(data);
              // var perform= data.changedone;
-             var x = data.success;
+             var x = data.success
   console.log(dataLayer.success);
     localStorage.setItem("loginUser", JSON.stringify(data.success));
     localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
@@ -160,24 +155,27 @@ $('#onsign').click(function(){
 
    if(x!=null && x.token)
       {
-           if(x.role==1)
+          if(x.role===1)
            {
              window.location.replace("{{ url('/admin/dashboard') }}");
            }
-          if(x.role==2)
+          if(x.role===2)
            {
-             window.location.replace("{{ url('/retail/dashboard') }}"); 
+             window.location.replace("{{ url('/retail/dashboard?islog=1') }}"); 
            }
-          if(x.role==3)
-          {
-            window.location.replace("{{ url('/warehouse/dashboard') }}"); 
-          }
+
+          if(x.role===3)
+           {
+             window.location.replace("{{ url('/warehouse/dashboard') }}"); 
+           }
            
 
       }
+     //  alert(perform.product_name);
+               // jQuery('.alert').html(result.success);
+             }
 
              });
-          }
 
 
 

@@ -237,14 +237,14 @@
  		  }
  		  else
  		  {
- 		  	
+ 		  		console.log(location.search );
  		  	   swal(
                 {
                     position: 'top-end',
                     type: 'success',
                     title: localStorage.getItem("loggedInMessage"),
                     showConfirmButton: false,
-                    timer: 1000
+                    timer:  5000
                 }
             );
  		  }
