@@ -22,3 +22,5 @@ Route::get('logout', 'webController@logout');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('admin/retail-user-list', 'webController@retalUserList');
