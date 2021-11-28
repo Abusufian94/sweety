@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 //use App\Services\GuzzleService;
 use GuzzleHttp;
-use Illuminate\Http\Request; 
-use App\Http\Controllers\Controller; 
-use App\User; 
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 
 
@@ -23,25 +23,34 @@ class webController extends Controller
 
       $url = 'profile';
       $httpMethod = "GET";
-    
+
     try {
 
-    	   $client = new GuzzleHttp\Client();
-         $res = $client->request('POST', 'http://localhost:8080/sweeterp/public/api/details', 
-          [
-           'headers' => 
-                [
-  	             'Authorization' => 'Bearer ' . $_COOKIE['token'],
-  	             'Accept' =>'application/json',
-  	            ]
-         ]);
+    	//    $client = new GuzzleHttp\Client();
+        //  $res = $client->request('POST', 'http://localhost:8000/sweeterp/public/api/details',
+        //   [
+        //    'headers' =>
+        //         [
+  	    //          'Authorization' => 'Bearer ' . $_COOKIE['token'],
+  	    //          'Accept' =>'application/json',
+  	    //         ]
+        //  ]);
 
-return view('admin.profile');
-//echo $res->getBody();
+    	//    $client = new GuzzleHttp\Client();
+        //  $res = $client->request('POST','http://localhost:8080/sweeterp/public/api/details',
+        //   [
+        //    'headers' =>
+        //         [
+  	    //          'Authorization' => 'Bearer ' . $_COOKIE['token'],
+  	    //          'Accept' =>'application/json',
+  	    //         ]
+        //  ]);
 
+         return view('admin.profile');
+    // }
 
     }
-      
+
       catch(\Exception $e)
       {
           die($e->getMessage());
@@ -51,12 +60,12 @@ return view('admin.profile');
 
   public function logout()
   {
-  
+
     $httpMethod = "GET";
      $url = 'logout';
     try {
      // return env('BASE_API_URL').$url;
-    
+
       $client = new GuzzleHttp\Client();
       $res = $client->request('get', env('BASE_API_URL').$url, [
      'headers' => [
@@ -67,8 +76,8 @@ return view('admin.profile');
       return redirect('/login');
 
     }
-      
-    catch(\Exception $e) 
+
+    catch(\Exception $e)
     {
           die($e->getMessage());
     }
@@ -84,12 +93,12 @@ return view('admin.profile');
     {
      return view('retail.profile2');
     }
-    
-      
-     
 
 
-  
+
+
+
+
 
 
 }

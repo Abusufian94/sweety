@@ -272,19 +272,19 @@
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-edit2"></span><span class="mtext">Forms</span>
+							<span class="micon dw dw-edit2"></span><span class="mtext">Warehouse</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="form-basic.html">Form Basic</a></li>
-							<li><a href="advanced-components.html">Advanced Components</a></li>
+							<li><a href="form-basic.html">User</a></li>
+							{{-- <li><a href="advanced-components.html">Advanced Components</a></li>
 							<li><a href="form-wizard.html">Form Wizard</a></li>
 							<li><a href="html5-editor.html">HTML5 Editor</a></li>
 							<li><a href="form-pickers.html">Form Pickers</a></li>
 							<li><a href="image-cropper.html">Image Cropper</a></li>
-							<li><a href="image-dropzone.html">Image Dropzone</a></li>
+							<li><a href="image-dropzone.html">Image Dropzone</a></li> --}}
 						</ul>
 					</li>
-					<li class="dropdown">
+					{{-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-library"></span><span class="mtext">Tables</span>
 						</a>
@@ -442,7 +442,7 @@
 							<span class="micon dw dw-paper-plane1"></span>
 							<span class="mtext">Landing Page <img src="{{asset('deskapp/vendors/images/coming-soon.png')}}" alt="" width="25"></span>
 						</a>
-					</li>
+					</li> --}}
 				</ul>
 			</div>
 		</div>
@@ -457,7 +457,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/layout-settings.js')}}"></script>
 		<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
 	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
-	
+
 
 	<script type="text/javascript">
 			$(document).ready(function(){
@@ -466,7 +466,7 @@
 			 window.location.replace("{{ url('/') }}");
 		});
 
-	
+
 
 	});
 
