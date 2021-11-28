@@ -97,8 +97,8 @@ class webController extends Controller
 
     public function retalUserList(Request $request)
     {
-      return "hello";
-      return view('retail.retail_user_list');
+     
+      return view('admin.retail_user_list');
     }
 
 
