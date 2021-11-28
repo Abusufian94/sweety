@@ -19,6 +19,7 @@ Route::get('admin/dashboard', 'webController@profile');
 Route::get('retail/dashboard', 'webController@profile2');
 Route::get('warehouse/dashboard', 'webController@profile3');
 Route::get('logout', 'webController@logout');
+Route::get('/warehouses','WarehouseController@index')->name('warehouse.home');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
