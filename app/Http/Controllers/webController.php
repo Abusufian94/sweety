@@ -24,7 +24,17 @@ class webController extends Controller
       $url = 'profile';
       $httpMethod = "GET";
 
-    //try {
+    try {
+
+    	//    $client = new GuzzleHttp\Client();
+        //  $res = $client->request('POST', 'http://localhost:8000/sweeterp/public/api/details',
+        //   [
+        //    'headers' =>
+        //         [
+  	    //          'Authorization' => 'Bearer ' . $_COOKIE['token'],
+  	    //          'Accept' =>'application/json',
+  	    //         ]
+        //  ]);
 
     	//    $client = new GuzzleHttp\Client();
         //  $res = $client->request('POST','http://localhost:8080/sweeterp/public/api/details',
@@ -39,10 +49,12 @@ class webController extends Controller
          return view('admin.profile');
     // }
 
-    //   catch(\Exception $e)
-    //   {
-    //       die($e->getMessage());
-    //   }
+    }
+
+      catch(\Exception $e)
+      {
+          die($e->getMessage());
+      }
 
     }
 

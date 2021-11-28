@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</div>
-			
+
 				<div class="col-md-4 mb-30">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
@@ -216,7 +216,7 @@
 				</table>
 			</div>
 			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
+				De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
 			</div>
 		</div>
 	</div>
@@ -237,7 +237,7 @@
  		  }
  		  else
  		  {
- 		  	
+
  		  	   swal(
                 {
                     position: 'top-end',
@@ -250,6 +250,5 @@
  		  }
 });
 	</script>
-	
+
  @endsection
-	

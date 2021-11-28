@@ -108,26 +108,32 @@
       x = JSON.parse(x);
       if(x!=null && x.token)
       {
-            if(x.role==1)
-            {
-                window.location.replace("{{ url('/admin/dashboard') }}");
-            }
-            if(x.role==2)
-            {
-                window.location.replace("{{ url('/retail/dashboard') }}");
-            }
-                if(x.role==3)
-            {
+           if(x.role==1)
+           {
+             window.location.replace("{{ url('/admin/dashboard') }}");
+           }
+          if(x.role==2)
+           {
+             window.location.replace("{{ url('/retail/dashboard') }}");
+           }
+             if(x.role==3)
+          {
             window.location.replace("{{ url('/warehouse/dashboard') }}");
-            }
+          }
+
+
+
       }
 
 
 
 $('#onsign').click(function(){
   alert("ok");
-    var email = $('#email').val();
-    var password = $('#password').val();
+
+
+  var email = $('#email').val();
+  var password = $('#password').val();
+
 
  $.ajax({
      headers: {
@@ -146,38 +152,43 @@ $('#onsign').click(function(){
              {
                 // alert(data);
              // var perform= data.changedone;
-                var x = data.success;
-                localStorage.setItem("loginUser", JSON.stringify(data.success));
-                localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
-                localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
-                setCookie('token',data.success.token,'10');
+             var x = data.success;
+  console.log(dataLayer.success);
+    localStorage.setItem("loginUser", JSON.stringify(data.success));
+    localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
+    localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
+    setCookie('token',data.success.token,'10');
 
-            if(x!=null && x.token)
-                {
-                    if(x.role==1)
-                    {
-                        window.location.replace("{{ url('/admin/dashboard') }}");
-                    }
-                    if(x.role==2)
-                    {
-                        window.location.replace("{{ url('/retail/dashboard') }}");
-                    }
-                    if(x.role==3)
-                    {
-                        window.location.replace("{{ url('/warehouse/dashboard') }}");
-                    }
-                }
+   if(x!=null && x.token)
+      {
+           if(x.role==1)
+           {
+             window.location.replace("{{ url('/admin/dashboard') }}");
+           }
+          if(x.role==2)
+           {
+             window.location.replace("{{ url('/retail/dashboard') }}");
+           }
+          if(x.role==3)
+          {
+            window.location.replace("{{ url('/warehouse/dashboard') }}");
+          }
+
+
+      }
+
              }
           });
 
-      });
-   });
 
-function setCookie(key, value, expiry) {
-    var expires = new Date();
-    expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
-    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
-}
+
+});
+});
+      function setCookie(key, value, expiry) {
+        var expires = new Date();
+        expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+        document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+    }
 
 function isNumberKey(evt){
     var charCode = (evt.which) ? evt.which : evt.keyCode

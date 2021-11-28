@@ -16,15 +16,16 @@ use Illuminate\Http\Request;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::post('login', 'API\UserController@login');
-Route::post('hello', 'API\UserController@hello');
-
+Route::auth();
 Route::post('register', 'API\UserController@register');
-Route::group(['middleware' => 'auth:api'], function(){
-Route::post('details', 'API\UserController@details');
-Route::get('logout', 'API\UserController@logout');
-Route::group(['middleware' => 'CheckUser'], function(){
+Route::post('login', 'API\UserController@login');
+Route::group(["prefix"=>"/v1","middleware"=>['auth:api'],"namespace"=>'\App\Http\Controllers\API'],function () {
+    Route::get('profile/', 'UserController@myprofile');
+    Route::get('logout/','UserController@logout');
+    Route::post('warehose/create','UserController@register');
+    Route::patch('warehose/update','UserController@updatewarehouse');
+    Route::delete('warehose/delete','UserController@deletewarehouse');
+    Route::get('warehose/all','UserController@warehouselist');
+});
 
-Route::get('profile','API\UserController@hello');
-});
-});
+
