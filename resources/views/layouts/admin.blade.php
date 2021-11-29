@@ -53,7 +53,7 @@
 			<div class="menu-icon dw dw-menu"></div>
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
-			
+
 			</div>
 		</div>
 		<div class="header-right">
@@ -136,7 +136,7 @@
 					</div>
 				</div>
 			</div>
-		
+
 		</div>
 	</div>
 
@@ -234,7 +234,7 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
-						
+
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -242,7 +242,7 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">WAREHOUSE</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="form-basic.html">Warehouse User</a></li>
+							<li><a href="{{route('warehouse.home')}}">Warehouse User</a></li>
 						</ul>
 					</li>
 
@@ -254,7 +254,7 @@
 							<li><a href="{{url('/admin/retail-user-list')}}"> Retail User</a></li>
 						</ul>
 					</li>
-			
+
 				</ul>
 			</div>
 		</div>
@@ -281,7 +281,21 @@
 
 
 	});
+     async function apiCall(apiUrl,method,body={})
+     {
+        const token = JSON.parse(localStorage.getItem('loginUser'));
+        const response = await $.ajax({
+            url:apiUrl,
+            headers:{
+                'Accept':'application/json',
+                'Authorization':'Bearer '+token.token
+            },
+            type:method,
+            data:body
 
+        });
+        return response;
+     }
 	</script>
 
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
@@ -298,5 +312,6 @@
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js')}}"></script>
 	<!-- Datatable Setting js -->
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
+    <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 </body>
 </html>

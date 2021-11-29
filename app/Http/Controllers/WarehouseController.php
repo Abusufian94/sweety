@@ -10,4 +10,10 @@ class WarehouseController extends Controller
     {
         return view('admin.users.warehouses');
     }
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
+
 }
