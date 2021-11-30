@@ -26,6 +26,8 @@ Route::group(["prefix"=>"/v1","middleware"=>['auth:api'],"namespace"=>'\App\Http
     Route::patch('warehose/update','UserController@updatewarehouse');
     Route::delete('warehose/delete','UserController@deletewarehouse');
     Route::get('warehose/all','UserController@warehouselist');
+
+    Route::get('warehouse/{id}','UserController@editwarehouse');
 });
 
 

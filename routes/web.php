@@ -21,6 +21,7 @@ Route::get('warehouse/dashboard', 'webController@profile3');
 Route::get('logout', 'webController@logout');
 Route::get('/warehouses','WarehouseController@index')->name('warehouse.home');
 Route::get('/warehouses/create','WarehouseController@create')->name('warehouse.create');
+Route::get('/warehouse/edit/','WarehouseController@edit')->name('warehouse.edit');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

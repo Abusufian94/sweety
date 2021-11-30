@@ -326,13 +326,16 @@
        $(document).ready(function() {
 
     $("#myform").validate({
-        rules: {
-            name: "required"
-        },
-        messages: {
-            name: "Please specify your name"
+        rules : {
+                password : {
+                    minlength : 5
+                },
+                password_confirmation : {
+                    minlength : 5,
+                    equalTo : "#password"
+                }
+            },
 
-        },
         submitHandler: function(form){
             const obj =  $(form).serializeArray();
             const token = JSON.parse(localStorage.getItem('loginUser'));
