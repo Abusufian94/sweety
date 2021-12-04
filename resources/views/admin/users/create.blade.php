@@ -71,14 +71,39 @@
                             data-toggle="collapse" role="button"><i class="fa fa-code"></i> Source Code</a>
                     </div>
                 </div> --}}
-                <form>
+                <form id="myform" method="POST">
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Text</label>
+                        <label class="col-sm-12 col-md-2 col-form-label">Name<small style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" placeholder="Johnny Brown">
+                            <input class="form-control" type="text" name="name" placeholder="Name" required/>
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Email<small style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="email" name="email" placeholder="Email" required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Password<small style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="password" placeholder="Password" name="password" id="password" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Confirm Password<small style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                        </div>
+                    </div>
+                    <input type="hidden" name='roles' value="3"/>
+                    <div class="form-group row">
+                        {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
+                        <div class="col-sm-12 col-md-10">
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </div>
+                    </div>
+                    {{-- <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Search</label>
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" placeholder="Search Here" type="search">
@@ -161,7 +186,7 @@
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" value="50" type="range">
                         </div>
-                    </div>
+                    </div> --}}
                 </form>
                 <div class="collapse collapse-box" id="basic-form1">
                     <div class="code-box">
@@ -296,6 +321,42 @@
                 });
             }
         });
+    </script>
+     <script type="text/javascript">
+       $(document).ready(function() {
+
+    $("#myform").validate({
+        rules : {
+                password : {
+                    minlength : 5
+                },
+                password_confirmation : {
+                    minlength : 5,
+                    equalTo : "#password"
+                }
+            },
+
+        submitHandler: function(form){
+            const obj =  $(form).serializeArray();
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            $.ajax({
+                url: "{{url('api/v1/warehose/create')}}",
+                headers: {
+                    'Accept':'application/json',
+                    'Authorization':'Bearer '+token.token
+                     },
+                type: form.method,
+                data: $(form).serialize(),
+                success: function(response) {
+                   $(form)[0].reset()
+                   window.location ="{{route('warehouse.home')}}"
+                }
+             });
+
+       }
+      })
+
+});
     </script>
 
 @endsection

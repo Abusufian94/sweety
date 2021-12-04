@@ -281,7 +281,21 @@
 
 
 	});
+     async function apiCall(apiUrl,method,body={})
+     {
+        const token = JSON.parse(localStorage.getItem('loginUser'));
+        const response = await $.ajax({
+            url:apiUrl,
+            headers:{
+                'Accept':'application/json',
+                'Authorization':'Bearer '+token.token
+            },
+            type:method,
+            data:body
 
+        });
+        return response;
+     }
 	</script>
 
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
@@ -298,5 +312,6 @@
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/vfs_fonts.js')}}"></script>
 	<!-- Datatable Setting js -->
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
+    <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 </body>
 </html>

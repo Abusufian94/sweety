@@ -262,8 +262,14 @@ class UserController extends Controller
         }
     }
 
-    public function deletewarehouse(Request $request)
-    {
+   public function editwarehouse($id)
+   {
+     $warehosue = User::find($id);
+     return response()->json(['stat'=>true,'message'=>'get warehouse details','data'=>$warehosue]);
+   }
+
+   public function deletewarehouse(Request $request)
+   {
         $validator = Validator::make($request->all(), [
             'w_id' => 'required'
         ]);
