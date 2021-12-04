@@ -17,15 +17,20 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 Route::auth();
-Route::post('register', 'API\UserController@register');
-Route::post('login', 'API\UserController@login');
-Route::group(["prefix"=>"/v1","middleware"=>['auth:api'],"namespace"=>'\App\Http\Controllers\API'],function () {
+Route::post('/register', 'API\UserController@register');
+Route::post('/login', 'API\UserController@login');
+Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\App\Http\Controllers\API'], function () {
     Route::get('profile/', 'UserController@myprofile');
-    Route::get('logout/','UserController@logout');
-    Route::post('warehose/create','UserController@register');
-    Route::patch('warehose/update','UserController@updatewarehouse');
-    Route::delete('warehose/delete','UserController@deletewarehouse');
-    Route::get('warehose/all','UserController@warehouselist');
+    Route::get('logout/', 'UserController@logout');
+    Route::post('warehose/create', 'UserController@register');
+    Route::patch('warehose/update', 'UserController@updatewarehouse');
+    Route::delete('warehose/delete', 'UserController@deletewarehouse');
+    Route::get('warehose/all', 'UserController@warehouselist');
+
+    // Raw Data Routes
+    Route::post('raw/create', 'StockController@insert');
+    Route::get('raw/details/{id}', 'StockController@getRawDetails');
+    Route::patch('raw/update', 'StockController@updatestock');
+    Route::delete('raw/delete/{id}', 'StockController@deletestock');
+    Route::get('raw/all', 'StockController@list');
 });
-
-
