@@ -128,6 +128,7 @@ class StockController extends Controller
      */
     public function updatestock(Request $request)
     {
+       
         $validator = Validator::make($request->all(), [
             'raw_id' => 'required',
             'raw_name' =>  'required|unique:raw_tbl,raw_name,'.$request->raw_id.',raw_id',

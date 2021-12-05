@@ -22,6 +22,11 @@ Route::get('logout', 'webController@logout');
 Route::get('/warehouses','WarehouseController@index')->name('warehouse.home');
 Route::get('/warehouses/create','WarehouseController@create')->name('warehouse.create');
 Route::get('/warehouse/edit/','WarehouseController@edit')->name('warehouse.edit');
+
+Route::get('/stock','StockController@index')->name('stock.home');
+Route::get('/stock/create','StockController@create')->name('stock.create');
+Route::get('/stock/edit/','StockController@edit')->name('stock.edit');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

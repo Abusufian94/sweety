@@ -32,7 +32,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     // Raw Data Routes
     Route::post('raw/create', 'StockController@insert');
     Route::get('raw/details/{id}', 'StockController@getRawDetails');
-    Route::patch('raw/update', 'StockController@updatestock');
+    Route::post('raw/update', 'StockController@updatestock');
     Route::delete('raw/delete/{id}', 'StockController@deletestock');
     Route::get('raw/all', 'StockController@list');
 });

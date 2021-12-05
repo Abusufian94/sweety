@@ -202,6 +202,4 @@ function isNumberKey(evt){
     return true;
 }
 
-    });
-
 </script>
