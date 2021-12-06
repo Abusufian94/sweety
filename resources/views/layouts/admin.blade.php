@@ -251,7 +251,7 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
-							<li><a href="#">Stock Log</a></li>
+							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">

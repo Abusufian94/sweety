@@ -35,4 +35,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     Route::post('raw/update', 'StockController@updatestock');
     Route::delete('raw/delete/{id}', 'StockController@deletestock');
     Route::get('raw/all', 'StockController@list');
+
+    //stok log listen
+    Route::get('log/all', 'StockController@log_list')->name('stocklog.list');
 });

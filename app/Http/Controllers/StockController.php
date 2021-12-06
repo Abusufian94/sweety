@@ -19,4 +19,8 @@ class StockController extends Controller
         $id = $request->query('id');
         return view('stock.edits',compact('id'));
     }
+    public function indexLog()
+    {
+        return view('stocklog.stock');
+    }
 }

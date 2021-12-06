@@ -407,4 +407,53 @@ class StockController extends Controller
         $data['log_type'] = $log;
         Stocklog::create($data);
     }
+
+
+    //stock log list
+    public function log_list(Request $request){
+        try {
+            $retailPoList  =  Stocklog::select('*');
+
+           
+
+            if (!empty($search_text)) {
+
+                $searchText = $search_text;
+                $retailPoList  =   $retailPoList->where('raw_name', 'LIKE', "%" . $searchText . "%");
+            }
+
+            $total_count = $retailPoList->count();
+
+            if (isset($start) && isset($request['length'])) {
+
+                $offset = $start;
+                $retailPoList = $retailPoList->offset($offset)->limit($request['length']);
+            }
+
+            if (isset($request['order']) && $request['order'] == 'asc')
+                $retailPoList = $retailPoList->orderBy('raw_stock_log_id', 'asc');
+            else {
+                $retailPoList = $retailPoList->orderBy('raw_stock_log_id', 'desc');
+            }
+
+            $retailPoList = $retailPoList->get()->toArray();
+            // print_r($retailPoList);
+            // exit();
+
+
+            if ($total_count > 0) {
+                $retailPoList  = json_decode(json_encode($retailPoList));
+                $msg = array('status' => 1, 'msg' => 'Success', 'draw' => $request['draw'], 'recordsTotal' => $total_count, 'recordsFiltered' => $total_count,  'data' => $retailPoList);
+            } else {
+                $msg = array('status' => 1, 'msg' => 'no data found', 'data' => $retailPoList);
+            }
+
+            return response()->json(["stat" => true, "message" => "list fetch successfully", "data" => $msg], 200);
+        } catch (\Exception $e) {
+            Log::info('==================== retailPoListData ======================');
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+    }
+
 }

@@ -3,18 +3,18 @@
     <div class="main-container">
         <div class="pd-ltr-20">
             <!-- 	<div class="card-box pd-20 height-100-p mb-30">
-                <div class="row align-items-center">
-                 <div class="col-md-4">
-                  <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
-                 </div>
-                 <div class="col-md-8">
-                  <h4 class="font-20 weight-500 mb-10 text-capitalize">
-                   Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
-                  </h4>
-                  <p class="font-18 max-width-600"></p>
-                 </div>
-                </div>
-               </div> -->
+        <div class="row align-items-center">
+         <div class="col-md-4">
+          <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
+         </div>
+         <div class="col-md-8">
+          <h4 class="font-20 weight-500 mb-10 text-capitalize">
+           Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
+          </h4>
+          <p class="font-18 max-width-600"></p>
+         </div>
+        </div>
+       </div> -->
             {{-- <div class="row">
 				<div class="col-md-4 col-sm-12 mb-30 ">
 					<div class="card-box height-100-p widget-style1">
@@ -88,7 +88,7 @@
 
             <div class="card-box mb-30">
                 <h2 class="h4 pd-20">Stocks</h2>
-                <table id="example1" class="data-table table nowrap responsive">
+                <table class="data-table table nowrap responsive">
                     <thead>
                         <tr>
                             <th>SL</th>
@@ -124,80 +124,37 @@
 
             apiCall("{{ url('api/v1/raw/all/') }}", "Get")
                 .then(function(data) {
-                    //         console.log(data.data.data)
-                    //         var html = ''
-                    //         $.each(data.data.data, function(index, value) {
+                    console.log(data.data.data)
+                    var html = ''
+                    $.each(data.data.data, function(index, value) {
 
-                    //             html += `<tr>
-                //     <td>${index + 1}</td>
-                //      <td>
-                //          <h5 class="font-16">${value.raw_name}</h5>
+                        html += `<tr>
+                <td>${index + 1}</td>
+                 <td>
+                     <h5 class="font-16">${value.raw_name}</h5>
 
-                //      </td>
-                //      <td>${value.unit}</td>
-                //      <td>${value.stock}</td>
-                // 	 <td>${value.price}</td>
-                //      <td>${(value.status==0)?'InActive':'Active'}</td>
-                //      <td>
-                //          <div class="dropdown">
-                //              <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                //                  <i class="dw dw-more"></i>
-                //              </a>
-                //              <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                 </td>
+                 <td>${value.unit}</td>
+                 <td>${value.stock}</td>
+				 <td>${value.price}</td>
+                 <td>${(value.status==0)?'InActive':'Active'}</td>
+                 <td>
+                     <div class="dropdown">
+                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                             <i class="dw dw-more"></i>
+                         </a>
+                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 
-                //                  <a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                //                  <a class="dropdown-item" onclick="remove(${value.raw_id})"><i class="dw dw-delete-3"></i> Delete</a>
-                //              </div>
-                //          </div>
-                //      </td>
-                //  </tr>`
-                    //         });
-                    //         $("#demo").html(html)
-
-                    $('#example1').dataTable({
-                        processing: true,
-                        data: data.data.data,
-                        destroy: true,
-                        data: data.data.data,
-                        columns: [{
-                                data: 'raw_id'
-                            },
-                            {
-                                data: 'raw_name'
-                            },
-                            {
-                                data: 'unit'
-                            },
-                            {
-                                data: 'stock'
-                            },
-                            {
-                                data: 'price'
-                            },
-                            {
-                                data: 'status'
-                            },
-                            {
-                                data: 'status'
-                            }
-                        ],
-                        "columnDefs": [{
-                                "targets": 6,
-                                "render": function(data, type, row, meta) {
-                                    
-                                    //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
-                                     return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
-                                    // return "<a onclick='remove("+ row.raw_id+")'>" + row.raw_id + "</a>"
-
-                                }
-                               
-                            },
-                            { "orderable": false, "targets": 0 }
-                        ],
-                        'aaSorting': [[1, 'asc']] 
+                             <a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                             <a class="dropdown-item" onclick="remove(${value.raw_id})"><i class="dw dw-delete-3"></i> Delete</a>
+                         </div>
+                     </div>
+                 </td>
+             </tr>`
                     });
+                    $("#demo").html(html)
 
-                });
+                })
 
         });
 

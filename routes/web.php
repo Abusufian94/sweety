@@ -27,6 +27,8 @@ Route::get('/stock','StockController@index')->name('stock.home');
 Route::get('/stock/create','StockController@create')->name('stock.create');
 Route::get('/stock/edit/','StockController@edit')->name('stock.edit');
 
+Route::get('/stock-log','StockController@indexLog')->name('stocklog.home');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

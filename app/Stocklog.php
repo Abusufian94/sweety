@@ -18,6 +18,12 @@ class Stocklog extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'raw_id', 'unit', 'stock','price','log_type','operation','user_id'
+        'raw_id', 'unit', 'stock','price','log_type','operation','user_id', 'raw_name'
     ];
+
+    public function raw()
+    {
+        return $this->belongsTo('App\Raw','raw_id','raw_id');
+    }
+
 }
