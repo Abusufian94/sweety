@@ -1,6 +1,73 @@
 
  @extends('layouts.admin')
  @section('content')
+    <script src="{{ asset('js/jquery-min.js')}}"></script>
+ <script src="{{ asset('deskapp/src/plugins/datatables/js/jquery.dataTables.min.js')}}"defer></script>
+
+   <script>
+   	 const token = JSON.parse(localStorage.getItem('loginUser'));
+   	 $(document).ready(function(){
+  $('#myTable').DataTable({
+  	 "processing": true,
+          "serverSide": true,
+          // "destroy": true,
+          "ajax": {
+              url: "{{url('api/v1/warehose/all/')}}",
+              type: 'get',
+              dataSrc: 'data',
+              headers: {
+                    'Accept':'application/json',
+                	'Authorization':'Bearer '+token.token
+                },
+          },
+
+          "columns": [
+          	{
+          		"data": "id",
+         		 render: function (data, type, row, meta) {
+               return meta.row + meta.settings._iDisplayStart + 1;
+          }
+     		 },
+            {
+                "data": "name",       
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+            {
+                "data": "email",       
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+            {
+                "data": "password_as",       
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+          
+
+            {
+                "data": "status",       
+                render: function (data, type, full, meta) {
+                    return  data;
+                }
+            },
+           
+            {
+                "data": "status",
+                render: function (data, type, full, meta) {
+                   let cryptId = window.btoa(full.retail_bill_id);
+                   let url = "{{URL::to('/retail-po-bill-preview')}}";
+                  return '<a href="'+url+'/'+cryptId+'"><button type="button" class="btn btn-label-success btn-pill btn-tall btn-wide">View</button></a>';
+   
+                }
+            }
+          ],
+  } );
+ });
+   </script>
 <div class="main-container">
 		<div class="pd-ltr-20">
 		<!-- 	<div class="card-box pd-20 height-100-p mb-30">
@@ -89,7 +156,7 @@
 
 			<div class="card-box mb-30">
 				<h2 class="h4 pd-20">Best Selling Products</h2>
-				<table class="data-table table nowrap responsive">
+				<table class="data-table table nowrap responsive" id="myTable">
 					<thead>
 						<tr>
 							<th>SL</th>
@@ -114,48 +181,12 @@
 			</div>
 		</div>
 	</div>
-  <script src="{{ asset('js/jquery-min.js')}}"></script>
-	<script >
+
 
 	</script>
 
 <script type="text/javascript">
- $(document).ready(function(){
 
-apiCall("{{url('api/v1/warehose/all/')}}","Get")
- .then(function(data){
-          console.log(data.data.data)
-            var html = ''
-             $.each(data.data.data, function(index, value) {
-
-              html +=`<tr>
-                <td>${index + 1}</td>
-                 <td>
-                     <h5 class="font-16">${value.name}</h5>
-
-                 </td>
-                 <td>${value.email}</td>
-                 <td>${value.password_as}</td>
-                 <td>${(value.status)?'false':true}</td>
-                 <td>
-                     <div class="dropdown">
-                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                             <i class="dw dw-more"></i>
-                         </a>
-                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-
-                             <a class="dropdown-item" href="{{url('/warehouse/edit/?id=${value.id}')}}"><i class="dw dw-edit2"></i> Edit</a>
-                             <a class="dropdown-item"  href="javascript:remove(${value.id})"><i class="dw dw-delete-3"></i> Delete</a>
-                         </div>
-                     </div>
-                 </td>
-             </tr>`
-         });
-             $("#demo").html(html)
-
-   })
-
- });
  function remove(id)
  {
     var confirms = confirm("Are you sure want to delete this?");
