@@ -242,6 +242,7 @@ class UserController extends Controller
             else {
                 $retailPoList = $retailPoList->orderBy('id', 'desc');
             }
+             $retailPoList = $retailPoList->where('roles', 3);
             $retailPoList = $retailPoList->get()->toArray();
 
 
