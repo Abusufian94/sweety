@@ -220,13 +220,12 @@ class UserController extends Controller
         try {
             // $retailId = $request['retail_id'];
 
+              $searchText= $request['search']['value'];
+            $retailPoList  = User::query();
 
-            $retailPoList  = User::where('roles', 3);
 
+            if (!empty($searchText)) {
 
-            if (!empty($request['search_text'])) {
-
-                $searchText = $request['search_text'];
                 $retailPoList  =   $retailPoList->where('name', 'LIKE', "%" . $searchText . "%")->orWhere('email', 'LIKE', "%" . $searchText . "%");
             }
 
@@ -243,18 +242,17 @@ class UserController extends Controller
             else {
                 $retailPoList = $retailPoList->orderBy('id', 'desc');
             }
-
             $retailPoList = $retailPoList->get()->toArray();
 
 
             if ($total_count > 0) {
-                $retailPoList  = json_decode(json_encode($retailPoList));
+                // $retailPoList  = json_decode(json_encode($retailPoList));
                 $msg = array('status' => 1, 'msg' => 'Success', 'draw' => $request['draw'], 'recordsTotal' => $total_count, 'recordsFiltered' => $total_count,  'data' => $retailPoList);
             } else {
                 $msg = array('status' => 1, 'msg' => 'no data found', 'data' => $retailPoList);
             }
 
-            return response()->json(["stat" => true, "message" => "Ware house list fetch successfully", "data" => $msg], 200);
+           return response()->json($msg);
         } catch (\Exception $e) {
             Log::info('==================== retailPoListData ======================');
             Log::error($e->getMessage());
