@@ -105,9 +105,11 @@
 
     $(document).ready(function(){
       var x = localStorage.getItem("loginUser");
-      x = JSON.parse(x);
-      if(x!=null && x.token)
+      
+      if(x!=null)
       {
+
+        x = JSON.parse(x);
            if(x.role==1)
            {
              window.location.replace("{{ url('/admin/dashboard') }}");
