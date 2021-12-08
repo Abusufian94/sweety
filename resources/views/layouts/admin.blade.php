@@ -21,10 +21,21 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/style.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.css')}}">
 
+	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/datatables/css/dataTables.bootstrap4.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/datatables/css/responsive.bootstrap4.min.css')}}">
 
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-119386393-1');
+	</script>
 </head>
 <body>
-<!-- 	<div class="pre-loader">
+	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.png')}}" alt=""></div>
 			<div class='loader-progress' id="progress_div">
@@ -35,7 +46,7 @@
 				Loading...
 			</div>
 		</div>
-	</div> -->
+	</div>
 
 	<div class="header">
 		<div class="header-left">
@@ -259,11 +270,7 @@
 	<div class="mobile-menu-overlay"></div>
 
 	  @yield('content')
-
-
-	<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" type="text/javascript"></script>
- -->
+  <script src="{{ asset('js/jquery-min.js')}}"></script>
 	  <script src="{{ asset('deskapp/vendors/scripts/core.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
@@ -271,7 +278,7 @@
 		<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
 	<script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
 
-  
+
 	<script type="text/javascript">
 			$(document).ready(function(){
 		$(".logOut").click(function(){
@@ -299,7 +306,6 @@
      }
 	</script>
 
-
 	<!-- <script src="{{ asset('deskapp/src/plugins/datatables/js/jquery.dataTables.min.js')}}"></script>
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.bootstrap4.min.js')}}"></script>
 	<script src="{{ asset('deskapp/src/plugins/datatables/js/dataTables.responsive.min.js')}}"></script>
@@ -315,6 +321,5 @@
 
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body> -->
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
-
 </body>
 </html>
