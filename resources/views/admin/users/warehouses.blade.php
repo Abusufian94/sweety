@@ -1,6 +1,7 @@
 
  @extends('layouts.admin')
  @section('content')
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 <div class="main-container">
 		<div class="pd-ltr-20">
 		<!-- 	<div class="card-box pd-20 height-100-p mb-30">
@@ -89,7 +90,7 @@
 
 			<div class="card-box mb-30">
 				<h2 class="h4 pd-20">Best Selling Products</h2>
-				<table class="data-table table nowrap responsive">
+				<table class="data-table table nowrap responsive" id="mytab">
 					<thead>
 						<tr>
 							<th>SL</th>
@@ -114,13 +115,19 @@
 			</div>
 		</div>
 	</div>
-  <script src="{{ asset('js/jquery-min.js')}}"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<!--   <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
 	<script >
 
 	</script>
 
 <script type="text/javascript">
  $(document).ready(function(){
+ 	  $('#mytab').DataTable({
+        "processing": true,
+        "serverSide": true,
+    });
 
 apiCall("{{url('api/v1/warehose/all/')}}","Get")
  .then(function(data){
