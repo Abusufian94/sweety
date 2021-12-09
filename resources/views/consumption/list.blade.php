@@ -10,12 +10,12 @@
                 <table id='example' class="data-table table nowrap responsive example">
                     <thead>
                         <tr>
-                            <th>SL</th>
-                            <th>Name</th>
-                            <th>Unit</th>
-                            <th>Stock</th>
-                            <th>Product</th>
-                            <th>Updated By User</th>
+                            <th class="all">SL</th>
+                            <th class="all">Name</th>
+                            <th class="all">Unit</th>
+                            <th class="all">Stock</th>
+                            <th class="all">Product</th>
+                            <th class="all">Updated By User</th>
                         </tr>
                     </thead>
 
