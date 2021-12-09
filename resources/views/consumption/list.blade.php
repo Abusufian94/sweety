@@ -6,7 +6,7 @@
 
 
             <div class="card-box mb-30">
-                <h2 class="h4 pd-20">Stocks</h2>
+                <h2 class="h4 pd-20">Consumption Entries</h2>
                 <table id='example' class="data-table table nowrap responsive example">
                     <thead>
                         <tr>
@@ -14,9 +14,8 @@
                             <th>Name</th>
                             <th>Unit</th>
                             <th>Stock</th>
-                            <th>Price</th>
-                            <th>Log Type</th>
-                            <th>Operation</th>
+                            <th>Product</th>
+                            <th>Updated By User</th>
                         </tr>
                     </thead>
 
@@ -35,27 +34,10 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            apiCall("{{ url('api/v1/log/all/') }}", "Get")
+            apiCall("{{ url('api/v1/consumption/all/') }}", "Get")
                 .then(function(data) {
-                    //             console.log(data.data.data)
-                    //             var html = ''
-                    //             $.each(data.data.data, function(index, value) {
 
-                    //                 html += `<tr>
-                //     <td>${index + 1}</td>
-                //      <td>
-                //          <h5 class="font-16">${value.raw_name}</h5>
-
-                //      </td>
-                //      <td>${value.unit}</td>
-                //      <td>${value.stock}</td>
-                // 	 <td>${value.price}</td>
-                //      <td>${value.log_type}</td>
-                //      <td>${value.operation}</td>
-                //  </tr>`
-                    //             });
-                    //             $("#demo").html(html)
-
+                    console.log(data.data.data)
                     $('#example').dataTable({
                         processing: true,
                         data: data.data.data,
@@ -68,7 +50,7 @@
 									}
                             },
                             {
-                                data: 'raw_name'
+                                data: 'raw.raw_name'
                             },
                             {
                                 data: 'unit'
@@ -77,14 +59,11 @@
                                 data: 'stock'
                             },
                             {
-                                data: 'price'
+                                data: 'product_id'
                             },
                             {
-                                data: 'log_type'
+                                data: 'users.name'
                             },
-                            {
-                                data: 'operation'
-                            }
                         ]
                     });
 

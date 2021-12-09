@@ -23,4 +23,9 @@ class StockController extends Controller
     {
         return view('stocklog.stock');
     }
+
+    public function consumption()
+    {
+        return view('consumption.list');
+    }
 }

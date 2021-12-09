@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\Raw;
+use App\Consumption;
 use App\Stocklog;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -143,6 +144,7 @@ class StockController extends Controller
 
 
         $result =  Raw::where('raw_id', $request->raw_id)->first();
+        $prev_stock = $result->stock;
         if ($result) {
             $result->raw_name = $request->raw_name;
             $result->unit = $request->unit;
@@ -151,6 +153,16 @@ class StockController extends Controller
             $result->save();
 
             $this->stock_log($request->all(), $request->raw_id, "Update", "Raw");
+
+          
+            if($prev_stock> $request->stock){
+                $data['stock']= $prev_stock - $request->stock;
+                $data['unit']=$request->unit;
+                $data['user_id'] = $request->user_id;
+                $this->consumption($data, $request->raw_id);
+            }
+           
+
 
             return response()->json(['stat' => true, 'message' => "Updated successfully ", 'data' => "Success"], $this->successStatus);
         } else {
@@ -398,18 +410,70 @@ class StockController extends Controller
         }
     }
 
-    // Common Function for updating log table
-    public function stock_log($input, $id, $operation, $log)
-    {
-        $data =  $input;
-        $data['raw_id'] = $id;
-        $data['operation'] = $operation;
-        $data['log_type'] = $log;
-        Stocklog::create($data);
-    }
-
-
     //stock log list
+
+     /**
+     * @OA\Get(
+     *      path="/api/v1/log/all",
+     *      operationId="fetch all",
+     *      tags={"Raw Stock"},
+     *      summary="Stocklog list ",
+     *      description="StockLog list",
+     *     @OA\Parameter(
+     *      name="search_text",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="text"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="start",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="length",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="order",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="text"
+     *      )
+     *   ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *           @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  security={{"bearerAuth":{}}},
+     *  )
+     */
+
     public function log_list(Request $request){
         try {
             $retailPoList  =  Stocklog::select('*');
@@ -456,4 +520,138 @@ class StockController extends Controller
         }
     }
 
+
+    //Consumption List 
+    //stock log list
+
+     /**
+     * @OA\Get(
+     *      path="/api/v1/consumption/all",
+     *      operationId="fetch all",
+     *      tags={"Raw Stock"},
+     *      summary="Consumption list ",
+     *      description="Consumption list",
+     *     @OA\Parameter(
+     *      name="search_text",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="text"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="start",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="length",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *  @OA\Parameter(
+     *      name="order",
+     *      in="path",
+     *      @OA\Schema(
+     *           type="text"
+     *      )
+     *   ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *           @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  security={{"bearerAuth":{}}},
+     *  )
+     */
+
+    public function consumption_list(Request $request){
+        try {
+
+         
+
+            $retailPoList  =  Consumption::with('raw','users')->select('*');
+
+            $total_count = $retailPoList->count();
+
+            if (!empty($search_text)) {
+
+                $searchText = $search_text;
+                $retailPoList  =   $retailPoList->where('raw_name', 'LIKE', "%" . $searchText . "%");
+            }
+
+            if (isset($start) && isset($request['length'])) {
+
+                $offset = $start;
+                $retailPoList = $retailPoList->offset($offset)->limit($request['length']);
+            }
+
+            if (isset($request['order']) && $request['order'] == 'asc')
+                $retailPoList = $retailPoList->orderBy('consumption_id', 'asc');
+            else {
+                $retailPoList = $retailPoList->orderBy('consumption_id', 'desc');
+            }
+
+            $retailPoList = $retailPoList->get()->toArray();
+            // print_r($retailPoList);
+            // exit();
+
+           
+
+
+            if ($total_count > 0) {
+                $retailPoList  = json_decode(json_encode($retailPoList));
+                $msg = array('status' => 1, 'msg' => 'Success', 'draw' => $request['draw'], 'recordsTotal' => $total_count, 'recordsFiltered' => $total_count,  'data' => $retailPoList);
+            } else {
+                $msg = array('status' => 1, 'msg' => 'no data found', 'data' => $retailPoList);
+            }
+
+            return response()->json(["stat" => true, "message" => "list fetch successfully", "data" => $msg], 200);
+        } catch (\Exception $e) {
+            Log::info('==================== retailPoListData ======================');
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+    }
+
+     // Common Function for updating log table
+     public function stock_log($input, $id, $operation, $log)
+     {
+         $data =  $input;
+         $data['raw_id'] = $id;
+         $data['operation'] = $operation;
+         $data['log_type'] = $log;
+         Stocklog::create($data);
+     }
+
+      // Common Function for updating Consumption table
+      public function consumption($input, $id)
+      {
+
+          $data =  $input;
+          $data['raw_id'] = $id;
+          Consumption::create($data);
+      }
+ 
 }

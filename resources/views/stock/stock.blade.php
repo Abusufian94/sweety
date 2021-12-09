@@ -192,6 +192,15 @@
                                 }
                                
                             },
+                            {
+                                "targets": 5,
+                                "render": function(data, type, row, meta) {
+
+                                    return row.status==1?'Active':'InActive';
+
+                                }
+
+                            },
                             { "orderable": false, "targets": 0 }
                         ],
                         'aaSorting': [[1, 'asc']] 

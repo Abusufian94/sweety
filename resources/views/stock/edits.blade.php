@@ -80,8 +80,11 @@
 
                             <select name="unit" id="unit" class="form-control" required>
                                 <option value="">Select Unit</option>
-                                <option value="kd">KD</option>
-                                <option value="ua">UA</option>
+                                <option value="kg">KG</option>
+                                <option value="mg">Mg</option>
+                                <option value="li">Litre</option>
+                                <option value="ml">Mili Liter</option>
+                                <option value="pcs">Pcs</option>
                             </select>
                         </div>
                     </div>

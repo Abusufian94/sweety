@@ -38,4 +38,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
 
     //stok log listen
     Route::get('log/all', 'StockController@log_list')->name('stocklog.list');
+
+    //consumption listen
+    Route::get('consumption/all', 'StockController@consumption_list')->name('consumption.list');
 });
