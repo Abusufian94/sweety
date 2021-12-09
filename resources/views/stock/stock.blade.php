@@ -109,9 +109,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="footer-wrap pd-20 mb-20 card-box">
-                De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-            </div>
+           
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
