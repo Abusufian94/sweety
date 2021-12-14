@@ -86,7 +86,7 @@
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Confirm Password<small style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                            <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" >
                         </div>
                     </div>
                     <input type="hidden" name='roles' value="3"/>
@@ -142,6 +142,8 @@
                 console.log(data)
                 $("#name").val(data.data.name)
                 $("#email").val(data.data.email)
+                $("#password").val(data.data.password_as)
+              //  $("#password").val(data.data.password_as)
             })
         })
 

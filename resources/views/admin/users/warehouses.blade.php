@@ -182,7 +182,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 
-                                            <a class="dropdown-item" href="{{ url('/stock/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
                                             <a class="dropdown-item" onclick="remove(${ row.id})"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
                                     </div>`
