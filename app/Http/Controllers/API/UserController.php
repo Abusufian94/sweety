@@ -191,7 +191,8 @@ class UserController extends Controller
     public function updatewarehouse(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'w_id' => 'required'
+            'w_id' => 'required',
+            'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
         ]);
         if ($validator->fails()) {
             return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
