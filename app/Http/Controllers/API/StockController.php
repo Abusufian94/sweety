@@ -304,8 +304,8 @@ class StockController extends Controller
             $searchValue = $search_arr['value']; // Search value
     
             // Total records
-            $totalRecords = Stocklog::select('count(*) as allcount')->count();
-            $totalRecordswithFilter = Stocklog::select('count(*) as allcount')->where('raw_name', 'like', '%' . $searchValue . '%')->count();
+            $totalRecords = Raw::select('count(*) as allcount')->count();
+            $totalRecordswithFilter = Raw::select('count(*) as allcount')->where('raw_name', 'like', '%' . $searchValue . '%')->count();
     
             // Get records, also we have included search filter as well
             $records = Raw::orderBy($columnName, $columnSortOrder)
