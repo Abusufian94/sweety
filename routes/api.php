@@ -25,7 +25,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     Route::post('warehose/create','UserController@register');
     Route::patch('warehose/update','UserController@updatewarehouse');
     Route::delete('warehose/delete','UserController@deletewarehouse');
-    Route::get('warehose/all','UserController@warehouselist');
+    Route::get('warehose/all','UserController@warehouselist')->name('warehouse.list');
     Route::get('warehouse/{id}','UserController@editwarehouse');
 
 
@@ -34,7 +34,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     Route::get('raw/details/{id}', 'StockController@getRawDetails');
     Route::post('raw/update', 'StockController@updatestock');
     Route::delete('raw/delete/{id}', 'StockController@deletestock');
-    Route::get('raw/all', 'StockController@list');
+    Route::get('raw/all', 'StockController@list')->name('raw.list');
 
     //stok log listen
     Route::get('log/all', 'StockController@log_list')->name('stocklog.list');

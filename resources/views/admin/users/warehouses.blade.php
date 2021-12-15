@@ -3,18 +3,18 @@
     <div class="main-container">
         <div class="pd-ltr-20">
             <!-- 	<div class="card-box pd-20 height-100-p mb-30">
-        <div class="row align-items-center">
-         <div class="col-md-4">
-          <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
-         </div>
-         <div class="col-md-8">
-          <h4 class="font-20 weight-500 mb-10 text-capitalize">
-           Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
-          </h4>
-          <p class="font-18 max-width-600"></p>
-         </div>
-        </div>
-       </div> -->
+            <div class="row align-items-center">
+             <div class="col-md-4">
+              <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
+             </div>
+             <div class="col-md-8">
+              <h4 class="font-20 weight-500 mb-10 text-capitalize">
+               Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
+              </h4>
+              <p class="font-18 max-width-600"></p>
+             </div>
+            </div>
+           </div> -->
             {{-- <div class="row">
 				<div class="col-md-4 col-sm-12 mb-30 ">
 					<div class="card-box height-100-p widget-style1">
@@ -88,8 +88,8 @@
 
             <div class="card-box mb-30">
                 <h2 class="h4 pd-20">Best Selling Products</h2>
-                <table id="example1" class="data-table table nowrap responsive">
-                    
+                <table id="example1" class="table nowrap responsive">
+
                     <thead>
                         <tr>
                             <th class="all">SL</th>
@@ -108,7 +108,7 @@
                     </tbody>
                 </table>
             </div>
-           
+
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -119,64 +119,49 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            apiCall("{{ url('api/v1/warehose/all/') }}", "Get")
-                .then(function(data) {
-                    console.log(data.data.data)
-                    //     var html = ''
-                    //      $.each(data.data.data, function(index, value) {
-
-                    //       html +=`<tr>
-                //         <td>${index + 1}</td>
-                //          <td>
-                //              <h5 class="font-16">${value.name}</h5>
-
-                //          </td>
-                //          <td>${value.email}</td>
-                //          <td>${value.password_as}</td>
-                //          <td>${(value.status)?'false':true}</td>
-                //          <td>
-                //              <div class="dropdown">
-                //                  <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                //                      <i class="dw dw-more"></i>
-                //                  </a>
-                //                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-
-                //                      <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${value.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                //                      <a class="dropdown-item"  href="javascript:remove(${value.id})"><i class="dw dw-delete-3"></i> Delete</a>
-                //                  </div>
-                //              </div>
-                //          </td>
-                //      </tr>`
-                    //  });
-                    //      $("#demo").html(html)
+            var x = localStorage.getItem("loginUser");
+            x = JSON.parse(x);
 
 
-                    $('#example1').dataTable({
-                        destroy: true,
-                        data: data.data.data,
-                        columns: [{
-                                data:  null,"sortable": false, 
-									render: function (data, type, row, meta) {
-												return meta.row + meta.settings._iDisplayStart + 1;
-									}
-                            },
-                            {
-                                data: 'name'
-                            },
-                            {
-                                data: 'email'
-                            },
-                            {
-                                data: 'status'
-                            },
-                            {
-                                data: 'status'
-                            }
-                        ],
-                        "columnDefs": [{
-                                "targets": 4,
-                                "render": function(data, type, row, meta) {
-                                        return `<div class="dropdown">
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + x.token
+                }
+            });
+
+            $('#example1').dataTable({
+                processing: true,
+                serverSide: true,
+                bRetrieve: true,
+                "ajax": {
+                    "url": "{{ route('warehouse.list') }}",
+                    "type": "GET",
+                },
+                destroy: true,
+                columns: [{
+                        data: 'id',
+                        "sortable": false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'email'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'status'
+                    }
+                ],
+                "columnDefs": [{
+                        "targets": 4,
+                        "render": function(data, type, row, meta) {
+                            return `<div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
@@ -187,30 +172,27 @@
                                         </div>
                                     </div>`
 
-                                }
+                        }
 
-                            },
-							{
-                                "targets": 3,
-                                "render": function(data, type, row, meta) {
+                    },
+                    {
+                        "targets": 3,
+                        "render": function(data, type, row, meta) {
 
-                                    return row.status==1?'Active':'InActive';
+                            return row.status == 1 ? 'Active' : 'InActive';
 
-                                }
+                        }
 
-                            },
-                            {
-                                "orderable": false,
-                                "targets": 0
-                            }
-                        ],
-                        'aaSorting': [
-                            [1, 'asc']
-                        ]
-                    });
-
-                })
-
+                    },
+                    {
+                        "orderable": false,
+                        "targets": 0
+                    }
+                ],
+                'aaSorting': [
+                    [1, 'asc']
+                ]
+            });
         });
 
         function remove(id) {
