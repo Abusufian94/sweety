@@ -88,16 +88,16 @@
 
             <div class="card-box mb-30">
                 <h2 class="h4 pd-20">Stocks</h2>
-                <table id="example1" class="data-table table nowrap responsive">
+                <table id="example1" class="table nowrap responsive">
                     <thead>
                         <tr>
-                            <th>SL</th>
-                            <th>Name</th>
-                            <th>Unit</th>
-                            <th>Stock</th>
-                            <th>Price</th>
-                            <th>status</th>
-                            <th class="datatable-nosort">Action</th>
+                            <th class="all">SL</th>
+                            <th class="all">Name</th>
+                            <th class="all">Unit</th>
+                            <th class="all">Stock</th>
+                            <th class="all">Price</th>
+                            <th class="all">status</th>
+                            <th class="datatable-nosort all">Action</th>
                         </tr>
                     </thead>
                     <tbody id="demo">
@@ -109,9 +109,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="footer-wrap pd-20 mb-20 card-box">
-                De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-            </div>
+           
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -122,43 +120,25 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
-            apiCall("{{ url('api/v1/raw/all/') }}", "Get")
-                .then(function(data) {
-                    //         console.log(data.data.data)
-                    //         var html = ''
-                    //         $.each(data.data.data, function(index, value) {
+            var x = localStorage.getItem("loginUser");
+            x = JSON.parse(x);
 
-                    //             html += `<tr>
-                //     <td>${index + 1}</td>
-                //      <td>
-                //          <h5 class="font-16">${value.raw_name}</h5>
 
-                //      </td>
-                //      <td>${value.unit}</td>
-                //      <td>${value.stock}</td>
-                // 	 <td>${value.price}</td>
-                //      <td>${(value.status==0)?'InActive':'Active'}</td>
-                //      <td>
-                //          <div class="dropdown">
-                //              <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                //                  <i class="dw dw-more"></i>
-                //              </a>
-                //              <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-
-                //                  <a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                //                  <a class="dropdown-item" onclick="remove(${value.raw_id})"><i class="dw dw-delete-3"></i> Delete</a>
-                //              </div>
-                //          </div>
-                //      </td>
-                //  </tr>`
-                    //         });
-                    //         $("#demo").html(html)
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + x.token
+                }
+            });
 
                     $('#example1').dataTable({
                         processing: true,
-                        data: data.data.data,
+                        serverSide: true,
+                        bRetrieve: true ,
+                        "ajax": {
+                            "url": "{{ route('raw.list') }}",
+                            "type": "GET",
+                        },
                         destroy: true,
-                        data: data.data.data,
                         columns: [{
                                 data: 'raw_id'
                             },
@@ -186,11 +166,30 @@
                                 "render": function(data, type, row, meta) {
                                     
                                     //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
-                                     return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
+                                   //  return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
                                     // return "<a onclick='remove("+ row.raw_id+")'>" + row.raw_id + "</a>"
 
+                                    return `<div class="dropdown">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+
+                                            <a class="dropdown-item" href="{{ url('/stock/edit/?id=${row.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" onclick="remove(${row.raw_id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                        </div>
+                                    </div>`
                                 }
                                
+                            },
+                            {
+                                "targets": 5,
+                                "render": function(data, type, row, meta) {
+
+                                    return row.status==1?'Active':'InActive';
+
+                                }
+
                             },
                             { "orderable": false, "targets": 0 }
                         ],
@@ -198,8 +197,6 @@
                     });
 
                 });
-
-        });
 
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");

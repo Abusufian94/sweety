@@ -86,7 +86,7 @@
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Confirm Password<small style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                            <input class="form-control" type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" required>
                         </div>
                     </div>
                     <input type="hidden" name='roles' value="3"/>
@@ -99,9 +99,7 @@
 
                 </form>
 
-            <div class="footer-wrap pd-20 mb-20 card-box">
-                De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-            </div>
+           
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -115,7 +113,6 @@
                     minlength : 5
                 },
                 password_confirmation : {
-                    minlength : 5,
                     equalTo : "#password"
                 }
             },
@@ -144,6 +141,8 @@
                 console.log(data)
                 $("#name").val(data.data.name)
                 $("#email").val(data.data.email)
+                $("#password").val(data.data.password_as)
+                $("#password_confirmation").val(data.data.password_as)
             })
         })
 

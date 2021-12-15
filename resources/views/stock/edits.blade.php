@@ -80,8 +80,11 @@
 
                             <select name="unit" id="unit" class="form-control" required>
                                 <option value="">Select Unit</option>
-                                <option value="kd">KD</option>
-                                <option value="ua">UA</option>
+                                <option value="kg">KG</option>
+                                <option value="mg">Mg</option>
+                                <option value="li">Litre</option>
+                                <option value="ml">Mili Liter</option>
+                                <option value="pcs">Pcs</option>
                             </select>
                         </div>
                     </div>
@@ -105,9 +108,7 @@
                     </div>
                 </form>
 
-                <div class="footer-wrap pd-20 mb-20 card-box">
-                    De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-                </div>
+               
             </div>
         </div>
         <script src="{{ asset('js/jquery-min.js') }}"></script>

@@ -28,6 +28,8 @@ Route::get('/stock/create','StockController@create')->name('stock.create');
 Route::get('/stock/edit/','StockController@edit')->name('stock.edit');
 
 Route::get('/stock-log','StockController@indexLog')->name('stocklog.home');
+Route::get('/consumption-list','StockController@consumption')->name('consumption.home');
+
 
 Auth::routes();
 

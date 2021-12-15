@@ -243,17 +243,21 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('warehouse.home')}}">Warehouse User</a></li>
+							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
+							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
+							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
+					{{-- <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-factory1"></span><span class="mtext">STOCK</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
 							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
+							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
 						</ul>
-					</li>
+					</li> --}}
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-11"></span><span class="mtext">RETAIL</span>

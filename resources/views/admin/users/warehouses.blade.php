@@ -1,89 +1,21 @@
-
- @extends('layouts.admin')
- @section('content')
-    <script src="{{ asset('js/jquery-min.js')}}"></script>
- <script src="{{ asset('deskapp/src/plugins/datatables/js/jquery.dataTables.min.js')}}"defer></script>
-
-   <script>
-   	 const token = JSON.parse(localStorage.getItem('loginUser'));
-   	 $(document).ready(function(){
-  $('#myTable').DataTable({
-  	 "processing": true,
-          "serverSide": true,
-          // "destroy": true,
-          "ajax": {
-              url: "{{url('api/v1/warehose/all/')}}",
-              type: 'get',
-              dataSrc: 'data',
-              headers: {
-                    'Accept':'application/json',
-                	'Authorization':'Bearer '+token.token
-                },
-          },
-
-          "columns": [
-          	{
-          		"data": "id",
-         		 render: function (data, type, row, meta) {
-               return meta.row + meta.settings._iDisplayStart + 1;
-          }
-     		 },
-            {
-                "data": "name",       
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            {
-                "data": "email",       
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            {
-                "data": "password_as",       
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-          
-
-            {
-                "data": "status",       
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-           
-            {
-                "data": "status",
-                render: function (data, type, full, meta) {
-                   let cryptId = window.btoa(full.retail_bill_id);
-                   let url = "{{URL::to('/retail-po-bill-preview')}}";
-                  return '<a href="'+url+'/'+cryptId+'"><button type="button" class="btn btn-label-success btn-pill btn-tall btn-wide">View</button></a>';
-   
-                }
-            }
-          ],
-  } );
- });
-   </script>
-<div class="main-container">
-		<div class="pd-ltr-20">
-		<!-- 	<div class="card-box pd-20 height-100-p mb-30">
-				<div class="row align-items-center">
-					<div class="col-md-4">
-						<img src="{{asset('deskapp/vendors/images/banner-img.png')}}" alt="">
-					</div>
-					<div class="col-md-8">
-						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
-						</h4>
-						<p class="font-18 max-width-600"></p>
-					</div>
-				</div>
-			</div> -->
-			{{-- <div class="row">
+@extends('layouts.admin')
+@section('content')
+    <div class="main-container">
+        <div class="pd-ltr-20">
+            <!-- 	<div class="card-box pd-20 height-100-p mb-30">
+            <div class="row align-items-center">
+             <div class="col-md-4">
+              <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
+             </div>
+             <div class="col-md-8">
+              <h4 class="font-20 weight-500 mb-10 text-capitalize">
+               Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
+              </h4>
+              <p class="font-18 max-width-600"></p>
+             </div>
+            </div>
+           </div> -->
+            {{-- <div class="row">
 				<div class="col-md-4 col-sm-12 mb-30 ">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
@@ -110,7 +42,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="col-md-4  col-sm-12 mb-30">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
@@ -127,9 +58,9 @@
 			</div> --}}
 
             <div class="page-header">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							{{-- <div class="title">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        {{-- <div class="title">
 								<h4>Themify Icons</h4>
 							</div>
 							<nav aria-label="breadcrumb" role="navigation">
@@ -138,69 +69,131 @@
 									<li class="breadcrumb-item active" aria-current="page">Icons</li>
 								</ol>
 							</nav> --}}
-						</div>
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary " href="{{route('warehouse.create')}}" >
-									Create
-								</a>
-								{{-- <div class="dropdown-menu dropdown-menu-right">
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-primary " href="{{ route('warehouse.create') }}">
+                                Create
+                            </a>
+                            {{-- <div class="dropdown-menu dropdown-menu-right">
 									<a class="dropdown-item" href="#">Export List</a>
 									<a class="dropdown-item" href="#">Policies</a>
 									<a class="dropdown-item" href="#">View Assets</a>
 								</div> --}}
-							</div>
-						</div>
-					</div>
-				</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div class="card-box mb-30">
-				<h2 class="h4 pd-20">Best Selling Products</h2>
-				<table class="data-table table nowrap responsive" id="myTable">
-					<thead>
-						<tr>
-							<th>SL</th>
-							<th>Name</th>
-							<th>Email</th>
-							<th>Password</th>
-							<th>status</th>
-							<th class="datatable-nosort">Action</th>
-						</tr>
-					</thead>
-					<tbody id="demo">
+            <div class="card-box mb-30">
+                <h2 class="h4 pd-20">Best Selling Products</h2>
+                <table id="example1" class="table nowrap responsive">
 
-
+                    <thead>
+                        <tr>
+                            <th class="all">SL</th>
+                            <th class="all">Name</th>
+                            <th class="all">Email</th>
+                            <th class="all">Status</th>
+                            <th class="datatable-nosort all">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="demo">
 
 
 
-					</tbody>
-				</table>
-			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				De By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
-		</div>
-	</div>
 
 
-	</script>
+                    </tbody>
+                </table>
+            </div>
 
-<script type="text/javascript">
-
- function remove(id)
- {
-    var confirms = confirm("Are you sure want to delete this?");
-    if(confirms)
-    {
-     apiCall("{{url('api/v1/warehose/delete')}}","Delete",{"w_id":id})
-     .then(function(data){
-         console.log(data)
-         window.location.reload();
-     })
-    }
-
- }
+        </div>
+    </div>
+    <script src="{{ asset('js/jquery-min.js') }}"></script>
+    <script>
     </script>
 
- @endsection
- 
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var x = localStorage.getItem("loginUser");
+            x = JSON.parse(x);
+            $.ajaxSetup({
+                headers: {
+                    'Authorization': 'Bearer ' + x.token
+                }
+            });
+            $('#example1').dataTable({
+                processing: true,
+                serverSide: true,
+                bRetrieve: true,
+                "ajax": {
+                    "url": "{{ route('warehouse.list') }}",
+                    "type": "GET",
+                },
+                destroy: true,
+                columns: [{
+                        data: 'id',
+                        "sortable": false,
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'name'
+                    },
+                    {
+                        data: 'email'
+                    },
+                    {
+                        data: 'status'
+                    },
+                    {
+                        data: 'status'
+                    }
+                ],
+                "columnDefs": [{
+                        "targets": 4,
+                        "render": function(data, type, row, meta) {
+                            return `<div class="dropdown">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                            <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" onclick="remove(${ row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                        </div>
+                                    </div>`
+                        }
+                    },
+                    {
+                        "targets": 3,
+                        "render": function(data, type, row, meta) {
+                            return row.status == 1 ? 'Active' : 'InActive';
+                        }
+                    },
+                    {
+                        "orderable": false,
+                        "targets": 0
+                    }
+                ],
+                'aaSorting': [
+                    [1, 'asc']
+                ]
+            });
+        });
+        function remove(id) {
+            var confirms = confirm("Are you sure want to delete this?");
+            if (confirms) {
+                apiCall("{{ url('api/v1/warehose/delete') }}", "Delete", {
+                        "w_id": id
+                    })
+                    .then(function(data) {
+                        console.log(data)
+                        window.location.reload();
+                    })
+            }
+        }
+    </script>
+
+@endsection
