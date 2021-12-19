@@ -41,4 +41,14 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
 
     //consumption listen
     Route::get('consumption/all', 'StockController@consumption_list')->name('consumption.list');
+
+
+     // Product Routes
+     Route::post('product/create', 'StockController@pinsert');
+     Route::get('product/details/{id}', 'StockController@getProductDetails');
+     Route::post('product/update', 'StockController@pupdatestock');
+     Route::delete('product/delete/{id}', 'StockController@pdeleteproduct');
+     Route::get('product/all', 'StockController@plist')->name('product.list');
+     Route::get('raw-stock', 'StockController@rawlist')->name('rawstock.rawlist');
+
 });

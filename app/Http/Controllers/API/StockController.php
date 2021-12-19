@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Raw;
 use App\Consumption;
+use App\Product;
 use App\Stocklog;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -746,5 +747,96 @@ class StockController extends Controller
           $data['raw_id'] = $id;
           Consumption::create($data);
       }
+
+
+    //   Product list
+    public function plist(Request $request)
+    {
+        try {
+            $draw = $request->get('draw');
+            $start = $request->get("start");
+            $rowperpage = $request->get("length"); // total number of rows per page
+    
+            $columnIndex_arr = $request->get('order');
+            $columnName_arr = $request->get('columns');
+            $order_arr = $request->get('order');
+            $search_arr = $request->get('search');
+    
+            $columnIndex = $columnIndex_arr[0]['column']; // Column index
+            $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+            $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+            $searchValue = $search_arr['value']; // Search value
+    
+            // Total records
+            $totalRecords = Product::select('count(*) as allcount')->count();
+            $totalRecordswithFilter = Product::select('count(*) as allcount')->where('product_name', 'like', '%' . $searchValue . '%')->count();
+    
+            // Get records, also we have included search filter as well
+            $records = Product::orderBy($columnName, $columnSortOrder)
+                ->where('product.product_name', 'like', '%' . $searchValue . '%')
+                ->orWhere('product.product_unit', 'like', '%' . $searchValue . '%')
+                ->orWhere('product.product_price', 'like', '%' . $searchValue . '%')
+                ->orWhere('product.product_quantity', 'like', '%' . $searchValue . '%')
+                ->select('product.*')
+                ->skip($start)
+                ->take($rowperpage)
+                ->get();
+    
+            $data_arr = array();
+    
+            foreach ($records as $record) {
+    
+                $data_arr[] = array(
+                    "id" => $record->id,
+                    "product_name" => $record->product_name,
+                    "product_name" => $record->product_image,
+                    "product_unit" => $record->product_unit,
+                    "product_quantity" => $record->product_quantity,
+                    "product_price" => $record->product_price,
+                    "status" => $record->status,
+                    "status" => $record->status,
+                );
+            }
+    
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => $totalRecordswithFilter,
+                "aaData" => $data_arr,
+            );
+    
+            echo json_encode($response);
+
+
+        } catch (\Exception $e) {
+            Log::info('==================== retailPoListData ======================');
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+    }
+
+
  
+     public function rawlist(){
+        try {
+
+            $retailPoList  =  Raw::select('*')->where('stock',  '<>' , 0);
+            $retailPoList = $retailPoList->orderBy('raw_id', 'desc');
+            $total_count = $retailPoList->count();
+
+            $retailPoList = $retailPoList->get()->toArray();
+
+            if ($total_count > 0) {
+                $retailPoList  = json_decode(json_encode($retailPoList));
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "data" => $retailPoList], 200);
+            } else {
+                return response()->json(["stat" => true, "message" => "no data found", "data" => $retailPoList], 200);
+            }
+
+        } catch (\Exception $e) {
+            Log::info('==================== retailPoListData ======================');
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
+        }
+    }
 }

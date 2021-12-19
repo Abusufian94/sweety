@@ -260,6 +260,14 @@
 					</li> --}}
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="{{route('product.home')}}"> Product</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-11"></span><span class="mtext">RETAIL</span>
 						</a>
 						<ul class="submenu">
