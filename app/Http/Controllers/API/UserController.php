@@ -143,7 +143,7 @@ class UserController extends Controller
         return response()->json(['stat' => true, 'message' => "User account has been created successfully ", 'data' => $success], $this->successStatus);
     }
 
-   
+
 
      /**
  * @OA\Get(path="/api/v1/profile",
@@ -222,21 +222,21 @@ class UserController extends Controller
             $draw = $request->get('draw');
             $start = $request->get("start");
             $rowperpage = $request->get("length"); // total number of rows per page
-    
+
             $columnIndex_arr = $request->get('order');
             $columnName_arr = $request->get('columns');
             $order_arr = $request->get('order');
             $search_arr = $request->get('search');
-    
+
             $columnIndex = $columnIndex_arr[0]['column']; // Column index
             $columnName = $columnName_arr[$columnIndex]['data']; // Column name
             $columnSortOrder = $order_arr[0]['dir']; // asc or desc
             $searchValue = $search_arr['value']; // Search value
-    
+
             // Total records
             $totalRecords = User::where('users.roles','=', 3)->select('count(*) as allcount')->count();
             $totalRecordswithFilter = User::select('count(*) as allcount')->where('users.roles','=', 3)->where('name', 'like', '%' . $searchValue . '%')->count();
-    
+
             // Get records, also we have included search filter as well
             $records = User::where('users.roles','=', 3)->orderBy($columnName, $columnSortOrder)
                 ->where('users.name', 'like', '%' . $searchValue . '%')
@@ -246,11 +246,11 @@ class UserController extends Controller
                 ->take($rowperpage)
                 ->where('users.roles','=', 3)
                 ->get();
-    
+
             $data_arr = array();
-    
+
             foreach ($records as $record) {
-    
+
                 $data_arr[] = array(
                     "id" => $record->id,
                     "name" => $record->name,
@@ -259,17 +259,17 @@ class UserController extends Controller
                     "status" => $record->status,
                 );
             }
-    
+
             $response = array(
                 "draw" => intval($draw),
                 "iTotalRecords" => $totalRecords,
                 "iTotalDisplayRecords" => $totalRecordswithFilter,
                 "aaData" => $data_arr,
             );
-    
+
             echo json_encode($response);
 
-       
+
         } catch (\Exception $e) {
             Log::info('==================== retailPoListData ======================');
             Log::error($e->getMessage());

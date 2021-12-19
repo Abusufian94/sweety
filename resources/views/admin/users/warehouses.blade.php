@@ -42,7 +42,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="col-md-4  col-sm-12 mb-30">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
@@ -113,22 +112,17 @@
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
-
     </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-
             var x = localStorage.getItem("loginUser");
             x = JSON.parse(x);
-
-
             $.ajaxSetup({
                 headers: {
                     'Authorization': 'Bearer ' + x.token
                 }
             });
-
             $('#example1').dataTable({
                 processing: true,
                 serverSide: true,
@@ -166,23 +160,17 @@
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-
                                             <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
                                             <a class="dropdown-item" onclick="remove(${ row.id})"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
                                     </div>`
-
                         }
-
                     },
                     {
                         "targets": 3,
                         "render": function(data, type, row, meta) {
-
                             return row.status == 1 ? 'Active' : 'InActive';
-
                         }
-
                     },
                     {
                         "orderable": false,
@@ -194,7 +182,6 @@
                 ]
             });
         });
-
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");
             if (confirms) {
@@ -206,7 +193,6 @@
                         window.location.reload();
                     })
             }
-
         }
     </script>
 
