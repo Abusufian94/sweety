@@ -904,14 +904,16 @@ class StockController extends Controller
         if(isset($request->raw_id)&&count($request->raw_id) > 0){
             foreach($request->raw_id as $key=>$attributes)
             {
-             
-                $consumption =  new Consumption();
-                $consumption->product_id = $id;
-                $consumption->raw_id = $request->raw_id[$key];
-                $consumption->unit = $request->unit[$key];
-                $consumption->stock = $request->stock[$key];
-                $consumption->user_id = $request->user_id;
-                $consumption->save();
+                $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
+                if($result ==1 ){
+                    $consumption =  new Consumption();
+                    $consumption->product_id = $id;
+                    $consumption->raw_id = $request->raw_id[$key];
+                    $consumption->unit = $request->unit[$key];
+                    $consumption->stock = $request->stock[$key];
+                    $consumption->user_id = $request->user_id;
+                    $consumption->save();
+                }
             }
           }
       
@@ -960,22 +962,28 @@ class StockController extends Controller
                   $consumption = Consumption::where(['product_id'=>$request->id,'raw_id'=>$request->raw_id[$key]])->first();
                   if(empty($consumption))
                   {
-                    $consumption =  new Consumption();
-                    $consumption->product_id = $request->id;
-                    $consumption->raw_id = $request->raw_id[$key];
-                    $consumption->unit = $request->unit[$key];
-                    $consumption->stock = $request->stock[$key];
-                    $consumption->user_id = $request->user_id;
-                    $consumption->save();
+                    $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
+                    if($result ==1 ){
+                        $consumption =  new Consumption();
+                        $consumption->product_id = $request->id;
+                        $consumption->raw_id = $request->raw_id[$key];
+                        $consumption->unit = $request->unit[$key];
+                        $consumption->stock = $request->stock[$key];
+                        $consumption->user_id = $request->user_id;
+                        $consumption->save();
+                    }
                   }
                   else
                   {
-                    $consumption->product_id = $request->id;
-                    $consumption->raw_id = $request->raw_id[$key];
-                    $consumption->unit = $request->unit[$key];
-                    $consumption->stock = $request->stock[$key];
-                    $consumption->user_id = $request->user_id;
-                    $consumption->save();
+                    $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
+                    if($result ==1 ){
+                        $consumption->product_id = $request->id;
+                        $consumption->raw_id = $request->raw_id[$key];
+                        $consumption->unit = $request->unit[$key];
+                        $consumption->stock = $request->stock[$key];
+                        $consumption->user_id = $request->user_id;
+                        $consumption->save();
+                    }
                   }
                 
                 }
@@ -997,5 +1005,16 @@ class StockController extends Controller
             'data' => $package,
             'message' => 'Success'
         ]);
+    }
+
+    public function raw_update($id, $quantity){
+        
+        $result =  Raw::where('raw_id', $id)->first();
+
+        if ($result->stock > $quantity) {
+            $result->stock = $result->stock - $quantity;
+            $result->save();
+            return 1;
+        }
     }
 }
