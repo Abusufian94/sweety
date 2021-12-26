@@ -4,84 +4,85 @@
         <div class="pd-ltr-20">
 
             <div class="pd-20 card-box mb-30">
-
-                <form id="myform" method="POST">
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
-                                style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" name="product_name" id="product_name"
-                                placeholder="Name" required />
-                        </div>
+                <form id="myform" method="post" enctype="multipart/form-data">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10">
+                        <input class="form-control" type="text" name="product_name" id="product_name" required="required"
+                            placeholder="Name"  />
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
-                                style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10" style="width:100%;">
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                            <select class="selectpicker" data-width="100%" multiple data-live-search="true"
-                                name="product_unit" id="product_unit" class="form-control" required placeholder="Select">
-                                <option value="" disabled>Select Unit</option>
-                                <option value="kg">KG</option>
-                                <option value="mg">Mg</option>
-                                <option value="li">Litre</option>
-                                <option value="ml">Mili Liter</option>
-                                <option value="pcs">Pcs</option>
-                            </select>
-                        </div>
+                        <select 
+                            name="product_unit" id="product_unit" class="form-control"  required="required">
+                            <option value="" disabled selected>Select Unit</option>
+                            <option value="kg">KG</option>
+                            <option value="mg">Mg</option>
+                            <option value="li">Litre</option>
+                            <option value="ml">Mili Liter</option>
+                            <option value="pcs">Pcs</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Select Raw Material<small
-                                style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10" style="width:100%;">
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Select Raw Material<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                            <select  data-width="100%" multiple name="raw"
-                                id="raw" class="form-control"  required onchange="get_raw(this)">
-                                <option value="" disabled>Select Raw Material</option>
-                            </select>
-                        </div>
+                        <select  data-width="100%" multiple name="raw" required="required"
+                            id="raw" class="form-control"   onchange="get_raw(this)">
+                            <option value="" disabled>Select Raw Material</option>
+                        </select>
                     </div>
+                </div>
 
-                    <div id="outputArea"></div>
+                <div id="outputArea"></div>
 
 
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
-                                style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" placeholder="Quantity" name="product_quantity"
-                                id="product_quantity" required>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10">
+                        <input class="form-control" type="text" placeholder="Quantity" name="product_quantity"
+                            id="product_quantity" required="required" />
                     </div>
-                    <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
-                                style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" name="product_price" placeholder="Price" required>
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10">
+                        <input class="form-control" type="text" name="product_price" placeholder="Price" required="required"/>
                     </div>
-                    <div class="form-group row">
-                        {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
-                        <div class="col-sm-12 col-md-10">
-                            <input class="btn btn-primary" type="submit" value="Submit">
-                        </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Image</label>
+                    <div class="col-sm-12 col-md-10">
+                        <input class="form-control" type="file" name="product_image" id="product_image" required="required" />
                     </div>
-
-
-                </form>
+                </div>
+                <div class="form-group row">
+                    {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
+                    <div class="col-sm-12 col-md-10">
+                        <input class="btn btn-primary" type="submit" value="Submit" />
+                    </div>
+                </div>
+            </form>
 
             </div>
         </div>
     </div>
-
+    
     </div>
     </div>
- 
     <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         $(document).ready(function() {
-           
 
             var x = localStorage.getItem("loginUser");
 
@@ -104,11 +105,8 @@
         });
     </script>
     <script type="text/javascript">
-     var arr=[];
         $(document).ready(function() {
-           
             loadattribute();
-            loadConsumption();
             $("#myform").validate({
                 rules: {
                     product_unit: {
@@ -124,7 +122,6 @@
                         required: true
                     }
                 },
-
                 submitHandler: function(form) {
                     const obj = $(form).serializeArray();
                     const token = JSON.parse(localStorage.getItem('loginUser'));
@@ -144,14 +141,33 @@
                     form_data.append("user_id", user_id);
 
 
+                    // const obj = $(form).serializeArray();
+                    // const token = JSON.parse(localStorage.getItem('loginUser'));
+                    // const user_id = token.id;
 
+
+                    var product_name = $("#product_name").val();
+                    var product_unit = $('[name="product_unit"]').val();
+                    var product_quantity = $('[name="product_quantity"]').val();
+                    var product_price = $('[name="product_price"]').val();
+                    var product_image = $('[name="product_image"]').val();
+
+                    var form_data = new FormData(form); 
+                    form_data.append("product_name", product_name);
+                    form_data.append("product_unit", product_unit);
+                    form_data.append("product_quantity", product_quantity);
+                    form_data.append("product_price", product_price);
+                    form_data.append("user_id", user_id);
+                 
+                     var product_price = $('[name="product_price"]').val();
                     $.ajax({
-                        url: "{{ url('api/v1/raw/create') }}",
+                        url: "{{ url('api/v1/pro/create') }}",
                         headers: {
                             'Accept': 'application/json',
                             'Authorization': 'Bearer ' + token.token
                         },
                         type: form.method,
+                        enctype: 'multipart/form-data',
                         contentType: false,
                         cache: false,
                         processData: false,
@@ -159,7 +175,7 @@
                         data: form_data,
                         success: function(response) {
                             $(form)[0].reset()
-                            window.location = "{{ route('stock.home') }}"
+                            window.location = "{{ route('product.home') }}"
                         }
                     });
 
@@ -168,46 +184,7 @@
 
 
 
-
-
-            //$("#raw").change(function() {
-            //     var htmlString = "";
-            //     var len = $('#raw').find(":selected").val();
-            //     arr.push(len);
-            //     console.log(arr);
-            //     var count = $("#raw :selected").length;
-
-            //     if(jQuery.inArray(len, arr) != -1) {
-            //         htmlString=``;
-            //         arr.push(len);
-            //     }
-            //     else{
-                  
-            //     for (var i = 0; i < arr.length; i++) {
-                //     htmlString = ` <div class="form-group row">
-                //                     <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
-                //                         <div class="col-sm-12 col-md-10">
-                //                             <input class='form-control' type='text' placeholder='Unit' name='unit[]' />
-                //                         </div>
-                //                 </div>
-                //                 <div class="form-group row">
-                //                     <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
-                //                         <div class="col-sm-12 col-md-10">
-                //                     <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
-                //                     </div>
-                //                 </div>
-                //   `;
-            //       $("#outputArea").html(htmlString);
-            //     }
-            //  }
-            //});
-
-
-           
-
-
         });
-
 
         async function loadattribute() {
             const token = JSON.parse(localStorage.getItem('loginUser'));
@@ -223,16 +200,6 @@
                 processData: false,
                 dataType: "json", // what to expect back from the server
                 success: function(response) {
-                   // console.log(response);
-
-                    // $.each(response.data, function(key, value) {
-                    //     console.log(value.raw_name);
-                    //     $('#raw')
-                    //         .append($("<option value='' disabled>Select Raw Material</option>")
-                    //             .attr("value", value.raw_id)
-                    //             .text(value.raw_name));
-
-                    // });
                     $('#raw').empty();
 
                     const data = response.data;
@@ -247,11 +214,11 @@
                     $('#raw').append(
                         `<option value="" disabled>Select Raw Material</option>${html}`);
 
-
                 }
             });
 
         }
+
 
         function get_raw(select)
         {
@@ -269,8 +236,16 @@
                                 <div class="form-group row">
                                     <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
                                         <div class="col-sm-12 col-md-10">
-                                            <input class='form-control' type='text' placeholder='Unit' name='unit[]' />
+                                            <select name='unit[]'  class="form-control" required placeholder="Select">
+                                                <option value="" disabled>Select Unit</option>
+                                                <option value="kg">KG</option>
+                                                <option value="mg">Mg</option>
+                                                <option value="li">Litre</option>
+                                                <option value="ml">Mili Liter</option>
+                                                <option value="pcs">Pcs</option>
+                                            </select>
                                         </div>
+
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
@@ -281,9 +256,8 @@
                                 
                 }
             });
-            $('#outputArea').html(html);
+            $('#outputArea').append(html);
         }
-
     </script>
 
 @endsection

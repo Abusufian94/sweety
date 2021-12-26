@@ -2,12 +2,13 @@
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
+            <input type="hidden" id="pid" value="{{ $id }}" />
 
             <div class="pd-20 card-box mb-30">
 
-                <form id="myform" method="POST">
+                <form id="myform" method="POST" enctype="multipart/form-data">
                     <div class="form-group row">
-                        <input class="form-control" type="hidden" name="raw_id" id="raw_id"
+                        <input class="form-control" type="hidden" name="id" id="id"
                                 required />
                         <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
                                 style="color:red">*</small></label>
@@ -21,8 +22,8 @@
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                            <select class="selectpicker" data-width="100%" multiple data-live-search="true"
-                                name="product_unit" id="product_unit" class="form-control" required placeholder="Select">
+                            <select class="selectpicker"  width="100%"
+                                name="product_unit" id="product_unit" class="form-control" required >
                                 <option value="" disabled>Select Unit</option>
                                 <option value="kg">KG</option>
                                 <option value="mg">Mg</option>
@@ -39,7 +40,7 @@
                         <div class="col-sm-12 col-md-10" style="width:100%;">
 
                             <select  data-width="100%" multiple name="raw"
-                                id="raw" class="form-control"  required onchange="get_raw(this)">
+                                id="raw" class="form-control"   onchange="get_raw(this)">
                                 <option value="" disabled>Select Raw Material</option>
                             </select>
                             <label><a href="#exampleModal" data-toggle="modal" data-target="#exampleModal">View Selected</a></label>
@@ -62,9 +63,17 @@
                         <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" name="product_price" placeholder="Price" required>
+                            <input class="form-control" type="text" name="product_price" id="product_price" placeholder="Price" required>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Image</label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="file" name="product_image" id="product_image"  />
+                        </div>
+                    </div>
+
                     <div class="form-group row">
                         {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
                         <div class="col-sm-12 col-md-10">
@@ -97,8 +106,7 @@
               <tr>
                   <td>Name</td>
                   <td>unit </td>
-                  <td>stock </td>
-                  <td>Action</td>
+                  <td>Quantity </td>
               </tr>
             </thead>
             <tbody id="attr_table">
@@ -144,7 +152,7 @@
         $(document).ready(function() {
            
             loadattribute();
-            loadConsumption();
+            //loadConsumption();
             $("#myform").validate({
                 rules: {
                     product_unit: {
@@ -165,30 +173,18 @@
                     const obj = $(form).serializeArray();
                     const token = JSON.parse(localStorage.getItem('loginUser'));
                     const user_id = token.id;
-
-                    var raw_name = $("#raw_id").val();
-                    var raw_name = $("#raw_name").val();
-                    var unit = $('[name="unit"]').val();
-                    var stock = $('[name="stock"]').val();
-                    var price = $('[name="price"]').val();
-
-                    var form_data = new FormData();
-                    form_data.append("raw_name", raw_id);
-                    form_data.append("raw_name", raw_name);
-                    form_data.append("unit", unit);
-                    form_data.append("stock", stock);
-                    form_data.append("price", price);
+                    var form_data = new FormData(form);
                     form_data.append("user_id", user_id);
 
 
-
                     $.ajax({
-                        url: "{{ url('api/v1/raw/update') }}",
+                        url: "{{ url('api/v1/pro/update') }}",
                         headers: {
                             'Accept': 'application/json',
                             'Authorization': 'Bearer ' + token.token
                         },
                         type: form.method,
+                        enctype: 'multipart/form-data',
                         contentType: false,
                         cache: false,
                         processData: false,
@@ -196,60 +192,41 @@
                         data: form_data,
                         success: function(response) {
                             $(form)[0].reset()
-                            window.location = "{{ route('stock.home') }}"
+                            window.location = "{{ route('product.home') }}"
                         }
                     });
 
                 }
             })
 
-
-
-
-
-            //$("#raw").change(function() {
-            //     var htmlString = "";
-            //     var len = $('#raw').find(":selected").val();
-            //     arr.push(len);
-            //     console.log(arr);
-            //     var count = $("#raw :selected").length;
-
-            //     if(jQuery.inArray(len, arr) != -1) {
-            //         htmlString=``;
-            //         arr.push(len);
-            //     }
-            //     else{
-                  
-            //     for (var i = 0; i < arr.length; i++) {
-                //     htmlString = ` <div class="form-group row">
-                //                     <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
-                //                         <div class="col-sm-12 col-md-10">
-                //                             <input class='form-control' type='text' placeholder='Unit' name='unit[]' />
-                //                         </div>
-                //                 </div>
-                //                 <div class="form-group row">
-                //                     <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
-                //                         <div class="col-sm-12 col-md-10">
-                //                     <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
-                //                     </div>
-                //                 </div>
-                //   `;
-            //       $("#outputArea").html(htmlString);
-            //     }
-            //  }
-            //});
-
-            let id = $("#id").val();
-            apiCall("{{ url('api/v1/product/details') }}/" + id, "Get")
+            let id = $("#pid").val();
+            apiCall("{{ url('api/v1/pro/details') }}/" + id, "Get")
                 .then(function(data) {
-                    console.log(data)
-                    $("#raw_name").val(data.data.raw_name)
-                    $("#unit").val(data.data.unit)
-                    $("#price").val(data.data.price)
-                    $("#stock").val(data.data.stock)
+                  //  console.log(data)
+                    $("#id").val(data.data.id)
+                    $("#product_name").val(data.data.product_name)
+                    $("#product_unit").val(data.data.product_unit).attr('selected','selected');
+                    $("#product_price").val(data.data.product_price);
+                    $("#product_quantity").val(data.data.product_quantity);
+                });
+
+            apiCall("{{ url('api/v1/pro/consumption') }}/" + id, "Get")
+                .then(function(data) {
+                    // console.log(data);
+                    var html ='';
+                    $.each(data.data,function(index,item){
+
+                            html += `<tr>
+                                    <td>${item.raw.raw_name}</td>
+                                    <td>${item.unit}</td>
+                                    <td>${item.stock}</td>
+                                </tr>`;
+                        });
+                        $("#attr_table").html(html);
                 });
 
         });
+        
 
 
 
@@ -267,22 +244,12 @@
                 processData: false,
                 dataType: "json", // what to expect back from the server
                 success: function(response) {
-                   // console.log(response);
-
-                    // $.each(response.data, function(key, value) {
-                    //     console.log(value.raw_name);
-                    //     $('#raw')
-                    //         .append($("<option value='' disabled>Select Raw Material</option>")
-                    //             .attr("value", value.raw_id)
-                    //             .text(value.raw_name));
-
-                    // });
                     $('#raw').empty();
 
                     const data = response.data;
                     let html = '';
                     for (var i = 0; i < data.length; i++) {
-                        console.log(data[i].raw_id)
+                       // console.log(data[i].raw_id)
                         html +=
                             `<option value="${data[i].raw_id}">${data[i].raw_name}</option> `;
 
@@ -309,12 +276,20 @@
                 {
                   let names = $(item).text();
                   html +=  `<label>${names}</label> 
-                                <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
+                  <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
                                 <div class="form-group row">
                                     <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
                                         <div class="col-sm-12 col-md-10">
-                                            <input class='form-control' type='text' placeholder='Unit' name='unit[]' />
+                                            <select name='unit[]'  class="form-control" required placeholder="Select">
+                                                <option value="" disabled>Select Unit</option>
+                                                <option value="kg">KG</option>
+                                                <option value="mg">Mg</option>
+                                                <option value="li">Litre</option>
+                                                <option value="ml">Mili Liter</option>
+                                                <option value="pcs">Pcs</option>
+                                            </select>
                                         </div>
+
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
@@ -329,29 +304,7 @@
         }
 
 
-        async function loadConsumption()
-            {
-                let product = $("#product").val();
-                const response = await $.ajax({
-                                url: "{{ route('admin.product.attribute') }}",
-                                type: 'get',
-                                data: {
-                                // "_token": '{{ csrf_token() }}',
-                                    'product_id': product
-                                },
-                            });
-                var html =  ``;
-                $.each(response.data,function(index,item){
-                    html += `<tr>
-                            <td>${item.name}</td>
-                            <td>${item.attribute_values}</td>
-                            <td><a href="${item.url}" class="btn btn-danger"><i class="fa fa-trash"></i></a></td>
-                        </tr>`;
-                })
-                $("#attr_table").html(html);
-                            console.log(response.data)
-            
-            }
+      
     </script>
 
 @endsection

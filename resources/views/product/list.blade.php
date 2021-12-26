@@ -153,7 +153,7 @@
                                 data: 'product_unit'
                             },
                             {
-                                data: 'product_stock'
+                                data: 'product_quantity'
                             },
                             {
                                 data: 'product_price'
@@ -166,7 +166,7 @@
                             }
                         ],
                         "columnDefs": [{
-                                "targets": 6,
+                                "targets": 7,
                                 "render": function(data, type, row, meta) {
                                     
                                     //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
@@ -179,7 +179,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 
-                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=${row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=3') }}"><i class="dw dw-edit2"></i> Edit</a>
                                             <a class="dropdown-item" onclick="remove(${row.id})"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
                                     </div>`
@@ -187,7 +187,7 @@
                                
                             },
                             {
-                                "targets": 5,
+                                "targets": 6,
                                 "render": function(data, type, row, meta) {
 
                                     return row.status==1?'Active':'InActive';

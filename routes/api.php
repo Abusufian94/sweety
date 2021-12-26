@@ -44,11 +44,12 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
 
 
      // Product Routes
-     Route::post('product/create', 'StockController@pinsert');
-     Route::get('product/details/{id}', 'StockController@getProductDetails');
-     Route::post('product/update', 'StockController@pupdatestock');
-     Route::delete('product/delete/{id}', 'StockController@pdeleteproduct');
-     Route::get('product/all', 'StockController@plist')->name('product.list');
-     Route::get('raw-stock', 'StockController@rawlist')->name('rawstock.rawlist');
+     Route::post('pro/create', 'StockController@insertProduct')->name('pinsert');
+     Route::get('pro/details/{id}', 'StockController@getProductDetails');
+     Route::post('pro/update', 'StockController@updateProduct');
+     Route::delete('pro/delete/{id}', 'StockController@deleteProduct');
+     Route::get('pro/all', 'StockController@plist')->name('product.list');
+     Route::get('pro/rawitems', 'StockController@rawlist')->name('rawstock.rawlist');
+     Route::get('pro/consumption/{id}', 'StockController@productConsumption')->name('product.consumption');
 
 });
