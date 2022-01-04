@@ -195,6 +195,16 @@
                                 }
 
                             },
+                            {
+                                "targets": 2,
+                                "render": function(data, type, row, meta) {
+                                    
+                                    return `<div>
+                                            <img src="{!! asset('documents/${row.product_image}') !!}" />
+                                    </div>`
+                                }
+                               
+                            },
                             { "orderable": false, "targets": 0 }
                         ],
                         'aaSorting': [[1, 'asc']] 

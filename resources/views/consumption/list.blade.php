@@ -72,7 +72,7 @@
                         data: 'stock'
                     },
                     {
-                        data: 'product_id'
+                        data: 'product_name'
                     },
                     {
                         data: 'name'

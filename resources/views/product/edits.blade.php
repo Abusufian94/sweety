@@ -68,10 +68,14 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Image</label>
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Image</label> 
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" type="file" name="product_image" id="product_image"  />
                         </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div id="image"></div>
                     </div>
 
                     <div class="form-group row">
@@ -208,6 +212,12 @@
                     $("#product_unit").val(data.data.product_unit).attr('selected','selected');
                     $("#product_price").val(data.data.product_price);
                     $("#product_quantity").val(data.data.product_quantity);
+                    $("#image").val(data.data.product_image);
+                    html='';
+                    if(data.data.product_image !=null){
+                        html =`<img src="{!! asset('documents/${data.data.product_image}') !!}" width="100px" height="100px" />`
+                     }
+                     $("#image").append(html);
                 });
 
             apiCall("{{ url('api/v1/pro/consumption') }}/" + id, "Get")

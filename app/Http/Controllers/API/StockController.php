@@ -688,11 +688,13 @@ class StockController extends Controller
             $records = Consumption::orderBy($columnName, $columnSortOrder)
                 ->leftjoin('users', 'consumption_tbl.user_id', '=', 'users.id')
                 ->leftjoin('raw_tbl', 'consumption_tbl.raw_id', '=', 'raw_tbl.raw_id')
+                ->leftjoin('product', 'consumption_tbl.product_id', '=', 'product.id')
                 ->where('raw_tbl.raw_name', 'like', '%' . $searchValue . '%')
                 ->orWhere('consumption_tbl.unit', 'like', '%' . $searchValue . '%')
                 ->orWhere('consumption_tbl.stock', 'like', '%' . $searchValue . '%')
                 ->orWhere('users.name', 'like', '%' . $searchValue . '%')
-                ->select('consumption_tbl.*','raw_tbl.raw_name as raw_name','users.name as name')
+                ->orWhere('product.product_name', 'like', '%' . $searchValue . '%')
+                ->select('consumption_tbl.*','raw_tbl.raw_name as raw_name','users.name as name','product.product_name as product_name')
                 ->skip($start)
                 ->take($rowperpage)
                 ->get();
@@ -706,7 +708,7 @@ class StockController extends Controller
                     "raw_name" => $record->raw->raw_name,
                     "unit" => $record->unit,
                     "stock" => $record->stock,
-                    "product_id" => $record->product_id,
+                    "product_name" => $record->products->product_name,
                     "name" => $record->users->name
 
                 );
@@ -960,8 +962,8 @@ class StockController extends Controller
                 foreach($request->raw_id as $key=>$attributes)
                 {
                   $consumption = Consumption::where(['product_id'=>$request->id,'raw_id'=>$request->raw_id[$key]])->first();
-                  if(empty($consumption))
-                  {
+                  //if(empty($consumption))
+                  //{
                     $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
                     if($result ==1 ){
                         $consumption =  new Consumption();
@@ -972,19 +974,19 @@ class StockController extends Controller
                         $consumption->user_id = $request->user_id;
                         $consumption->save();
                     }
-                  }
-                  else
-                  {
-                    $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
-                    if($result ==1 ){
-                        $consumption->product_id = $request->id;
-                        $consumption->raw_id = $request->raw_id[$key];
-                        $consumption->unit = $request->unit[$key];
-                        $consumption->stock = $request->stock[$key];
-                        $consumption->user_id = $request->user_id;
-                        $consumption->save();
-                    }
-                  }
+                  //}
+                //   else
+                //   {
+                //     $result = $this->raw_update($request->raw_id[$key], $request->stock[$key]);
+                //     if($result ==1 ){
+                //         $consumption->product_id = $request->id;
+                //         $consumption->raw_id = $request->raw_id[$key];
+                //         $consumption->unit = $request->unit[$key];
+                //         $consumption->stock = $request->stock[$key];
+                //         $consumption->user_id = $request->user_id;
+                //         $consumption->save();
+                //     }
+                //   }
                 
                 }
               }
