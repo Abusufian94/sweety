@@ -29,6 +29,8 @@ Route::get('/stock/edit/','StockController@edit')->name('stock.edit');
 
 Route::get('/stock-log','StockController@indexLog')->name('stocklog.home');
 Route::get('/consumption-list','StockController@consumption')->name('consumption.home');
+Route::get('/consumption/create','StockController@consumptionCreate')->name('consumption.create');
+
 
 Route::get('/product','ProductController@index')->name('product.home');
 Route::get('/product/create','ProductController@create')->name('product.create');

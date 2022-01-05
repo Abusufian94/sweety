@@ -333,5 +333,9 @@
 
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
+
+	<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+	<script type="application/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+
 </body>
 </html>

@@ -4,7 +4,19 @@
         <div class="pd-ltr-20">
 
 
-
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-primary " href="{{ route('consumption.create') }}">
+                                Create
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card-box mb-30">
                 <h2 class="h4 pd-20">Consumption Entries</h2>
                 <table id='example' class="table nowrap responsive example">
@@ -14,8 +26,9 @@
                             <th class="all">Name</th>
                             <th class="all">Unit</th>
                             <th class="all">Stock</th>
-                            <th class="all">Product</th>
-                            <th class="all">Updated By User</th>
+                            <th class="all">Created By User</th>
+                            <th class="all">Created At</th>
+                            <th class="all">Updated At</th>
                         </tr>
                     </thead>
 
@@ -72,12 +85,23 @@
                         data: 'stock'
                     },
                     {
-                        data: 'product_name'
-                    },
-                    {
                         data: 'name'
                     },
-                ]
+                    {
+                        data: 'created_on', "render": function (value) {
+                              if (value === null) return "";
+                              return moment(value).format('DD/MM/YYYY');
+                          }
+                    },
+                    {
+                        data: 'updated_on', "render": function (value) {
+                              if (value === null) return "";
+                              return moment(value).format('DD/MM/YYYY');
+                          }
+                    },
+                    
+                ],
+                "order": [[0, "desc" ]]
             });
 
             // });

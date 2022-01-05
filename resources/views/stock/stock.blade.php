@@ -97,6 +97,8 @@
                             <th class="all">Stock</th>
                             <th class="all">Price</th>
                             <th class="all">status</th>
+                            <th class="all">Created At</th>
+                            <th class="all">Updated At</th>
                             <th class="datatable-nosort all">Action</th>
                         </tr>
                     </thead>
@@ -158,11 +160,23 @@
                                 data: 'status'
                             },
                             {
+                                data: 'created_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY');
+                                }
+                            },
+                            {
+                                data: 'updated_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY');
+                                }
+                            },
+                            {
                                 data: 'status'
                             }
                         ],
                         "columnDefs": [{
-                                "targets": 6,
+                                "targets": 8,
                                 "render": function(data, type, row, meta) {
                                     
                                     //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';

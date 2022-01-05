@@ -41,6 +41,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
 
     //consumption listen
     Route::get('consumption/all', 'StockController@consumption_list')->name('consumption.list');
+    Route::post('cn/add', 'StockController@consumptionCreate')->name('cn.add');
 
 
      // Product Routes

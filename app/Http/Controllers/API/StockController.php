@@ -331,6 +331,8 @@ class StockController extends Controller
                     "price" => $record->price,
                     "status" => $record->status,
                     "status" => $record->status,
+                    "created_on" => $record->created_at,
+                    "updated_on" => $record->updated_at,
                 );
             }
 
@@ -564,12 +566,12 @@ class StockController extends Controller
 
         // Get records, also we have included search filter as well
         $records = Stocklog::orderBy($columnName, $columnSortOrder)
+            ->leftjoin('users', 'raw_stock_log.user_id', '=', 'users.id')
             ->where('raw_stock_log.raw_name', 'like', '%' . $searchValue . '%')
             ->orWhere('raw_stock_log.unit', 'like', '%' . $searchValue . '%')
-            ->orWhere('raw_stock_log.price', 'like', '%' . $searchValue . '%')
             ->orWhere('raw_stock_log.log_type', 'like', '%' . $searchValue . '%')
             ->orWhere('raw_stock_log.operation', 'like', '%' . $searchValue . '%')
-            ->select('raw_stock_log.*')
+            ->select('raw_stock_log.*','users.name as name')
             ->skip($start)
             ->take($rowperpage)
             ->get();
@@ -583,10 +585,11 @@ class StockController extends Controller
                 "raw_name" => $record->raw_name,
                 "unit" => $record->unit,
                 "stock" => $record->stock,
-                "price" => $record->price,
                 "log_type" => $record->log_type,
+                "name" => $record->users->name,
                 "operation" => $record->operation,
-
+                "created_on" => $record->created_at,
+                "updated_on" => $record->updated_at,
             );
         }
 
@@ -708,9 +711,9 @@ class StockController extends Controller
                     "raw_name" => $record->raw->raw_name,
                     "unit" => $record->unit,
                     "stock" => $record->stock,
-                    "product_name" => $record->products->product_name,
-                    "name" => $record->users->name
-
+                    "name" => $record->users->name,
+                    "created_on" => $record->created_at,
+                    "updated_on" => $record->updated_at,
                 );
             }
 
@@ -731,24 +734,7 @@ class StockController extends Controller
         }
     }
 
-     // Common Function for updating log table
-     public function stock_log($input, $id, $operation, $log)
-     {
-         $data =  $input;
-         $data['raw_id'] = $id;
-         $data['operation'] = $operation;
-         $data['log_type'] = $log;
-         Stocklog::create($data);
-     }
-
-      // Common Function for updating Consumption table
-      public function consumption($input, $id)
-      {
-
-          $data =  $input;
-          $data['raw_id'] = $id;
-          Consumption::create($data);
-      }
+   
 
 
     //   Product list
@@ -797,6 +783,8 @@ class StockController extends Controller
                     "product_price" => $record->product_price,
                     "status" => $record->status,
                     "status" => $record->status,
+                    "created_on" => $record->created_at,
+                    "updated_on" => $record->updated_at,
                 );
             }
 
@@ -1019,4 +1007,62 @@ class StockController extends Controller
             return 1;
         }
     }
+
+    public function consumptionCreate(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'raw_id' => 'required',
+            'unit' => 'required',
+            'stock' => 'required',
+            'user_id'   => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+
+       
+        $input = $request->all();
+
+        if(isset($request->raw_id)){
+          
+                $result = $this->raw_update($request->raw_id, $request->stock);
+                $raw =  Raw::where('raw_id', $request->raw_id)->first();
+
+                if($result ==1){
+                    $id = Consumption::create($input)->consumption_id;
+                    $input["raw_name"] = $raw->raw_name;
+                    $this->stock_log($input, $id, "Insert", "Consumption");
+
+                }
+           
+          }
+      
+        return response()->json(['stat' => true, 'message' => "Consumption details added successfully ", 'data' => 'Success'], $this->successStatus);
+    }
+
+
+
+      // Common Function for updating log table
+      public function stock_log($input, $id, $operation, $log)
+      {
+          $data =  $input;
+          $data['raw_id'] = $id;
+          $data['operation'] = $operation;
+          $data['log_type'] = $log;
+          Stocklog::create($data);
+      }
+ 
+       // Common Function for updating Consumption table
+       public function consumption($input, $id)
+       {
+ 
+           $data =  $input;
+           $data['raw_id'] = $id;
+           Consumption::create($data);
+       }
+
+
 }

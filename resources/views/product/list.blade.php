@@ -98,7 +98,10 @@
                             <th class="all">Product Stock</th>
                             <th class="all">Product Price</th>
                             <th class="all">Status</th>
-                            <th class="datatable-nosort all">Action</th>
+                            <th class="all">Created At</th>
+                            <th  class="all">Updated At</th>
+                            <th class="datatable-nosort">Action</th>
+
                         </tr>
                     </thead>
                     <tbody id="demo">
@@ -161,12 +164,25 @@
                             {
                                 data: 'status'
                             },
+                           
+                            {
+                                data: 'created_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY');
+                                }
+                            },
+                            {
+                                data: 'updated_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY');
+                                }
+                            },
                             {
                                 data: 'status'
-                            }
+                            },
                         ],
                         "columnDefs": [{
-                                "targets": 7,
+                                "targets": 9,
                                 "render": function(data, type, row, meta) {
                                     
                                     //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
@@ -207,7 +223,8 @@
                             },
                             { "orderable": false, "targets": 0 }
                         ],
-                        'aaSorting': [[1, 'asc']] 
+                        'aaSorting': [[1, 'asc']] ,
+                        "order": [[0, "desc" ]]
                     });
 
                 });

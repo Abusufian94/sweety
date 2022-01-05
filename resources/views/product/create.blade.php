@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="form-group row">
+                {{-- <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Select Raw Material<small
                             style="color:red">*</small></label>
                     <div class="col-sm-12 col-md-10" style="width:100%;">
@@ -40,7 +40,7 @@
                             <option value="" disabled>Select Raw Material</option>
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
                 <div id="outputArea"></div>
 
@@ -106,7 +106,7 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            loadattribute();
+           // loadattribute();
             $("#myform").validate({
                 rules: {
                     product_unit: {
@@ -186,78 +186,78 @@
 
         });
 
-        async function loadattribute() {
-            const token = JSON.parse(localStorage.getItem('loginUser'));
-            const response = await $.ajax({
-                url: "{{ route('rawstock.rawlist') }}",
-                type: 'get',
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + token.token
-                },
-                contentType: false,
-                cache: false,
-                processData: false,
-                dataType: "json", // what to expect back from the server
-                success: function(response) {
-                    $('#raw').empty();
+        // async function loadattribute() {
+        //     const token = JSON.parse(localStorage.getItem('loginUser'));
+        //     const response = await $.ajax({
+        //         url: "{{ route('rawstock.rawlist') }}",
+        //         type: 'get',
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Authorization': 'Bearer ' + token.token
+        //         },
+        //         contentType: false,
+        //         cache: false,
+        //         processData: false,
+        //         dataType: "json", // what to expect back from the server
+        //         success: function(response) {
+        //             $('#raw').empty();
 
-                    const data = response.data;
-                    let html = '';
-                    for (var i = 0; i < data.length; i++) {
-                        console.log(data[i].raw_id)
-                        html +=
-                            `<option value="${data[i].raw_id}">${data[i].raw_name}</option> `;
+        //             const data = response.data;
+        //             let html = '';
+        //             for (var i = 0; i < data.length; i++) {
+        //                 console.log(data[i].raw_id)
+        //                 html +=
+        //                     `<option value="${data[i].raw_id}">${data[i].raw_name}</option> `;
 
-                    }
+        //             }
 
-                    $('#raw').append(
-                        `<option value="" disabled>Select Raw Material</option>${html}`);
+        //             $('#raw').append(
+        //                 `<option value="" disabled>Select Raw Material</option>${html}`);
 
-                }
-            });
+        //         }
+        //     });
 
-        }
+        // }
 
 
-        function get_raw(select)
-        {
-           // var result = [];
-            var options = select && select.options;
-            var html = '';
+        // function get_raw(select)
+        // {
+        //    // var result = [];
+        //     var options = select && select.options;
+        //     var html = '';
            
-            $.each(options,function(index,item){
+        //     $.each(options,function(index,item){
            
-                if(item.selected)
-                {
-                  let names = $(item).text();
-                  html +=  `<label>${names}</label> 
-                                <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
-                                <div class="form-group row">
-                                    <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
-                                        <div class="col-sm-12 col-md-10">
-                                            <select name='unit[]'  class="form-control" required placeholder="Select">
-                                                <option value="" disabled>Select Unit</option>
-                                                <option value="kg">KG</option>
-                                                <option value="mg">Mg</option>
-                                                <option value="li">Litre</option>
-                                                <option value="ml">Mili Liter</option>
-                                                <option value="pcs">Pcs</option>
-                                            </select>
-                                        </div>
+        //         if(item.selected)
+        //         {
+        //           let names = $(item).text();
+        //           html +=  `<label>${names}</label> 
+        //                         <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
+        //                         <div class="form-group row">
+        //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
+        //                                 <div class="col-sm-12 col-md-10">
+        //                                     <select name='unit[]'  class="form-control" required placeholder="Select">
+        //                                         <option value="" disabled>Select Unit</option>
+        //                                         <option value="kg">KG</option>
+        //                                         <option value="mg">Mg</option>
+        //                                         <option value="li">Litre</option>
+        //                                         <option value="ml">Mili Liter</option>
+        //                                         <option value="pcs">Pcs</option>
+        //                                     </select>
+        //                                 </div>
 
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
-                                        <div class="col-sm-12 col-md-10">
-                                    <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
-                                    </div>
-                                </div>`;
+        //                         </div>
+        //                         <div class="form-group row">
+        //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
+        //                                 <div class="col-sm-12 col-md-10">
+        //                             <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
+        //                             </div>
+        //                         </div>`;
                                 
-                }
-            });
-            $('#outputArea').append(html);
-        }
+        //         }
+        //     });
+        //     $('#outputArea').append(html);
+        // }
     </script>
 
 @endsection

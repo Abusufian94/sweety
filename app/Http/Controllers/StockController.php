@@ -28,4 +28,9 @@ class StockController extends Controller
     {
         return view('consumption.list');
     }
+
+    public function consumptionCreate()
+    {
+        return view('consumption.add');
+    }
 }

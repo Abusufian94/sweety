@@ -14,8 +14,10 @@
                             <th class="all">Name</th>
                             <th class="all">Unit</th>
                             <th class="all">Stock</th>
-                            <th class="all">Price</th>
                             <th class="all">Log Type</th>
+                            <th class="all">Updated By</th>
+                            <th class="all">Created At</th>
+                            <th class="all">Updated At</th>
                             <th class="all">Operation</th>
                         </tr>
                     </thead>
@@ -63,6 +65,8 @@
                     'Authorization': 'Bearer ' + x.token
                 }
             });
+
+
             var $table = $('#example3').dataTable({
                 processing: true,
                 serverSide: true,
@@ -76,7 +80,7 @@
                 },
                 destroy: true,
                 columns: [{
-                        data: 'raw_id',
+                        data: 'id',
                         "sortable": false,
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
@@ -92,15 +96,28 @@
                         data: 'stock'
                     },
                     {
-                        data: 'price'
-                    },
-                    {
                         data: 'log_type'
                     },
                     {
+                        data: 'name'
+                    },
+                    {
+                        data: 'created_on', "render": function (value) {
+                              if (value === null) return "";
+                              return moment(value).format('DD/MM/YYYY');
+                          }
+                    },
+                    {
+                        data: 'updated_on', "render": function (value) {
+                              if (value === null) return "";
+                              return moment(value).format('DD/MM/YYYY');
+                          }
+                    },
+                    {
                         data: 'operation'
-                    }
-                ]
+                    },
+                ],
+                "order": [[0, "desc" ]]
             });
 
             // });
