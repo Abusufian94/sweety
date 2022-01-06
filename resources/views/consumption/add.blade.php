@@ -11,7 +11,7 @@
                                     style="color:red">*</small></label>
                             <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                                <select  data-width="100%"  name="raw_id" id="raw_id" required="required"
+                                <select  data-width="100%"  name="raw_id" id="raw_id" required="required"   onchange="loadUnite(this)"
                                      class="form-control">
                                     <option value="">Select Raw Material</option>
                                 </select>
@@ -21,7 +21,7 @@
                         <label class="col-sm-12 col-md-2 col-form-label">Unit<small style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
 
-                            <select name="unit" id="unit" class="form-control" required>
+                            <select name="unit" id="unit" class="form-control" required disabled>
                                 <option value="">Select Unit</option>
                                 <option value="kg">KG</option>
                                 <option value="mg">Mg</option>
@@ -31,10 +31,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row avaliable">
+                        <label class="col-sm-12 col-md-2 col-form-label">Avaliable Stock<small style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="number" placeholder="Avaliable Stock" name="astock" id="astock">
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Stock<small style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" placeholder="Stock" name="stock" id="stock" required>
+                            <input class="form-control" type="number" placeholder="Stock" name="stock" id="stock" required>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -79,7 +85,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             loadattribute();
-
+            $(".avaliable").hide();
 
             $("#myform").validate({
                 rules: {
@@ -106,8 +112,7 @@
 
                     var form_data = new FormData(form);
                     form_data.append("user_id", user_id);
-
-
+                    form_data.append("unit", unit);
 
                     $.ajax({
                         url: "{{ url('api/v1/cn/add') }}",
@@ -163,6 +168,35 @@
                         `<option value="" disabled>Select Raw Material</option>${html}`);
 
                 }
+            });
+
+        }
+
+
+        function loadUnite(select) {
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            var id = select.value
+            const response =$.ajax({
+                url: "{{ url('api/v1/pro/rawitems') }}/" + id,
+                type: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json", // what to expect back from the server
+                success: function(response) {
+
+                    console.log(response);
+                    $(".avaliable").show();
+                    $("#astock").val(response.data[0].stock);
+                    $("#unit").val(response.data[0].unit).attr("selected","selected");
+
+                    $("#stock").attr('min', 1);
+                    $("#stock").attr('max', response.data[0].stock);
+                 }
             });
 
         }

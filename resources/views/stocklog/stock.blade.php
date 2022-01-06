@@ -14,6 +14,7 @@
                             <th class="all">Name</th>
                             <th class="all">Unit</th>
                             <th class="all">Stock</th>
+                            <th class="all">Price</th>
                             <th class="all">Log Type</th>
                             <th class="all">Updated By</th>
                             <th class="all">Created At</th>
@@ -96,6 +97,9 @@
                         data: 'stock'
                     },
                     {
+                        data: 'price'
+                    },
+                    {
                         data: 'log_type'
                     },
                     {
@@ -104,13 +108,13 @@
                     {
                         data: 'created_on', "render": function (value) {
                               if (value === null) return "";
-                              return moment(value).format('DD/MM/YYYY');
+                              return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                           }
                     },
                     {
                         data: 'updated_on', "render": function (value) {
                               if (value === null) return "";
-                              return moment(value).format('DD/MM/YYYY');
+                              return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                           }
                     },
                     {

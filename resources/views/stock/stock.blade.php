@@ -162,13 +162,13 @@
                             {
                                 data: 'created_on', "render": function (value) {
                                     if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY');
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                                 }
                             },
                             {
                                 data: 'updated_on', "render": function (value) {
                                     if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY');
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                                 }
                             },
                             {

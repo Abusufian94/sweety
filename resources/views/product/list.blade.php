@@ -98,9 +98,9 @@
                             <th class="all">Product Stock</th>
                             <th class="all">Product Price</th>
                             <th class="all">Status</th>
-                            <th class="all">Created At</th>
-                            <th  class="all">Updated At</th>
-                            <th class="datatable-nosort">Action</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th class="all datatable-nosort">Action</th>
 
                         </tr>
                     </thead>
@@ -168,13 +168,13 @@
                             {
                                 data: 'created_on', "render": function (value) {
                                     if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY');
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                                 }
                             },
                             {
                                 data: 'updated_on', "render": function (value) {
                                     if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY');
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                                 }
                             },
                             {

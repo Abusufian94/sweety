@@ -18,7 +18,7 @@ class Stocklog extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'raw_id', 'unit', 'stock','log_type','operation','user_id', 'raw_name'
+        'raw_id', 'price', 'unit', 'stock','log_type','operation','user_id', 'raw_name'
     ];
 
     public function raw()

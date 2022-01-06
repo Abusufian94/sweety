@@ -50,7 +50,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      Route::post('pro/update', 'StockController@updateProduct');
      Route::delete('pro/delete/{id}', 'StockController@deleteProduct');
      Route::get('pro/all', 'StockController@plist')->name('product.list');
-     Route::get('pro/rawitems', 'StockController@rawlist')->name('rawstock.rawlist');
+     Route::get('pro/rawitems/{id?}', 'StockController@rawlist')->name('rawstock.rawlist');
      Route::get('pro/consumption/{id}', 'StockController@productConsumption')->name('product.consumption');
 
 });

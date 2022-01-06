@@ -585,6 +585,7 @@ class StockController extends Controller
                 "raw_name" => $record->raw_name,
                 "unit" => $record->unit,
                 "stock" => $record->stock,
+                "price" => $record->price,
                 "log_type" => $record->log_type,
                 "name" => $record->users->name,
                 "operation" => $record->operation,
@@ -807,11 +808,18 @@ class StockController extends Controller
 
 
 
-     public function rawlist(){
+     public function rawlist(Request $request,  $id=null){
         try {
 
-            $retailPoList  =  Raw::select('*')->where('stock',  '<>' , 0);
-            $retailPoList = $retailPoList->orderBy('raw_id', 'desc');
+            if($id !=null){
+                $retailPoList  =  Raw::select('*')->where('stock',  '<>' , 0)->where('raw_id',"=",$id);
+                $retailPoList = $retailPoList->orderBy('raw_id', 'desc');
+            }
+            else{
+                $retailPoList  =  Raw::select('*')->where('stock',  '<>' , 0);
+                $retailPoList = $retailPoList->orderBy('raw_id', 'desc');
+            }
+           
             $total_count = $retailPoList->count();
 
             $retailPoList = $retailPoList->get()->toArray();
@@ -1031,9 +1039,13 @@ class StockController extends Controller
                 $result = $this->raw_update($request->raw_id, $request->stock);
                 $raw =  Raw::where('raw_id', $request->raw_id)->first();
 
+                // print_r($raw["raw_name"]);
+                // exit();
+
                 if($result ==1){
                     $id = Consumption::create($input)->consumption_id;
-                    $input["raw_name"] = $raw->raw_name;
+                    $input["raw_name"] = $raw["raw_name"];
+                    $input["price"] = $raw["price"];
                     $this->stock_log($input, $id, "Insert", "Consumption");
 
                 }
