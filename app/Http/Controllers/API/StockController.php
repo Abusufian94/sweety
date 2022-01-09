@@ -997,6 +997,8 @@ class StockController extends Controller
     public function getProductDetails(Request $request, $id)
     {
         $package = Product::where('id', $id)->firstOrFail();
+        
+
         return response()->json([
             'status' => 'success',
             'status_code' => Response::HTTP_OK,
