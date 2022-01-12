@@ -742,16 +742,13 @@ class StockController extends Controller
     public function productList(Request $request, $id=null)
     {
         try {
-           
-           
-            $start = (int) $request['start'];
-            $limit = (int) $request['length'];
-            $searchText = $request['search']['value'];
+                      
 
             $productList  = \DB::table('product')->select('*');
            
-             if (!empty($searchText)) {
-
+             if (!empty($$request['search']['value'])) 
+             {
+                     $searchText = $request['search']['value'];
                     $productList  =   $productList->where(function($q) use($searchText) {
                         $q->where('product_name', 'LIKE', "%" . $searchText . "%")
                         ->orWhere('product_quantity', 'LIKE', "%" . $searchText . "%")
@@ -761,6 +758,12 @@ class StockController extends Controller
                 }
 
             $total_count = $productList->count();
+
+             if (isset($request['start']) && isset($request['length'])) {
+
+                $offset = $request['start'];
+                $productList = $productList->offset($offset)->limit($request['length']);
+            }
 
             $productList = $productList->get()->toArray();
            
