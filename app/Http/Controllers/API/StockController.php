@@ -739,7 +739,7 @@ class StockController extends Controller
 
 
     //   Product list
-    public function plist(Request $request, $id=null)
+    public function productList(Request $request, $id=null)
     {
         try {
            
