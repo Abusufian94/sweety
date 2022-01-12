@@ -293,6 +293,10 @@
 
 	<script type="text/javascript">
 			$(document).ready(function(){
+				var x = JSON.parse(localStorage.getItem("loginUser"));
+				$('.user-name').html(x.name);
+			
+
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
 			 window.location.replace("{{ url('/') }}");

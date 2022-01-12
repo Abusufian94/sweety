@@ -739,69 +739,47 @@ class StockController extends Controller
 
 
     //   Product list
-    public function plist(Request $request)
+    public function plist(Request $request, $id=null)
     {
         try {
-            $draw = $request->get('draw');
-            $start = $request->get("start");
-            $rowperpage = $request->get("length"); // total number of rows per page
+           
+           
+            $start = (int) $request['start'];
+            $limit = (int) $request['length'];
+            $searchText = $request['search']['value'];
 
-            $columnIndex_arr = $request->get('order');
-            $columnName_arr = $request->get('columns');
-            $order_arr = $request->get('order');
-            $search_arr = $request->get('search');
+            $productList  = \DB::table('product')->select('*');
+           
+             if (!empty($searchText)) {
 
-            $columnIndex = $columnIndex_arr[0]['column']; // Column index
-            $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-            $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-            $searchValue = $search_arr['value']; // Search value
+                    $productList  =   $productList->where(function($q) use($searchText) {
+                        $q->where('product_name', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('product_quantity', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('product_price', 'LIKE', "%" . $searchText . "%");})
+                        ->where('status', 1);
+            
+                }
 
-            // Total records
-            $totalRecords = Product::select('count(*) as allcount')->count();
-            $totalRecordswithFilter = Product::select('count(*) as allcount')->where('product_name', 'like', '%' . $searchValue . '%')->count();
+            $total_count = $productList->count();
 
-            // Get records, also we have included search filter as well
-            $records = Product::orderBy($columnName, $columnSortOrder)
-                ->where('product.product_name', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_unit', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_price', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_quantity', 'like', '%' . $searchValue . '%')
-                ->select('product.*')
-                ->skip($start)
-                ->take($rowperpage)
-                ->get();
+            $productList = $productList->get()->toArray();
+           
+           
+            
 
-            $data_arr = array();
+            if ($total_count > 0) {
+                $productList  = json_decode(json_encode($productList));
 
-            foreach ($records as $record) {
-
-                $data_arr[] = array(
-                    "id" => $record->id,
-                    "product_name" => $record->product_name,
-                    "product_image" => $record->product_image,
-                    "product_unit" => $record->product_unit,
-                    "product_quantity" => $record->product_quantity,
-                    "product_price" => $record->product_price,
-                    "status" => $record->status,
-                    "status" => $record->status,
-                    "created_on" => $record->created_at,
-                    "updated_on" => $record->updated_at,
-                );
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$productList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "no data found", "data" => $productList], 200);
             }
-
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordswithFilter,
-                "aaData" => $data_arr,
-            );
-
-            echo json_encode($response);
 
 
         } catch (\Exception $e) {
-            Log::info('==================== retailPoListData ======================');
+            Log::info('==================== Product List Data ======================');
             Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
         }
     }

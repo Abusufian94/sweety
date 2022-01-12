@@ -240,7 +240,7 @@
                         'Accept': 'application/json',
                         'Authorization': 'Bearer ' + token.token
                     },
-                    url: "{{ url('api/v1/product/delete') }}/" + id,
+                    url: "{{ url('api/v1/pro/delete') }}/" + id,
                     dataType: "JSON",
                     data: {
                         id: id,
