@@ -290,6 +290,7 @@ class StockController extends Controller
     public function list(Request $request)
     {
         try {
+           
             $draw = $request->get('draw');
             $start = $request->get("start");
             $rowperpage = $request->get("length"); // total number of rows per page
