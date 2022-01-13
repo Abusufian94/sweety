@@ -11,6 +11,7 @@ class Product extends Authenticatable
 {
     use HasApiTokens,Notifiable;
     protected $table="product";
+    protected $appends = ['product_image_url'];
 
     protected  $primaryKey  = 'id';
 
@@ -26,5 +27,8 @@ class Product extends Authenticatable
     public function users()
     {
         return $this->belongsTo('App\User','user_id','id');
+    }
+    public function getProductImageUrlAttribute() {
+        return asset('documents/'.$this->product_image);
     }
 }
