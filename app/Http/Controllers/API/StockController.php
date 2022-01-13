@@ -744,10 +744,10 @@ class StockController extends Controller
     {
         try {
                       
-
+            
             $productList  = \DB::table('product')->select('*');
            
-             if (!empty($$request['search']['value'])) 
+             if (!empty($request['search']['value'])) 
              {
                      $searchText = $request['search']['value'];
                     $productList  =   $productList->where(function($q) use($searchText) {
