@@ -52,5 +52,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      Route::get('pro/all', 'StockController@productList')->name('product.list');
      Route::get('pro/rawitems/{id?}', 'StockController@rawlist')->name('rawstock.rawlist');
      Route::get('pro/consumption/{id}', 'StockController@productConsumption')->name('product.consumption');
+     //ware house apis
+     Route::post('product/update','Warehouseroducts@updatewarehouseproduct');
 
 });
