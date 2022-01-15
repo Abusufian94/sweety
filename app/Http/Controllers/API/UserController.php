@@ -220,60 +220,48 @@ class UserController extends Controller
     public function warehouselist(Request $request)
     {
         try {
-            $draw = $request->get('draw');
-            $start = $request->get("start");
-            $rowperpage = $request->get("length"); // total number of rows per page
+                      
+            
+            $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
+           
+             if (!empty($request['search']['value'])) 
+             {
+                     $searchText = $request['search']['value'];
+                    $retailUserList  =   $retailUserList->where(function($q) use($searchText) {
+                        $q->where('users.name', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('users.email', 'LIKE', "%" . $searchText . "%");});
+                       
+            
+                }
+            $retailUserList = $retailUserList->where('status', 1)
+                        ->where('roles', 3);
 
-            $columnIndex_arr = $request->get('order');
-            $columnName_arr = $request->get('columns');
-            $order_arr = $request->get('order');
-            $search_arr = $request->get('search');
+            $total_count = $retailUserList->count();
 
-            $columnIndex = $columnIndex_arr[0]['column']; // Column index
-            $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-            $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-            $searchValue = $search_arr['value']; // Search value
+             if (isset($request['start']) && isset($request['length'])) {
 
-            // Total records
-            $totalRecords = User::where('users.roles','=', 3)->select('count(*) as allcount')->count();
-            $totalRecordswithFilter = User::select('count(*) as allcount')->where('users.roles','=', 3)->where('name', 'like', '%' . $searchValue . '%')->count();
-
-            // Get records, also we have included search filter as well
-            $records = User::where('users.roles','=', 3)->orderBy($columnName, $columnSortOrder)
-                ->where('users.name', 'like', '%' . $searchValue . '%')
-                ->orWhere('users.email', 'like', '%' . $searchValue . '%')
-                ->select('users.*')
-                ->skip($start)
-                ->take($rowperpage)
-                ->where('users.roles','=', 3)
-                ->get();
-
-            $data_arr = array();
-
-            foreach ($records as $record) {
-
-                $data_arr[] = array(
-                    "id" => $record->id,
-                    "name" => $record->name,
-                    "email" => $record->email,
-                    "status" => $record->status,
-                    "status" => $record->status,
-                );
+                $offset = $request['start'];
+                $retailUserList = $retailUserList->offset($offset)->limit($request['length']);
             }
 
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordswithFilter,
-                "aaData" => $data_arr,
-            );
+            $retailUserList = $retailUserList->get()->toArray();
+           
+           
+            
 
-            echo json_encode($response);
+            if ($total_count > 0) {
+                $retailUserList  = json_decode(json_encode($retailUserList));
+
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "No Data Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            }
 
 
         } catch (\Exception $e) {
-            Log::info('==================== retailPoListData ======================');
+            Log::info('==================== Retail User List Data ======================');
             Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
         }
     }

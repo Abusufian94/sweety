@@ -257,6 +257,7 @@
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+							<li><a href="{{route('warehouse.retail.list')}}">Product Retail Assign </a></li>
 						</ul>
 					</li>
 				</ul>
