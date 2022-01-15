@@ -44,3 +44,7 @@ Route::get('admin/retail-user-list', 'webController@retalUserList');
 /** were house  */
 Route::get('warehouse/product/list','ProductController@warehouseproductlist')->name('warehouse.product.list');
 Route::get('warehouse/edit/product','ProductController@warehouseproductedit')->name('warehouse.product.edit');
+
+Route::get('admin/retail-user-list', 'retailController@index')->name('retail-user-list');
+Route::get('/admin/retail-user-create','retailController@create')->name('retail_user.create');
+

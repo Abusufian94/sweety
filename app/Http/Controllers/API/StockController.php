@@ -776,7 +776,7 @@ class StockController extends Controller
 
                 return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$productList]);
             } else {
-                return response()->json(["stat" => true, "message" => "no data found", "data" => $productList], 200);
+               return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$productList]);
             }
 
 
@@ -1058,6 +1058,34 @@ class StockController extends Controller
            $data =  $input;
            $data['raw_id'] = $id;
            Consumption::create($data);
+       }
+
+
+
+       //Fetch all retail store list.
+       public function retailList(Request $request )
+       {
+
+        try {
+              $retailList=  \DB::table('retail_tbl')->select('*');
+              $totalCount=$retailList->count();
+              $retailList=$retailList->get()->toArray();
+
+            $retailList=  json_decode(json_encode($retailList));
+
+              return response()->json(['stat' => true, 'message' => "Fetched all store ", 'totalStore'=>$totalCount ,'data' => $retailList]);
+
+             
+            
+        } catch (Exception $e) {
+            
+        }
+
+        
+
+
+          
+
        }
 
 

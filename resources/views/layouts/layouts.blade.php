@@ -36,7 +36,7 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <div class="brand-logo">
         <a href="{{url('/')}}">
-          <img src="{{ asset('deskapp/vendors/images/deskapp-logo.svg')}}" alt="">sweety
+          <img src="{{ asset('deskapp/vendors/images/logo.gif')}}" alt="">sweety
         </a>
       </div>
       <div class="login-menu">

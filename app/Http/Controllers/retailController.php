@@ -12,7 +12,7 @@ class retailController extends Controller
     }
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.users.retail_user_create');
     }
     public function edit(Request $request)
     {
