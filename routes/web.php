@@ -40,4 +40,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('admin/retail-user-list', 'webController@retalUserList');
+Route::get('admin/retail-user-list', 'retailController@index')->name('retail-user-list');
+Route::get('/admin/retail-user-create','retailController@create')->name('retail_user.create');

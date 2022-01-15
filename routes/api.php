@@ -53,4 +53,11 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      Route::get('pro/rawitems/{id?}', 'StockController@rawlist')->name('rawstock.rawlist');
      Route::get('pro/consumption/{id}', 'StockController@productConsumption')->name('product.consumption');
 
+     
+     /*retail store list*/
+       Route::get('admin/retails', 'StockController@retailList');
+       Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
+       Route::get('admin/retail-users', 'UserController@retailUsers');
+
+
 });
