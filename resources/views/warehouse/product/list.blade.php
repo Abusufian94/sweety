@@ -58,33 +58,6 @@
 				</div>
 			</div> --}}
 
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        {{-- <div class="title">
-								<h4>Themify Icons</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Icons</li>
-								</ol>
-							</nav> --}}
-                    </div>
-                    <div class="col-md-6 col-sm-12 text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-primary " href="{{ route('product.create') }}">
-                                Create
-                            </a>
-                            {{-- <div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="card-box mb-30">
                 <h2 class="h4 pd-20">Product</h2>
@@ -113,7 +86,7 @@
                     </tbody>
                 </table>
             </div>
-           
+
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -164,7 +137,7 @@
                             {
                                 data: 'status'
                             },
-                           
+
                             {
                                 data: 'created_on', "render": function (value) {
                                     if (value === null) return "";
@@ -184,7 +157,7 @@
                         "columnDefs": [{
                                 "targets": 9,
                                 "render": function(data, type, row, meta) {
-                                    
+
                                     //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
                                    //  return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
                                     // return "<a onclick='remove("+ row.raw_id+")'>" + row.raw_id + "</a>"
@@ -194,13 +167,11 @@
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-
-                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=${row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item" onclick="remove(${row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <a class="dropdown-item" href="{{ url('warehouse/edit/product?id=${row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
                                         </div>
                                     </div>`
                                 }
-                               
+
                             },
                             {
                                 "targets": 6,
@@ -214,12 +185,12 @@
                             {
                                 "targets": 2,
                                 "render": function(data, type, row, meta) {
-                                    
+
                                     return `<div>
                                             <img src="{!! asset('documents/${row.product_image}') !!}" />
                                     </div>`
                                 }
-                               
+
                             },
                             { "orderable": false, "targets": 0 }
                         ],

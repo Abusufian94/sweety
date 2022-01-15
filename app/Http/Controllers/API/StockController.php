@@ -290,6 +290,7 @@ class StockController extends Controller
     public function list(Request $request)
     {
         try {
+
             $draw = $request->get('draw');
             $start = $request->get("start");
             $rowperpage = $request->get("length"); // total number of rows per page
@@ -735,73 +736,54 @@ class StockController extends Controller
         }
     }
 
-   
+
 
 
     //   Product list
-    public function plist(Request $request)
+    public function productList(Request $request, $id=null)
     {
         try {
-            $draw = $request->get('draw');
-            $start = $request->get("start");
-            $rowperpage = $request->get("length"); // total number of rows per page
 
-            $columnIndex_arr = $request->get('order');
-            $columnName_arr = $request->get('columns');
-            $order_arr = $request->get('order');
-            $search_arr = $request->get('search');
 
-            $columnIndex = $columnIndex_arr[0]['column']; // Column index
-            $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-            $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-            $searchValue = $search_arr['value']; // Search value
+            $productList  = Product::select('*');
 
-            // Total records
-            $totalRecords = Product::select('count(*) as allcount')->count();
-            $totalRecordswithFilter = Product::select('count(*) as allcount')->where('product_name', 'like', '%' . $searchValue . '%')->count();
+             if (!empty($$request['search']['value']))
+             {
+                     $searchText = $request['search']['value'];
+                    $productList  =   $productList->where(function($q) use($searchText) {
+                        $q->where('product_name', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('product_quantity', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('product_price', 'LIKE', "%" . $searchText . "%");})
+                        ->where('status', 1);
 
-            // Get records, also we have included search filter as well
-            $records = Product::orderBy($columnName, $columnSortOrder)
-                ->where('product.product_name', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_unit', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_price', 'like', '%' . $searchValue . '%')
-                ->orWhere('product.product_quantity', 'like', '%' . $searchValue . '%')
-                ->select('product.*')
-                ->skip($start)
-                ->take($rowperpage)
-                ->get();
+                }
 
-            $data_arr = array();
+            $total_count = $productList->count();
 
-            foreach ($records as $record) {
+             if (isset($request['start']) && isset($request['length'])) {
 
-                $data_arr[] = array(
-                    "id" => $record->id,
-                    "product_name" => $record->product_name,
-                    "product_image" => $record->product_image,
-                    "product_unit" => $record->product_unit,
-                    "product_quantity" => $record->product_quantity,
-                    "product_price" => $record->product_price,
-                    "status" => $record->status,
-                    "status" => $record->status,
-                    "created_on" => $record->created_at,
-                    "updated_on" => $record->updated_at,
-                );
+                $offset = $request['start'];
+                $productList = $productList->offset($offset)->limit($request['length']);
             }
 
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordswithFilter,
-                "aaData" => $data_arr,
-            );
+            $productList = $productList->get()->toArray();
 
-            echo json_encode($response);
+
+
+
+            if ($total_count > 0) {
+                $productList  = json_decode(json_encode($productList));
+
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$productList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "no data found", "data" => $productList], 200);
+            }
 
 
         } catch (\Exception $e) {
-            Log::info('==================== retailPoListData ======================');
+            Log::info('==================== Product List Data ======================');
             Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
         }
     }
@@ -819,7 +801,7 @@ class StockController extends Controller
                 $retailPoList  =  Raw::select('*')->where('stock',  '<>' , 0);
                 $retailPoList = $retailPoList->orderBy('raw_id', 'desc');
             }
-           
+
             $total_count = $retailPoList->count();
 
             $retailPoList = $retailPoList->get()->toArray();
@@ -888,11 +870,11 @@ class StockController extends Controller
         }
 
         if ($files = $request->file('product_image')) {
-           
+
             $image = $request->file('product_image');
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('documents'), $new_name);
-  
+
         }
         $input = $request->all();
 
@@ -914,7 +896,7 @@ class StockController extends Controller
                 }
             }
           }
-      
+
         //$this->stock_log($request->all(), $id, "Insert", "Raw");
         return response()->json(['stat' => true, 'message' => "Product Data created successfully ", 'data' => 'Success'], $this->successStatus);
     }
@@ -937,11 +919,11 @@ class StockController extends Controller
 
         $result =  Product::where('id', $request->id)->first();
         if ($files = $request->file('product_image')) {
-           
+
             $image = $request->file('product_image');
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('documents'), $new_name);
-  
+
         }
         // $prev_stock = $result->stock;
          if ($result) {
@@ -952,7 +934,7 @@ class StockController extends Controller
             $result->product_image = $request->file('product_image')?$new_name: $result->product_image;
             $result->save();
 
-           
+
 
             if(isset($request->raw_id)&&count($request->raw_id) > 0){
                 foreach($request->raw_id as $key=>$attributes)
@@ -983,7 +965,7 @@ class StockController extends Controller
                 //         $consumption->save();
                 //     }
                 //   }
-                
+
                 }
               }
 
@@ -997,6 +979,8 @@ class StockController extends Controller
     public function getProductDetails(Request $request, $id)
     {
         $package = Product::where('id', $id)->firstOrFail();
+
+
         return response()->json([
             'status' => 'success',
             'status_code' => Response::HTTP_OK,
@@ -1006,7 +990,7 @@ class StockController extends Controller
     }
 
     public function raw_update($id, $quantity){
-        
+
         $result =  Raw::where('raw_id', $id)->first();
 
         if ($result->stock > $quantity) {
@@ -1031,11 +1015,11 @@ class StockController extends Controller
             return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
         }
 
-       
+
         $input = $request->all();
 
         if(isset($request->raw_id)){
-          
+
                 $result = $this->raw_update($request->raw_id, $request->stock);
                 $raw =  Raw::where('raw_id', $request->raw_id)->first();
 
@@ -1049,9 +1033,9 @@ class StockController extends Controller
                     $this->stock_log($input, $id, "Insert", "Consumption");
 
                 }
-           
+
           }
-      
+
         return response()->json(['stat' => true, 'message' => "Consumption details added successfully ", 'data' => 'Success'], $this->successStatus);
     }
 
@@ -1066,11 +1050,11 @@ class StockController extends Controller
           $data['log_type'] = $log;
           Stocklog::create($data);
       }
- 
+
        // Common Function for updating Consumption table
        public function consumption($input, $id)
        {
- 
+
            $data =  $input;
            $data['raw_id'] = $id;
            Consumption::create($data);

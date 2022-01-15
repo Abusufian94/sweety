@@ -242,39 +242,23 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">WAREHOUSE</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{route('warehouse.home')}}">Warehouse User</a></li>
-							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
-							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
-							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
-						</ul>
-					</li>
-					{{-- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-factory1"></span><span class="mtext">STOCK</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
-							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
-							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
-						</ul>
-					</li> --}}
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="{{route('product.home')}}"> Product</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-house-11"></span><span class="mtext">RETAIL</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="{{url('/admin/retail-user-list')}}"> Retail User</a></li>
-						</ul>
-					</li>
+                            <li><a href="#">User Profile</a></li>
+                            <li><a href="#">Stock Log</a></li>
+                            <li><a href="#">Consumption entries</a></li>
 
+							{{-- <li><a href="#">Raw Stock</a></li>
+							<li><a href="#">Stock Log</a></li>
+							<li><a href="#">Consumption Entries</a></li> --}}
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
+						</a>
+						<ul class="submenu">
+							<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -295,7 +279,7 @@
 			$(document).ready(function(){
 				var x = JSON.parse(localStorage.getItem("loginUser"));
 				$('.user-name').html(x.name);
-			
+
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");

@@ -105,27 +105,24 @@
 
     $(document).ready(function(){
       var x = localStorage.getItem("loginUser");
+      console.log(x)
       
-      if(x!=null)
-      {
 
         x = JSON.parse(x);
-           if(x.role==1)
+           if(x && x.role===1)
            {
              window.location.replace("{{ url('/admin/dashboard') }}");
            }
-           else
+           if(x && x.role===2)
            {
              window.location.replace("{{ url('/retail/dashboard') }}");
            }
 
-             if(x.role==3)
+             if(x && x.role===3)
           {
             window.location.replace("{{ url('/warehouse/dashboard') }}");
           }
 
-
-      }
 
 
 

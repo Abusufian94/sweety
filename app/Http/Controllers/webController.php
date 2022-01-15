@@ -91,13 +91,12 @@ class webController extends Controller
 
     public function profile3(Request $request)
     {
-     return view('retail.profile2');
+     return view('warehouse.profile2');
     }
 
 
     public function retalUserList(Request $request)
     {
-     
       return view('admin.retail_user_list');
     }
 

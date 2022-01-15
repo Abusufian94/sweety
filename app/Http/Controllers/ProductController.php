@@ -19,4 +19,14 @@ class ProductController extends Controller
         $id = $request->query('id');
         return view('product.edits',compact('id'));
     }
+    //ware house product
+
+    public function warehouseproductlist()
+    {
+        return view('warehouse.product.list');
+    }
+    public function warehouseproductedit(Request $request) {
+        $id = $request->query('id');
+        return view('warehouse.product.edits',compact('id'));
+    }
 }

@@ -41,3 +41,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('admin/retail-user-list', 'webController@retalUserList');
+/** were house  */
+Route::get('warehouse/product/list','ProductController@warehouseproductlist')->name('warehouse.product.list');
+Route::get('warehouse/edit/product','ProductController@warehouseproductedit')->name('warehouse.product.edit');
