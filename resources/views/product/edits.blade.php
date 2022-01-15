@@ -18,19 +18,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
+                        <label class="col-sm-12 col-md-2 col-form-label">Productd Unit<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
     
-                            <select 
-                                name="product_unit" id="product_unit" class="form-control"  required="required">
-                                <option value="" disabled selected>Select Unit</option>
-                                <option value="kg">KG</option>
-                                <option value="mg">Mg</option>
-                                <option value="li">Litre</option>
-                                <option value="ml">Mili Liter</option>
-                                <option value="pcs">Pcs</option>
-                            </select>
+                           
+                             <input class="form-control" type="text" name="product_unit" id="product_unit"
+                                placeholder="Name" required />
                         </div>
                     </div>
 
