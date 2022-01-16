@@ -14,7 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
@@ -25,14 +25,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/datatables/css/responsive.bootstrap4.min.css')}}">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
-
-		gtag('config', 'UA-119386393-1');
-	</script>
+	
 </head>
 <body>
 	<div class="pre-loader">
@@ -322,8 +315,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 
-	<script type="application/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-	<script type="application/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+	
 
 </body>
 </html>
