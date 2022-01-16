@@ -260,11 +260,6 @@ class UserController extends Controller
     public function warehouselist(Request $request)
     {
         try {
-<<<<<<< HEAD
-                      
-            
-=======
->>>>>>> master
             $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
            
              if (!empty($request['search']['value'])) 
@@ -343,7 +338,7 @@ class UserController extends Controller
 
     public function retailUsers(Request $request)
     {
-       log::info("hello");
+       //log::info("hello");
   
        try {
                       
