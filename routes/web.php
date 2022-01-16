@@ -48,6 +48,7 @@ Route::get('warehouse/edit/product','ProductController@warehouseproductedit')->n
 Route::get('warehouse/retail/list','ProductController@warehouseretaillist')->name('warehouse.retail.list');
 Route::get('warehouse/edit/retail','ProductController@warehouseretailedit')->name('warehouse.retail.edit');
 Route::get('warehouse/retail/create','ProductController@warehouseretailcreate')->name('warehouse.retail.create');
+
 Route::get('admin/retail-user-list', 'retailController@index')->name('retail-user-list');
 Route::get('/admin/retail-user-create','retailController@create')->name('retail_user.create');
 

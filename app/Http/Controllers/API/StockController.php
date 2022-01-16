@@ -12,7 +12,7 @@ use App\Product;
 use App\Stocklog;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 use DataTables;
 
 class StockController extends Controller

@@ -5,79 +5,74 @@
 
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
-                            style="color:red">*</small></label>
-                    <div class="col-sm-12 col-md-10">
-                        <input class="form-control" type="text" name="product_name" id="product_name" required="required"
-                            placeholder="Name"  />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
-                            style="color:red">*</small></label>
-                    <div class="col-sm-12 col-md-10" style="width:100%;">
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                        <select 
-                            name="product_unit" id="product_unit" class="form-control"  required="required">
-                            <option value="" disabled selected>Select Unit</option>
-                            <option value="kg">KG</option>
-                            <option value="mg">Mg</option>
-                            <option value="li">Litre</option>
-                            <option value="ml">Mili Liter</option>
-                            <option value="pcs">Pcs</option>
-                        </select>
+                            <select name="product_id" id="product_id" class="form-control" required="required">
+                                <option value="" disabled selected>Select Product</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                {{-- <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Select Raw Material<small
-                            style="color:red">*</small></label>
-                    <div class="col-sm-12 col-md-10" style="width:100%;">
+                            <select name="unity" id="unity" disabled class="form-control" required="required">
+                                <option value="">Select Unit</option>
+                                <option value="kg">KG</option>
+                                <option value="mg">Mg</option>
+                                <option value="li">Litre</option>
+                                <option value="ml">Mili Liter</option>
+                                <option value="pcs">Pcs</option>
+                            </select>
+                        </div>
+                    </div>
 
-                        <select  data-width="100%" multiple name="raw" required="required"
-                            id="raw" class="form-control"   onchange="get_raw(this)">
-                            <option value="" disabled>Select Raw Material</option>
-                        </select>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Avaliable Quantity<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="text" placeholder="Quantity" name="aval_quantity"
+                                id="aval_quantity" required="required" disabled />
+                        </div>
                     </div>
-                </div> --}}
 
-                <div id="outputArea"></div>
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Select Retail User<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10" style="width:100%;">
+
+                            <select name="retail_id" id="retail_id" class="form-control" required="required">
+                                <option value="" disabled selected>Select Retail User</option>
+                            </select>
+                        </div>
+                    </div>
 
 
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
-                            style="color:red">*</small></label>
-                    <div class="col-sm-12 col-md-10">
-                        <input class="form-control" type="text" placeholder="Quantity" name="product_quantity"
-                            id="product_quantity" required="required" />
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="text" placeholder="Quantity" name="quantity" min="1" 
+                                id="quantity" required="required" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
-                            style="color:red">*</small></label>
-                    <div class="col-sm-12 col-md-10">
-                        <input class="form-control" type="text" name="product_price" placeholder="Price" required="required"/>
+                   
+                    <div class="form-group row">
+                        {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
+                        <div class="col-sm-12 col-md-10">
+                            <input class="btn btn-primary" type="submit" value="Submit" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Image</label>
-                    <div class="col-sm-12 col-md-10">
-                        <input class="form-control" type="file" name="product_image" id="product_image" required="required" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
-                    <div class="col-sm-12 col-md-10">
-                        <input class="btn btn-primary" type="submit" value="Submit" />
-                    </div>
-                </div>
-            </form>
+                </form>
 
             </div>
         </div>
     </div>
-    
+
     </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -106,19 +101,20 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-           // loadattribute();
+             loadRetailUser();
+             loadProduct();
             $("#myform").validate({
                 rules: {
-                    product_unit: {
+                    unity: {
                         required: true
                     },
-                    product_price: {
+                    retail_id: {
                         required: true
                     },
-                    product_name: {
+                    product_id: {
                         required: true
                     },
-                    product_quantity: {
+                    quantity: {
                         required: true
                     }
                 },
@@ -126,42 +122,16 @@
                     const obj = $(form).serializeArray();
                     const token = JSON.parse(localStorage.getItem('loginUser'));
                     const user_id = token.id;
+                    let unity = $("#unity").val();
 
-
-                    var raw_name = $("#raw_name").val();
-                    var unit = $('[name="unit"]').val();
-                    var stock = $('[name="stock"]').val();
-                    var price = $('[name="price"]').val();
-
-                    var form_data = new FormData();
-                    form_data.append("raw_name", raw_name);
-                    form_data.append("unit", unit);
-                    form_data.append("stock", stock);
-                    form_data.append("price", price);
+                    var form_data = new FormData(form);
                     form_data.append("user_id", user_id);
+                    form_data.append("unity", unity);
+                    form_data.append("status", 0);
 
 
-                    // const obj = $(form).serializeArray();
-                    // const token = JSON.parse(localStorage.getItem('loginUser'));
-                    // const user_id = token.id;
-
-
-                    var product_name = $("#product_name").val();
-                    var product_unit = $('[name="product_unit"]').val();
-                    var product_quantity = $('[name="product_quantity"]').val();
-                    var product_price = $('[name="product_price"]').val();
-                    var product_image = $('[name="product_image"]').val();
-
-                    var form_data = new FormData(form); 
-                    form_data.append("product_name", product_name);
-                    form_data.append("product_unit", product_unit);
-                    form_data.append("product_quantity", product_quantity);
-                    form_data.append("product_price", product_price);
-                    form_data.append("user_id", user_id);
-                 
-                     var product_price = $('[name="product_price"]').val();
                     $.ajax({
-                        url: "{{ url('api/v1/pro/create') }}",
+                        url: "{{ url('api/v1/retail-assign-log') }}",
                         headers: {
                             'Accept': 'application/json',
                             'Authorization': 'Bearer ' + token.token
@@ -175,7 +145,7 @@
                         data: form_data,
                         success: function(response) {
                             $(form)[0].reset()
-                            window.location = "{{ route('product.home') }}"
+                            window.location = "{{ route('warehouse.retail.list') }}"
                         }
                     });
 
@@ -186,78 +156,81 @@
 
         });
 
-        // async function loadattribute() {
-        //     const token = JSON.parse(localStorage.getItem('loginUser'));
-        //     const response = await $.ajax({
-        //         url: "{{ route('rawstock.rawlist') }}",
-        //         type: 'get',
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Authorization': 'Bearer ' + token.token
-        //         },
-        //         contentType: false,
-        //         cache: false,
-        //         processData: false,
-        //         dataType: "json", // what to expect back from the server
-        //         success: function(response) {
-        //             $('#raw').empty();
+        async function loadRetailUser() {
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                url: "{{ url('api/v1/retail-users') }}" ,
+                type: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json", // what to expect back from the server
+                success: function(response) {
+                    $('#retail_id').empty();
 
-        //             const data = response.data;
-        //             let html = '';
-        //             for (var i = 0; i < data.length; i++) {
-        //                 console.log(data[i].raw_id)
-        //                 html +=
-        //                     `<option value="${data[i].raw_id}">${data[i].raw_name}</option> `;
+                    const data = response.data;
+                    let html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        html +=
+                            `<option value="${data[i].id}">${data[i].name}</option> `;
 
-        //             }
+                    }
 
-        //             $('#raw').append(
-        //                 `<option value="" disabled>Select Raw Material</option>${html}`);
+                    $('#retail_id').append(
+                        `<option value="">Select Retail User</option>${html}`);
 
-        //         }
-        //     });
+                }
+            });
 
-        // }
+        }
+
+        async function loadProduct() {
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                url: "{{ url('api/v1/product-list') }}" ,
+                type: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json", // what to expect back from the server
+                success: function(response) {
+                    $('#product_id').empty();
+
+                    const data = response.data;
+                    let html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        html +=
+                            `<option value="${data[i].id}" data-unit="${data[i].product_unit}" data-quantity="${data[i].product_quantity}">${data[i].product_name}</option> `;
+
+                    }
+
+                    $('#product_id').append(
+                        `<option value="">Select Product</option>${html}`);
+
+                }
+            });
+
+        }
+
+        $('#product_id').change(function() {
+            let unit = $(':selected', $(this)).data('unit');
+            let quantity = $(':selected', $(this)).data('quantity');
+            $("#unity").val(unit).attr("selected","selected");
+            $("#aval_quantity").val(quantity);
+            $("#quantity").attr('max', quantity);
+
+        });
 
 
-        // function get_raw(select)
-        // {
-        //    // var result = [];
-        //     var options = select && select.options;
-        //     var html = '';
-           
-        //     $.each(options,function(index,item){
-           
-        //         if(item.selected)
-        //         {
-        //           let names = $(item).text();
-        //           html +=  `<label>${names}</label> 
-        //                         <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
-        //                         <div class="form-group row">
-        //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
-        //                                 <div class="col-sm-12 col-md-10">
-        //                                     <select name='unit[]'  class="form-control" required placeholder="Select">
-        //                                         <option value="" disabled>Select Unit</option>
-        //                                         <option value="kg">KG</option>
-        //                                         <option value="mg">Mg</option>
-        //                                         <option value="li">Litre</option>
-        //                                         <option value="ml">Mili Liter</option>
-        //                                         <option value="pcs">Pcs</option>
-        //                                     </select>
-        //                                 </div>
-
-        //                         </div>
-        //                         <div class="form-group row">
-        //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Stock</label>
-        //                                 <div class="col-sm-12 col-md-10">
-        //                             <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
-        //                             </div>
-        //                         </div>`;
-                                
-        //         }
-        //     });
-        //     $('#outputArea').append(html);
-        // }
+      
     </script>
 
 @endsection

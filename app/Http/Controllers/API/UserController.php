@@ -8,7 +8,7 @@ use App\User;
 use App\RetailUser;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
