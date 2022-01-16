@@ -86,7 +86,7 @@
             </div>
 
             <div class="card-box mb-30">
-                <h2 class="h4 pd-20">Best Selling Products</h2>
+                <h2 class="h4 pd-20">Warehouse User list</h2>
                 <table id="example1" class="table nowrap responsive">
 
                     <thead>

@@ -55,4 +55,11 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      //ware house apis
      Route::post('product/update','Warehouseroducts@updatewarehouseproduct');
 
+     
+     /*retail store list*/
+       Route::get('admin/retails', 'StockController@retailList');
+       Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
+       Route::get('admin/retail-users', 'UserController@retailUsers');
+
+
 });

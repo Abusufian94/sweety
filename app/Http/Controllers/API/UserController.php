@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\RetailUser;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Log;
@@ -132,6 +133,11 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
         }
+          $checkUser= User::where('email', $request['email'])->first();
+        // if(!empty($checkUser))
+        // {
+        //      return response()->json(['stat' => true, 'message' => "The email has already been taken!", 'data' => $success]);   
+        // }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -142,6 +148,40 @@ class UserController extends Controller
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
         return response()->json(['stat' => true, 'message' => "User account has been created successfully ", 'data' => $success], $this->successStatus);
+    }
+
+     public function retailUserCreate(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'retail_id'=>'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
+            'roles' => "required"
+            //'c_password' => 'required|same:password',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+
+        $user = User::create($input);
+
+        $updatePassword = User::findOrFail($user->id);
+        $updatePassword->password_as = $request->password;
+        $updatePassword->status = 1;
+        $updatePassword->save();
+        $success['token'] =  $user->createToken('MyApp')->accessToken;
+        $success['name'] =  $user->name;
+        $retailInput=[];
+        $rtailInput['retail_id']=$request['retail_id'];
+        $rtailInput['user_id']=$updatePassword->id;
+        log::info($rtailInput);
+        $retailUser = RetailUser::create($rtailInput);
+
+        return response()->json(['stat' => true, 'message' => "Retail account has been created successfully ", 'data' => $success], $this->successStatus);
     }
 
 
@@ -220,8 +260,11 @@ class UserController extends Controller
     public function warehouselist(Request $request)
     {
         try {
+<<<<<<< HEAD
                       
             
+=======
+>>>>>>> master
             $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
            
              if (!empty($request['search']['value'])) 
@@ -254,12 +297,12 @@ class UserController extends Controller
 
                 return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
             } else {
-                return response()->json(["stat" => true, "message" => "No Data Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+                return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
             }
 
 
         } catch (\Exception $e) {
-            Log::info('==================== Retail User List Data ======================');
+            Log::info('==================== warehouselist ======================');
             Log::error($e->getMessage());
               return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
@@ -296,5 +339,58 @@ class UserController extends Controller
         $token->revoke();
         $response = ['stat' => true, "message" => "You Have Successfully Logged Out", 'data' => []];
         return response($response, 200);
+    }
+
+    public function retailUsers(Request $request)
+    {
+       log::info("hello");
+  
+       try {
+                      
+            
+            $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
+           
+             if (!empty($request['search']['value'])) 
+             {
+                     $searchText = $request['search']['value'];
+                    $retailUserList  =   $retailUserList->where(function($q) use($searchText) {
+                        $q->where('users.name', 'LIKE', "%" . $searchText . "%")
+                        ->orWhere('users.email', 'LIKE', "%" . $searchText . "%");});
+                       
+            
+                }
+            $retailUserList = $retailUserList->where('status', 1)
+                        ->where('roles', 2);
+
+            $total_count = $retailUserList->count();
+
+             if (isset($request['start']) && isset($request['length'])) {
+
+                $offset = $request['start'];
+                $retailUserList = $retailUserList->offset($offset)->limit($request['length']);
+            }
+
+            $retailUserList = $retailUserList->get()->toArray();
+           
+           
+            
+
+            if ($total_count > 0) {
+                $retailUserList  = json_decode(json_encode($retailUserList));
+
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "No Data Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            }
+
+
+        } catch (\Exception $e) {
+            Log::info('==================== Retail User List Data ======================');
+            Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
+            Log::error($e->getTraceAsString());
+        }
+
+
     }
 }
