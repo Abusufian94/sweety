@@ -10,7 +10,7 @@ use App\User;
 use App\ProductRetailLog;
 use Validator;
 use Illuminate\Support\Facades\Log;
-
+use App\RetailProduct;
 
 class Warehouseroducts extends Controller
 {
@@ -117,6 +117,19 @@ class Warehouseroducts extends Controller
     $result = ProductRetailLog::create($input)->product_retail_assign_log_id;
 
     if ($result) {
+      $retailProduct = new RetailProduct();
+      $retailProduct->product_retail_id = $result;
+      $retailProduct->product_id = $request->product_id;
+      $retailProduct->retail_id = $request->retail_id;
+      $retailProduct->unity = $request->unity;
+      $retailProduct->product_status = 0;
+      $retailProduct->quantity = $request->quantity;
+      $retailProduct->user_id = $request->user_id;
+      $retailProduct->save();
+    }
+
+
+    if ($result) {
       return response()->json(['stat' => true, 'message' => "Product assign to Retail ", 'data' => 'Success'], $this->successStatus);
     } else {
       return response()->json(['stat' => true, 'message' => "Error ", 'data' => 'Success'], $this->successStatus);
@@ -125,48 +138,125 @@ class Warehouseroducts extends Controller
 
   public function productRetailList(Request $request)
   {
-      try {
-          $retailUserList  =  \DB::table('product_retail_assign_log')::with('users','retails','products')->selectRaw("retails.name as rname, users.name,products.product_name,product_retail_assign_log.status,product_retail_assign_log.quantity,product_retail_assign_log.unity");
-         
-           if (!empty($request['search']['value'])) 
-           {
-                   $searchText = $request['search']['value'];
-                  $retailUserList  =   $retailUserList->where(function($q) use($searchText) {
-                      $q->where('users.name', 'LIKE', "%" . $searchText . "%")
-                      ->orWhere('products.product_name', 'LIKE', "%" . $searchText . "%");});
-                     
-          
-              }
-          $retailUserList = $retailUserList->where('status', 1)
-                      ->where('roles', 3);
+    try {
+      $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
 
-          $total_count = $retailUserList->count();
+      if (!empty($request['search']['value'])) {
+        $searchText = $request['search']['value'];
+        $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
+          $q->where('unity', 'LIKE', "%" . $searchText . "%")
+            ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
+        });
+        // ->orWhereHas('products', function($q) use($searchText){
+        //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
+        // ->orWhereHas('users', function($q) use($searchText){
+        //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
+        //     ->orWhereHas('retails', function($q) use($searchText){
+        //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
 
-           if (isset($request['start']) && isset($request['length'])) {
+        $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
 
-              $offset = $request['start'];
-              $retailUserList = $retailUserList->offset($offset)->limit($request['length']);
-          }
-
-          $retailUserList = $retailUserList->get()->toArray();
-         
-         
-          
-
-          if ($total_count > 0) {
-              $retailUserList  = json_decode(json_encode($retailUserList));
-
-              return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
-          } else {
-              return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
-          }
-
-
-      } catch (\Exception $e) {
-          Log::info('==================== warehouselist ======================');
-          Log::error($e->getMessage());
-            return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
-          Log::error($e->getTraceAsString());
+        $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
       }
+      $retailUserList = $retailUserList->where('status', 0);
+
+      $total_count = $retailUserList->count();
+
+      if (isset($request['start']) && isset($request['length'])) {
+
+        $offset = $request['start'];
+        $retailUserList = $retailUserList->offset($offset)->limit($request['length']);
+      }
+
+      $retailUserList = $retailUserList->get()->toArray();
+
+
+
+
+      if ($total_count > 0) {
+        $retailUserList  = json_decode(json_encode($retailUserList));
+
+        return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailUserList]);
+      } else {
+        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailUserList]);
+      }
+    } catch (\Exception $e) {
+      Log::info('==================== warehouselist ======================');
+      Log::error($e->getMessage());
+      return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+      Log::error($e->getTraceAsString());
+    }
+  }
+
+  public function getProductRetailDetails(Request $request, $id)
+  {
+    $package = ProductRetailLog::with('products')->where('product_retail_assign_log_id', $id)->firstOrFail();
+
+
+    return response()->json([
+      'status' => 'success',
+      'status_code' => '200',
+      'data' => $package,
+      'message' => 'Success'
+    ]);
+  }
+
+  public function productRetailLogUpdate(Request $request)
+  {
+
+    // dd($request->all());
+    // exit();
+
+    $validator = Validator::make($request->all(), [
+      'id' => 'required',
+      'product_id' => 'required',
+      'retail_id' => 'required',
+      'quantity' => 'required',
+      'unity' => 'required',
+      'user_id'   => 'required',
+    ]);
+    if ($validator->fails()) {
+      return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+    }
+
+
+    $result =  ProductRetailLog::where('product_retail_assign_log_id', $request->id)->first();
+
+    // print_r($result);
+    // exit();
+    if ($result) {
+      $result->product_id = $request->product_id;
+      $result->quantity = $request->quantity;
+      $result->unity = $request->unity;
+      $result->retail_id = $request->retail_id;
+      $result->user_id = $request->user_id;
+      $result->save();
+      //Check For entry Retail Product Table
+
+
+      $retailProduct = RetailProduct::where(['product_retail_id' => $request->id])->first();
+      if ($retailProduct) {
+        $retailProduct->product_retail_id = $request->id;
+        $retailProduct->product_id = $request->product_id;
+        $retailProduct->retail_id = $request->retail_id;
+        $retailProduct->unity = $request->unity;
+        $retailProduct->product_status = 0;
+        $retailProduct->quantity = $request->quantity;
+        $retailProduct->user_id = $request->user_id;
+        $retailProduct->save();
+      }
+
+      return response()->json(['stat' => true, 'message' => "Updated successfully ", 'data' => "Success"], $this->successStatus);
+    } else {
+      return response()->json(['stat' => false, 'message' => "Row is not found ", 'data' => []], 404);
+    }
   }
 }

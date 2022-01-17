@@ -267,6 +267,9 @@
 						<ul class="submenu">
 							<li><a href="{{url('/admin/retail-user-list')}}"> Retail User</a></li>
 						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.product.list')}}"> Retail Products</a></li>
+						</ul>
 					</li>
 
 				</ul>

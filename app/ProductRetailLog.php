@@ -8,6 +8,7 @@ class ProductRetailLog extends Model
 {
     //
     protected $table = 'product_retail_assign_log';
+    protected  $primaryKey  = 'product_retail_assign_log_id';
     protected $fillable = [ 'product_id', 'quantity', 'unity','retail_id','user_id','status', 'created_at', 'updated_at'];
 
 

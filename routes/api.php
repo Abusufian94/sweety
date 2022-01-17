@@ -63,9 +63,13 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
 
    /*retail users List*/
    Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
-   Route::get('/product-list', 'Warehouseroducts@productList')->name('productlist');
+  //  Route::get('/product-list', 'Warehouseroducts@productList')->name('productlist');
    Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
    Route::get('/product-retail-list', 'Warehouseroducts@productRetailList')->name('product.retail.list');
+   Route::get('/product-retail-details/{id}', 'Warehouseroducts@getProductRetailDetails');
+   Route::post('productretail/update','Warehouseroducts@productRetailLogUpdate');
+   Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
+   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
 
 
 });

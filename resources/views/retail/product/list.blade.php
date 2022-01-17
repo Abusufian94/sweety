@@ -2,22 +2,6 @@
 @section('content')
 <div class="main-container">
     <div class="pd-ltr-20">
-     
-
-        <div class="page-header">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                </div>
-                <div class="col-md-6 col-sm-12 text-right">
-                    <div class="dropdown">
-                        <a class="btn btn-primary " href="{{ route('warehouse.retail.create') }}">
-                            Create
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card-box mb-30">
             <h2 class="h4 pd-20">Product</h2>
             <table id="example1" class="table nowrap responsive">
@@ -71,12 +55,12 @@
                         serverSide: true,
                         bRetrieve: true ,
                         "ajax": {
-                            "url": "{{ route('product.retail.list') }}",
+                            "url": "{{ route('retail.products') }}",
                             "type": "GET",
                         },
                         destroy: true,
                         columns: [{
-                                data: 'product_retail_assign_log_id'
+                                data: 'retail_product_id'
                             },
                             {
                                 data: 'products.product_name'
@@ -85,7 +69,7 @@
                                 data: 'retails.name'
                             },
                             {
-                                data: 'unity'
+                                data: 'unit'
                             },
                             {
                                 data: 'quantity'
@@ -94,7 +78,7 @@
                                 data: 'users.name'
                             },
                             {
-                                data: 'status'
+                                data: 'product_status'
                             },
 
                             {
@@ -110,20 +94,23 @@
                                 }
                             },
                             {
-                                data: 'status'
+                                data: 'product_status'
                             },
                         ],
                         "columnDefs": [{
                                 "targets": 9,
                                 "render": function(data, type, row, meta) {
-                                    return `<div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-more"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                            <a class="dropdown-item" href="{{ url('warehouse/edit/retail?id=${row.product_retail_assign_log_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                        </div>
-                                    </div>`;
+                                        return row.product_status ==0?`<div class="dropdown">
+                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                        <i class="dw dw-more"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                        <a class="dropdown-item" onclick="changeStatus(${row.retail_product_id},${row.product_retail_id},1)"><i class="dw dw-edit2"></i> Aprroved</a>
+                                                        <a class="dropdown-item" onclick="changeStatus(${row.retail_product_id},${row.product_retail_id},2)"><i class="dw dw-edit2"></i> Returned</a>
+
+                                                        </div>
+                                                </div>`:'';
+                                    
                                 }
 
                             },
@@ -131,7 +118,7 @@
                                 "targets": 6,
                                 "render": function(data, type, row, meta) {
 
-                                    return row.status==0?row.status==1?'Approved':'Pending':'Rejected';
+                                    return (row.product_status == 0) ? "Pending" : ((row.product_status == 1)  ? "Approved" : "Rejected");
 
                                 }
 
@@ -144,33 +131,30 @@
 
                 });
 
-        // function remove(id) {
-        //     var confirms = confirm("Are you sure want to delete this?");
-        //     if (confirms) {
-        //         var id = id;
-        //         const token = JSON.parse(localStorage.getItem('loginUser'));
-        //         $.ajax({
-        //             type: "DELETE",
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Authorization': 'Bearer ' + token.token
-        //             },
-        //             url: "{{ url('api/v1/pro/delete') }}/" + id,
-        //             dataType: "JSON",
-        //             data: {
-        //                 id: id,
-        //                 user_id: token.id
-        //             },
-        //             success: function(data) {
-        //                 console.log(data)
-        //                 window.location.reload();
-        //             }
-        //         });
+        function changeStatus(id,product_retail_id,status) {
+                var id = id;
+                const token = JSON.parse(localStorage.getItem('loginUser'));
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token.token
+                    },
+                    url: "{{ url('api/v1/retail-products-approve') }}",
+                    dataType: "JSON",
+                    data: {
+                        retail_product_id: id,
+                        product_retail_id:product_retail_id,
+                        user_id: token.id,
+                        product_status:status
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        window.location.reload();
+                    }
+                });
 
-        //     }
-
-
-        // }
+            }
     </script>
 
 @endsection

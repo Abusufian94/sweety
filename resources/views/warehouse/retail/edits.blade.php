@@ -2,19 +2,20 @@
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
-            <input type="hidden" id="pid" value="{{ $id }}" />
 
             <div class="pd-20 card-box mb-30">
+                <form id="myform" method="post" enctype="multipart/form-data">
 
-                <form id="myform" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="id" value="{{ $id }}" />
+
                     <div class="form-group row">
-                        <input class="form-control" type="hidden" name="id" id="product_id"
-                                required />
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
                                 style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" name="product_name" id="product_name"
-                                placeholder="Name" required readonly/>
+                        <div class="col-sm-12 col-md-10" style="width:100%;">
+
+                            <select name="product_id" id="product_id" class="form-control" required="required">
+                                <option value="" disabled selected>Select Product</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -22,9 +23,8 @@
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                            <select
-                                name="product_unit" id="product_unit" class="form-control"  required="required" readonly>
-                                <option value="" disabled selected>Select Unit</option>
+                            <select name="unity" id="unity" disabled class="form-control" required="required">
+                                <option value="">Select Unit</option>
                                 <option value="kg">KG</option>
                                 <option value="mg">Mg</option>
                                 <option value="li">Litre</option>
@@ -33,33 +33,43 @@
                             </select>
                         </div>
                     </div>
-                    <div id="outputArea"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Avaliable Quantity<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="text" placeholder="Quantity" name="aval_quantity"
+                                id="aval_quantity" required="required" disabled />
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Select Retail User<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10" style="width:100%;">
+
+                            <select name="retail_id" id="retail_id" class="form-control" required="required">
+                                <option value="" disabled selected>Select Retail User</option>
+                            </select>
+                        </div>
+                    </div>
+
+
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" placeholder="Quantity" name="product_quantity"
-                                id="product_quantity" required>
+                            <input class="form-control" type="number" placeholder="Quantity" name="quantity" min="1" 
+                                id="quantity" required="required" />
                         </div>
                     </div>
+                   
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
-                                style="color:red">*</small></label>
+                        {{-- <label class="col-sm-12 col-md-2 col-form-label">Confirm Password</label> --}}
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" name="product_price" id="product_price" placeholder="Price" required readonly>
+                            <input class="btn btn-primary" type="submit" value="Submit" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <div id="image"></div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-12 col-md-10">
-                            <input class="btn btn-primary" type="submit" value="Update">
-                        </div>
-                    </div>
-
-
                 </form>
 
             </div>
@@ -68,42 +78,9 @@
 
     </div>
     </div>
-        <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Consumption List</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
-              <tr>
-                  <td>Name</td>
-                  <td>unit </td>
-                  <td>Quantity </td>
-              </tr>
-            </thead>
-            <tbody id="attr_table">
-
-            </tbody>
-
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-
-        </div>
-      </div>
-    </div>
-  </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         $(document).ready(function() {
-
 
             var x = localStorage.getItem("loginUser");
 
@@ -126,58 +103,155 @@
         });
     </script>
     <script type="text/javascript">
-     var arr=[];
         $(document).ready(function() {
-
+             loadRetailUser();
+             loadProduct();
             $("#myform").validate({
                 rules: {
-                    product_unit: {
+                    unity: {
                         required: true
                     },
-                    product_price: {
+                    retail_id: {
                         required: true
                     },
-                    product_name: {
+                    product_id: {
                         required: true
                     },
-                    product_quantity: {
+                    quantity: {
                         required: true
                     }
                 },
-
                 submitHandler: function(form) {
-                    let qty = $("#product_quantity").val();
-                    let productId = $("#product_id").val();
+                    const obj = $(form).serializeArray();
+                    const token = JSON.parse(localStorage.getItem('loginUser'));
+                    const user_id = token.id;
+                    let unity = $("#unity").val();
+                    let id = $("#id").val();
 
-                    apiCall("{{ url('api/v1/product/update') }}", form.method,{
-                        "_token": '{{ csrf_token() }}',
-                        product_id: productId,
-                        product_quantity :qty
-                    })
-                .then(function(data) {
-                    $(form)[0].reset()
-                    window.location = "{{ route('warehouse.product.list') }}"
-                });
+                    var form_data = new FormData(form);
+                    form_data.append("user_id", user_id);
+                    form_data.append("unity", unity);
+                    form_data.append("status", 0);
+                    form_data.append("id", id);
+
+
+                    $.ajax({
+                        url: "{{url('api/v1/productretail/update') }}",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Authorization': 'Bearer ' + token.token
+                        },
+                        type: form.method,
+                        enctype: 'multipart/form-data',
+                        contentType: false,
+                        method:'Post',
+                        cache: false,
+                        processData: false,
+                        dataType: "json", // what to expect back from the server
+                        data: form_data,
+                        success: function(response) {
+                            $(form)[0].reset()
+                            window.location = "{{ route('warehouse.retail.list') }}"
+                        }
+                    });
+
                 }
-            })
+            });
 
-            let id = $("#pid").val();
-            apiCall("{{ url('api/v1/pro/details') }}/" + id, "Get")
+            let id = $("#id").val();
+            apiCall("{{ url('api/v1/product-retail-details') }}/" + id, "Get")
                 .then(function(data) {
 
-                    $("#product_id").val(data.data.id)
-                    $("#product_name").val(data.data.product_name)
-                    $("#product_unit").val(data.data.product_unit).attr('selected','selected');
-                    $("#product_price").val(data.data.product_price);
-                    $("#product_quantity").val(data.data.product_quantity);
-                    $("#image").val(data.data.product_image);
-                    html='';
-                    if(data.data.product_image !=null){
-                        html =`<img src="{!! asset('documents/${data.data.product_image}') !!}" width="100px" height="100px" />`
-                     }
-                     $("#image").append(html);
+                    $("#id").val(data.data.product_retail_assign_log_id)
+                    $("#product_id").val(data.data.product_id).attr('selected','selected');
+                    $("#unity").val(data.data.unity).attr('selected','selected');
+                    $("#retail_id").val(data.data.retail_id).attr('selected','selected');
+                    $("#aval_quantity").val(data.data.products.product_quantity);
+                    $("#quantity").val(data.data.quantity);
+
                 });
+
+
+
         });
+
+        async function loadRetailUser() {
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                url: "{{ url('api/v1/retail-users') }}" ,
+                type: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json", // what to expect back from the server
+                success: function(response) {
+                    $('#retail_id').empty();
+
+                    const data = response.data;
+                    let html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        html +=
+                            `<option value="${data[i].id}">${data[i].name}</option> `;
+
+                    }
+
+                    $('#retail_id').append(
+                        `<option value="">Select Retail User</option>${html}`);
+
+                }
+            });
+
+        }
+
+        async function loadProduct() {
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                url: "{{ url('api/v1/pro/all') }}" ,
+                type: 'get',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                contentType: false,
+                cache: false,
+                processData: false,
+                dataType: "json", // what to expect back from the server
+                success: function(response) {
+                    $('#product_id').empty();
+
+                    const data = response.data;
+                    let html = '';
+                    for (var i = 0; i < data.length; i++) {
+                        html +=
+                            `<option value="${data[i].id}" data-unit="${data[i].product_unit}" data-quantity="${data[i].product_quantity}">${data[i].product_name}</option> `;
+
+                    }
+
+                    $('#product_id').append(
+                        `<option value="">Select Product</option>${html}`);
+
+                }
+            });
+
+        }
+
+        $('#product_id').change(function() {
+
+                let unit = $(':selected', $(this)).data('unit');
+                let quantity = $(':selected', $(this)).data('quantity');
+                $("#unity").val(unit).attr("selected","selected");
+                $("#aval_quantity").val(quantity);
+                $("#quantity").attr('max', quantity);
+
+        });
+
+        $("#product_id").trigger("change");
+
+      
     </script>
 
 @endsection

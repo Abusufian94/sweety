@@ -56,7 +56,7 @@
                         <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10">
-                            <input class="form-control" type="text" placeholder="Quantity" name="quantity" min="1" 
+                            <input class="form-control" type="number" placeholder="Quantity" name="quantity" min="1" 
                                 id="quantity" required="required" />
                         </div>
                     </div>
@@ -191,7 +191,7 @@
         async function loadProduct() {
             const token = JSON.parse(localStorage.getItem('loginUser'));
             const response = await $.ajax({
-                url: "{{ url('api/v1/product-list') }}" ,
+                url: "{{ url('api/v1/pro/all') }}" ,
                 type: 'get',
                 headers: {
                     'Accept': 'application/json',
