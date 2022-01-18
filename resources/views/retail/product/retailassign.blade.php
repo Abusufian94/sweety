@@ -2,22 +2,6 @@
 @section('content')
 <div class="main-container">
     <div class="pd-ltr-20">
-     
-
-        <div class="page-header">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                </div>
-                <div class="col-md-6 col-sm-12 text-right">
-                    <div class="dropdown">
-                        <a class="btn btn-primary " href="{{ route('warehouse.retail.create') }}">
-                            Create
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card-box mb-30">
             <h2 class="h4 pd-20">Product</h2>
             <table id="example1" class="table nowrap responsive">
@@ -58,7 +42,7 @@
 
             var x = localStorage.getItem("loginUser");
             x = JSON.parse(x);
-
+            var status = 0;
 
             $.ajaxSetup({
                 headers: {
@@ -71,8 +55,9 @@
                         serverSide: true,
                         bRetrieve: true ,
                         "ajax": {
-                            "url": "{{ route('product.retail.list') }}",
+                            "url": "{{ url('api/v1/product-retail-list') }}/" + status,
                             "type": "GET",
+
                         },
                         destroy: true,
                         columns: [{
@@ -110,20 +95,23 @@
                                 }
                             },
                             {
-                                data: 'status'
+                                data: 'product_status'
                             },
                         ],
                         "columnDefs": [{
                                 "targets": 9,
                                 "render": function(data, type, row, meta) {
-                                    return  (row.status == 0) ?`<div class="dropdown">
-                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                            <i class="dw dw-more"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                            <a class="dropdown-item" href="{{ url('warehouse/edit/retail?id=${row.product_retail_assign_log_id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                        </div>
-                                    </div>`:'';
+                                        return row.status ==0?`<div class="dropdown">
+                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                                        <i class="dw dw-more"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                                        <a class="dropdown-item" onclick="changeStatus(${row.product_retail_assign_log_id},1)"><i class="dw dw-edit2"></i> Aprroved</a>
+                                                        <a class="dropdown-item" onclick="changeStatus(${row.product_retail_assign_log_id},2)"><i class="dw dw-edit2"></i> Returned</a>
+
+                                                        </div>
+                                                </div>`:'';
+                                    
                                 }
 
                             },
@@ -144,33 +132,29 @@
 
                 });
 
-        // function remove(id) {
-        //     var confirms = confirm("Are you sure want to delete this?");
-        //     if (confirms) {
-        //         var id = id;
-        //         const token = JSON.parse(localStorage.getItem('loginUser'));
-        //         $.ajax({
-        //             type: "DELETE",
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Authorization': 'Bearer ' + token.token
-        //             },
-        //             url: "{{ url('api/v1/pro/delete') }}/" + id,
-        //             dataType: "JSON",
-        //             data: {
-        //                 id: id,
-        //                 user_id: token.id
-        //             },
-        //             success: function(data) {
-        //                 console.log(data)
-        //                 window.location.reload();
-        //             }
-        //         });
+        function changeStatus(id,status) {
+                var id = id;
+                const token = JSON.parse(localStorage.getItem('loginUser'));
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': 'Bearer ' + token.token
+                    },
+                    url: "{{ url('api/v1/retail-products-approve') }}",
+                    dataType: "JSON",
+                    data: {
+                        product_retail_assign_log_id: id,
+                        user_id: token.id,
+                        product_status:status
+                    },
+                    success: function(data) {
+                        console.log(data)
+                        window.location.reload();
+                    }
+                });
 
-        //     }
-
-
-        // }
+            }
     </script>
 
 @endsection

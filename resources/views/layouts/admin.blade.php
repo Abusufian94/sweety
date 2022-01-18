@@ -221,7 +221,7 @@
 		</div>
 		<div class="menu-block customscroll">
 			<div class="sidebar-menu">
-				{{-- <ul id="accordion-menu">
+				<ul id="accordion-menu">
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
@@ -263,9 +263,12 @@
 						<ul class="submenu">
 							<li><a href="{{route('retail.product.list')}}"> Retail Products</a></li>
 						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.assign.product.list')}}"> Assign Products</a></li>
+						</ul>
 					</li>
 
-				</ul> --}}
+				</ul>
 				@yield('menu')
 			</div>
 		</div>

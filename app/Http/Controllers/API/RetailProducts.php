@@ -77,25 +77,31 @@ class RetailProducts extends Controller
       //Check For entry Retail Product Table
 
 
-      $retailProduct = RetailProduct::where(['retail_product_id' => $request->retail_product_id])->first();
-      if ($retailProduct) {
-        $retailProduct->product_status = $request->product_status;
-        $retailProduct->save();
+      $ProductRetailLog = ProductRetailLog::where(['product_retail_assign_log_id' => $request->product_retail_assign_log_id])->first();
+      if ($ProductRetailLog) {
+      
         
         if($request->product_status ==1){
 
-            $product =  Product::where('id', $retailProduct->product_id)->first();
-            $product->product_quantity =  $product->product_quantity - $retailProduct->quantity;
+            $product =  Product::where('id', $ProductRetailLog->product_id)->first();
+            $product->product_quantity =  $product->product_quantity - $ProductRetailLog->quantity;
             $product->save();
             if($product){
-                $result =  ProductRetailLog::where('product_retail_assign_log_id', $request->product_retail_id)->first();
-                $result->status = $request->product_status;
-                $result->user_id = $request->user_id;
-                $result->save();
+              $retailProduct = new RetailProduct();
+              $retailProduct->product_id = $ProductRetailLog->product_id;
+              $retailProduct->retail_id = $ProductRetailLog->retail_id;
+              $retailProduct->unit = $ProductRetailLog->unity;
+              $retailProduct->product_status =$request->product_status;
+              $retailProduct->quantity = $ProductRetailLog->quantity;
+              $retailProduct->user_id = $ProductRetailLog->user_id;
+              $retailProduct->save();
 
             }
 
         }
+
+        $ProductRetailLog->status = $request->product_status;
+        $ProductRetailLog->save();
 
       return response()->json(['stat' => true, 'message' => "Updated successfully ", 'data' => "Success"], $this->successStatus);
     } else {

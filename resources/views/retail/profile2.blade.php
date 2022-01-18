@@ -1,7 +1,7 @@
 
  @extends('layouts.admin')
 
- @section('menu')
+ {{-- @section('menu')
  <ul id="accordion-menu">
 	<li class="dropdown">
 		<a href="javascript:;" class="dropdown-toggle">
@@ -19,12 +19,18 @@
 		<ul class="submenu">
 			<li><a href="{{url('/admin/retail-user-list')}}"> Retail User</a></li>
 		</ul>
+
+		<ul class="submenu">
+			<li><a href="{{route('retail.assign.product.list')}}"> Retail Assign</a></li>
+		</ul>
+		
 		<ul class="submenu">
 			<li><a href="{{route('retail.product.list')}}"> Retail Products</a></li>
 		</ul>
+
 	</li>
 </ul>
- @endsection
+ @endsection --}}
 
  @section('content')
 <div class="main-container">

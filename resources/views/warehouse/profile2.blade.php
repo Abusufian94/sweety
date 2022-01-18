@@ -1,7 +1,7 @@
 
  @extends('layouts.admin')
 
- @section('menu')
+ {{-- @section('menu')
  <ul id="accordion-menu">
 	<li class="dropdown">
 		<a href="javascript:;" class="dropdown-toggle">
@@ -34,7 +34,7 @@
 		</ul>
 	</li>
 </ul>
- @endsection
+ @endsection --}}
  
  @section('content')
 <div class="main-container">

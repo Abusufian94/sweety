@@ -24,4 +24,9 @@ class retailController extends Controller
     {
         return view('retail.product.list');
     }
+
+    public function retailAssignProductList()
+    {
+        return view('retail.product.retailassign');
+    }
 }

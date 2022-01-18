@@ -10,7 +10,7 @@ class Retailproduct extends Model
     protected $table = 'retail_product';
     protected  $primaryKey  = 'retail_product_id';
 
-    protected $fillable = [ 'product_id', 'quantity', 'unity','retail_id','user_id','product_status', 'created_at', 'updated_at','product_retail_id'];
+    protected $fillable = [ 'product_id', 'quantity', 'unity','retail_id','user_id','product_status', 'created_at', 'updated_at'];
 
 
     public function products()
@@ -28,8 +28,4 @@ class Retailproduct extends Model
         return $this->belongsTo('App\Retail','retail_id','retail_id');
     }
 
-    public function proretailslogs()
-    {
-        return $this->belongsTo('App\ProductRetailLog','product_retail_id','product_retail_assign_log_id');
-    }
 }

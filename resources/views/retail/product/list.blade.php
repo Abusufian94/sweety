@@ -16,7 +16,7 @@
                         <th class="all">Status</th>
                         <th>Created At</th>
                         <th>Updated At</th>
-                        <th class="all datatable-nosort">Action</th>
+                       
 
                     </tr>
                 </thead>
@@ -93,27 +93,9 @@
                                     return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
                                 }
                             },
-                            {
-                                data: 'product_status'
-                            },
+                           
                         ],
-                        "columnDefs": [{
-                                "targets": 9,
-                                "render": function(data, type, row, meta) {
-                                        return row.product_status ==0?`<div class="dropdown">
-                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                                        <i class="dw dw-more"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                                        <a class="dropdown-item" onclick="changeStatus(${row.retail_product_id},${row.product_retail_id},1)"><i class="dw dw-edit2"></i> Aprroved</a>
-                                                        <a class="dropdown-item" onclick="changeStatus(${row.retail_product_id},${row.product_retail_id},2)"><i class="dw dw-edit2"></i> Returned</a>
-
-                                                        </div>
-                                                </div>`:'';
-                                    
-                                }
-
-                            },
+                        "columnDefs": [
                             {
                                 "targets": 6,
                                 "render": function(data, type, row, meta) {
@@ -131,7 +113,7 @@
 
                 });
 
-        function changeStatus(id,product_retail_id,status) {
+        function changeStatus(id,status) {
                 var id = id;
                 const token = JSON.parse(localStorage.getItem('loginUser'));
                 $.ajax({
@@ -144,7 +126,6 @@
                     dataType: "JSON",
                     data: {
                         retail_product_id: id,
-                        product_retail_id:product_retail_id,
                         user_id: token.id,
                         product_status:status
                     },

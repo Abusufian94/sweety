@@ -114,20 +114,6 @@ class Warehouseroducts extends Controller
 
     $input = $request->all();
     $result = ProductRetailLog::create($input)->product_retail_assign_log_id;
-
-    if ($result) {
-      $retailProduct = new RetailProduct();
-      $retailProduct->product_retail_id = $result;
-      $retailProduct->product_id = $request->product_id;
-      $retailProduct->retail_id = $request->retail_id;
-      $retailProduct->unit = $request->unity;
-      $retailProduct->product_status = 0;
-      $retailProduct->quantity = $request->quantity;
-      $retailProduct->user_id = $request->user_id;
-      $retailProduct->save();
-    }
-
-
     if ($result) {
       return response()->json(['stat' => true, 'message' => "Product assign to Retail ", 'data' => 'Success'], $this->successStatus);
     } else {
@@ -135,7 +121,7 @@ class Warehouseroducts extends Controller
     }
   }
 
-  public function productRetailList(Request $request)
+  public function productRetailList(Request $request, $status=null)
   {
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
@@ -165,7 +151,10 @@ class Warehouseroducts extends Controller
           });
         });
       }
-      $retailUserList = $retailUserList->where('status', 0);
+      if($status!=null){
+          $retailUserList = $retailUserList->where('status', 0);
+      }
+      // $retailUserList = $retailUserList->where('status', 0);
 
       $total_count = $retailUserList->count();
 
@@ -238,20 +227,6 @@ class Warehouseroducts extends Controller
       $result->retail_id = $request->retail_id;
       $result->user_id = $request->user_id;
       $result->save();
-      //Check For entry Retail Product Table
-
-
-      $retailProduct = RetailProduct::where(['product_retail_id' => $request->id])->first();
-      if ($retailProduct) {
-        $retailProduct->product_retail_id = $request->id;
-        $retailProduct->product_id = $request->product_id;
-        $retailProduct->retail_id = $request->retail_id;
-        $retailProduct->unity = $request->unity;
-        $retailProduct->product_status = 0;
-        $retailProduct->quantity = $request->quantity;
-        $retailProduct->user_id = $request->user_id;
-        $retailProduct->save();
-      }
 
       return response()->json(['stat' => true, 'message' => "Updated successfully ", 'data' => "Success"], $this->successStatus);
     } else {
