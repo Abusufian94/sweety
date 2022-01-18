@@ -91,7 +91,6 @@ class RetailProducts extends Controller
                 $result =  ProductRetailLog::where('product_retail_assign_log_id', $request->product_retail_id)->first();
                 $result->status = $request->product_status;
                 $result->user_id = $request->user_id;
-                $result->quantity =  $product->product_quantity - $retailProduct->quantity;
                 $result->save();
 
             }
