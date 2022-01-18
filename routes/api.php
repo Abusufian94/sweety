@@ -60,6 +60,8 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
        Route::get('admin/retails', 'StockController@retailList');
        Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
        Route::get('admin/retail-users', 'UserController@retailUsers');
+      Route::delete('admin/retail_user/delete', 'UserController@retailUserDelete');
+       
 
 
 });

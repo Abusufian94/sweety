@@ -116,9 +116,16 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            var x = localStorage.getItem("loginUser");
+
+           
+            loadDataTable( );
+       
+        });
+        function loadDataTable()
+        {
+             var x = localStorage.getItem("loginUser");
             x = JSON.parse(x);
-            $.ajaxSetup({
+                 $.ajaxSetup({
                 headers: {
                     'Authorization': 'Bearer ' + x.token
                 }
@@ -181,16 +188,26 @@
                     [1, 'asc']
                 ]
             });
-        });
+        }
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");
+            alert(id);
             if (confirms) {
-                apiCall("{{ url('api/v1/warehose/delete') }}", "Delete", {
-                        "w_id": id
+                apiCall("{{ url('api/v1/admin/retail_user/delete') }}", "Delete", {
+                        "user_id": id
                     })
                     .then(function(data) {
-                        console.log(data)
-                        window.location.reload();
+                         $('#example1').DataTable().destroy();
+                        swal({
+                    position: 'top-end',
+                    type: 'success',
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 2000
+                    });
+                   
+                    loadDataTable();
+
                     })
             }
         }

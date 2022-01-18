@@ -5,7 +5,7 @@
             <input type="hidden" id="pid" value="{{ $id }}" />
 
             <div class="pd-20 card-box mb-30 row">
-                 <div class="col-md-2">
+                 <div class="col-md-2 col-sm-12">
                      <div class="form-group row">
                         <div id="image"></div>
                     </div>
@@ -15,16 +15,14 @@
                     <div class="form-group row">
                         <input class="form-control" type="hidden" name="id" id="product_id"
                                 required />
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
-                                style="color:red">*</small></label>
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Name</label>
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" type="text" name="product_name" id="product_name"
                                 placeholder="Name" required readonly/>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
-                                style="color:red">*</small></label>
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Unit</label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
 
                             <select
@@ -40,8 +38,7 @@
                     </div>
                     <div id="outputArea"></div>
                      <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Price<small
-                                style="color:red">*</small></label>
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Price</label>
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" type="number" name="product_price" id="product_price" placeholder="Price" required readonly>
                         </div>
@@ -59,7 +56,7 @@
                                 id="update_quantity" style="border: 3px solid #555;" >
                         </div>
                         =
-                         <label class="col-sm-6 col-md-2 col-form-label"> <span id="ttlQty" class="badge" style="background-color: grey;border: 3px solid #555;"></span></label>
+                         <label class="col-sm-6 col-md-2 col-form-label"> <span id="ttlQty" class="badge" style="background-color: grey;border: 3px solid #555;"></span></label>  <input class="btn btn-success" type="submit" value="Update >>">
 
                     </div>
                    
@@ -67,7 +64,7 @@
 
                     <div class="form-group row">
                         <div class="col-sm-12 col-md-10">
-                            <input class="btn btn-primary" type="submit" value="Update">
+                           
                         </div>
                     </div>
 
