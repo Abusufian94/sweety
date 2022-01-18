@@ -24,6 +24,6 @@ class ProductRetailLog extends Model
 
     public function retails()
     {
-        return $this->belongsTo('App\User','retail_id','id');
+        return $this->belongsTo('App\Retail','retail_id','retail_id');
     }
 }

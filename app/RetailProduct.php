@@ -25,11 +25,11 @@ class Retailproduct extends Model
 
     public function retails()
     {
-        return $this->belongsTo('App\User','retail_id','id');
+        return $this->belongsTo('App\Retail','retail_id','retail_id');
     }
 
     public function proretailslogs()
     {
-        return $this->belongsTo('App\User','product_retail_id','product_retail_assign_log_id');
+        return $this->belongsTo('App\ProductRetailLog','product_retail_id','product_retail_assign_log_id');
     }
 }

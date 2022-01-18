@@ -66,7 +66,7 @@
                                 data: 'products.product_name'
                             },
                             {
-                                data: 'retails.name'
+                                data: 'retails.retail_name'
                             },
                             {
                                 data: 'unit'

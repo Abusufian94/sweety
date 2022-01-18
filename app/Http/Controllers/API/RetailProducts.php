@@ -77,7 +77,7 @@ class RetailProducts extends Controller
       //Check For entry Retail Product Table
 
 
-      $retailProduct = RetailProduct::where(['product_retail_id' => $request->retail_product_id])->first();
+      $retailProduct = RetailProduct::where(['retail_product_id' => $request->retail_product_id])->first();
       if ($retailProduct) {
         $retailProduct->product_status = $request->product_status;
         $retailProduct->save();

@@ -8,9 +8,10 @@ use App\Product;
 use App\ProductLog;
 use App\User;
 use App\ProductRetailLog;
+use App\RetailProduct;
+use App\Retail;
 use Validator;
 use Illuminate\Support\Facades\Log;
-use App\RetailProduct;
 
 class Warehouseroducts extends Controller
 {
@@ -46,10 +47,8 @@ class Warehouseroducts extends Controller
   {
     try {
 
-
-
-      $retailPoList  =  User::select('*')->where('roles',  '=', 2);
-      $retailPoList = $retailPoList->orderBy('id', 'desc');
+      $retailPoList  =  Retail::select('*')->where('status',  '=', 1);
+      $retailPoList = $retailPoList->orderBy('retail_id', 'desc');
 
 
       $total_count = $retailPoList->count();
@@ -121,7 +120,7 @@ class Warehouseroducts extends Controller
       $retailProduct->product_retail_id = $result;
       $retailProduct->product_id = $request->product_id;
       $retailProduct->retail_id = $request->retail_id;
-      $retailProduct->unity = $request->unity;
+      $retailProduct->unit = $request->unity;
       $retailProduct->product_status = 0;
       $retailProduct->quantity = $request->quantity;
       $retailProduct->user_id = $request->user_id;
@@ -162,7 +161,7 @@ class Warehouseroducts extends Controller
 
         $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
           $q->where(function ($q) use ($searchText) {
-            $q->orWhere('name', 'LIKE', '%' . $searchText . '%');
+            $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
           });
         });
       }

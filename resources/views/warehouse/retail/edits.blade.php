@@ -195,7 +195,7 @@
                     let html = '';
                     for (var i = 0; i < data.length; i++) {
                         html +=
-                            `<option value="${data[i].id}">${data[i].name}</option> `;
+                            `<option value="${data[i].retail_id}">${data[i].retail_name}</option> `;
 
                     }
 
