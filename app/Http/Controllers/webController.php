@@ -58,6 +58,16 @@ class webController extends Controller
 
     }
 
+    public function profile2(Request $request)
+    {
+     return view('retail.profile2');
+    }
+
+    public function profile3(Request $request)
+    {
+     return view('warehouse.profile2');
+    }
+
   public function logout()
   {
 
@@ -84,15 +94,7 @@ class webController extends Controller
 
   }
 
-    public function profile2(Request $request)
-    {
-     return view('retail.profile2');
-    }
-
-    public function profile3(Request $request)
-    {
-     return view('warehouse.profile2');
-    }
+    
 
 
     public function retalUserList(Request $request)

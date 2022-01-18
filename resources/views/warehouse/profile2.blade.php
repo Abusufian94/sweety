@@ -1,5 +1,41 @@
 
- @extends('layouts.warehouse')
+ @extends('layouts.admin')
+
+ @section('menu')
+ <ul id="accordion-menu">
+	<li class="dropdown">
+		<a href="javascript:;" class="dropdown-toggle">
+			<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
+		</a>
+		<ul class="submenu">
+			<li><a href="{{url('warehouse/dashboard')}}">Dashboard</a></li>
+
+		</ul>
+	</li>
+	<li class="dropdown">
+		<a href="javascript:;" class="dropdown-toggle">
+			<span class="micon dw dw-factory1"></span><span class="mtext">WAREHOUSE</span>
+		</a>
+		<ul class="submenu">
+			<li><a href="{{route('warehouse.home')}}">Warehouse User</a></li>
+			<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
+			<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
+			<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
+		</ul>
+	</li>
+	
+	<li class="dropdown">
+		<a href="javascript:;" class="dropdown-toggle">
+			<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
+		</a>
+		<ul class="submenu">
+			<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+			<li><a href="{{route('warehouse.retail.list')}}">Product Retail Assign </a></li>
+		</ul>
+	</li>
+</ul>
+ @endsection
+ 
  @section('content')
 <div class="main-container">
 		<div class="pd-ltr-20">
@@ -10,7 +46,7 @@
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Retailer</div>
+							Welcome back <div class="weight-600 font-30 text-blue">WareHouse</div>
 						</h4>
 						<p class="font-18 max-width-600"></p>
 					</div>
