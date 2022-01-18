@@ -326,6 +326,30 @@ class UserController extends Controller
             return response()->json(['stat' => true, 'message' => "Warehouse Id not found", "data" => []], 404);
         }
     }
+
+      public function retailUserDelete(Request $request)
+   {
+        $validator = Validator::make($request->all(), [
+            'retail_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+        $user = User::find($request->retail_id);
+         $retail_user = RetailUser::where('user_id',$request->retail_id)->get();
+         $retail_user_id=$retail_user->id;
+         $retail_user=RetailUser::find($retail_user_id);
+
+        //echo"<pre>";print_r($user);exit;
+        if (!empty($user)) {
+            $user = $user->delete();
+            $retail_user->delete();
+
+            return response()->json(['stat' => true, 'message' => "Warehouse has been removed", "data" => []], 200);
+        } else {
+            return response()->json(['stat' => true, 'message' => "Warehouse Id not found", "data" => []], 404);
+        }
+    }
     public function logout(Request $request)
     {
         $user = Auth::user();
@@ -337,12 +361,12 @@ class UserController extends Controller
 
     public function retailUsers(Request $request)
     {
-       log::info("hello");
+       
   
        try {
                       
             
-            $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
+            $retailUserList  = \DB::table('users')->selectRaw("users.id,users.name,users.email,users.status,users.password_as");
            
              if (!empty($request['search']['value'])) 
              {

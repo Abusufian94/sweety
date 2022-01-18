@@ -185,8 +185,8 @@
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");
             if (confirms) {
-                apiCall("{{ url('api/v1/warehose/delete') }}", "Delete", {
-                        "w_id": id
+                apiCall("{{ url('api/v1/retail_user/delete') }}", "Delete", {
+                        "retail_id": id
                     })
                     .then(function(data) {
                         console.log(data)
