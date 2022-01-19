@@ -127,9 +127,6 @@
 
 
 $('#onsign').click(function(){
-  alert("ok");
-
-
   var email = $('#email').val();
   var password = $('#password').val();
 

@@ -8,7 +8,7 @@ use App\User;
 use App\RetailUser;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -136,7 +136,7 @@ class UserController extends Controller
           $checkUser= User::where('email', $request['email'])->first();
         // if(!empty($checkUser))
         // {
-        //      return response()->json(['stat' => true, 'message' => "The email has already been taken!", 'data' => $success]);   
+        //      return response()->json(['stat' => true, 'message' => "The email has already been taken!", 'data' => $success]);
         // }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
@@ -261,15 +261,15 @@ class UserController extends Controller
     {
         try {
             $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
-           
-             if (!empty($request['search']['value'])) 
+
+             if (!empty($request['search']['value']))
              {
                      $searchText = $request['search']['value'];
                     $retailUserList  =   $retailUserList->where(function($q) use($searchText) {
                         $q->where('users.name', 'LIKE', "%" . $searchText . "%")
                         ->orWhere('users.email', 'LIKE', "%" . $searchText . "%");});
-                       
-            
+
+
                 }
             $retailUserList = $retailUserList->where('status', 1)
                         ->where('roles', 3);
@@ -283,9 +283,9 @@ class UserController extends Controller
             }
 
             $retailUserList = $retailUserList->get()->toArray();
-           
-           
-            
+
+
+
 
             if ($total_count > 0) {
                 $retailUserList  = json_decode(json_encode($retailUserList));
@@ -299,6 +299,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::info('==================== warehouselist ======================');
             Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
         }
     }
@@ -326,7 +327,7 @@ class UserController extends Controller
         } else {
             return response()->json(['stat' => true, 'message' => "Warehouse Id not found", "data" => []], 404);
         }
-            
+
         } catch (Exception $e) {
             Log::info('==================== deletewarehouse ======================');
             Log::error($e->getMessage());
@@ -334,7 +335,7 @@ class UserController extends Controller
             Log::error($e->getTraceAsString());
         }
 
-      
+
     }
 
       public function retailUserDelete(Request $request)
@@ -362,15 +363,15 @@ class UserController extends Controller
         } else {
             return response()->json(['stat' => true, 'message' => "Retail Id not found", "data" => []], 404);
         }
-                
+
             } catch (Exception $e) {
                  Log::info('==================== retailUserDelete ======================');
             Log::error($e->getMessage());
               return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
-                
-            }     
-      
+
+            }
+
     }
     public function logout(Request $request)
     {
@@ -383,21 +384,21 @@ class UserController extends Controller
 
     public function retailUsers(Request $request)
     {
-       
-  
+
+
        try {
-                      
-            
+
+
             $retailUserList  = \DB::table('users')->selectRaw("users.id,users.name,users.email,users.status,users.password_as");
-           
-             if (!empty($request['search']['value'])) 
+
+             if (!empty($request['search']['value']))
              {
                      $searchText = $request['search']['value'];
                     $retailUserList  =   $retailUserList->where(function($q) use($searchText) {
                         $q->where('users.name', 'LIKE', "%" . $searchText . "%")
                         ->orWhere('users.email', 'LIKE', "%" . $searchText . "%");});
-                       
-            
+
+
                 }
             $retailUserList = $retailUserList->where('status', 1)
                         ->where('roles', 2);
@@ -411,9 +412,9 @@ class UserController extends Controller
             }
 
             $retailUserList = $retailUserList->get()->toArray();
-           
-           
-            
+
+
+
 
             if ($total_count > 0) {
                 $retailUserList  = json_decode(json_encode($retailUserList));

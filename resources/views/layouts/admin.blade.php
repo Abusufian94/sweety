@@ -235,22 +235,15 @@
 							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
 						</ul>
 					</li>
-					{{-- <li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-factory1"></span><span class="mtext">STOCK</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="{{route('stock.home')}}">Raw Stock</a></li>
-							<li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
-							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
-						</ul>
-					</li> --}}
+					
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('product.home')}}"> Product</a></li>
+							<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+							<li><a href="{{route('warehouse.retail.list')}}">Product Retail Assign </a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -260,9 +253,16 @@
 						<ul class="submenu">
 							<li><a href="{{url('/admin/retail-user-list')}}"> Retail User</a></li>
 						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.product.list')}}"> Retail Products</a></li>
+						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.assign.product.list')}}"> Assign Products</a></li>
+						</ul>
 					</li>
 
 				</ul>
+				@yield('menu')
 			</div>
 		</div>
 	</div>

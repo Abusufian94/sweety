@@ -1,5 +1,5 @@
 
- @extends('layouts.warehouse')
+ @extends('layouts.admin')
  @section('content')
 <div class="main-container">
 		<div class="pd-ltr-20">
@@ -10,7 +10,7 @@
 					</div>
 					<div class="col-md-8">
 						<h4 class="font-20 weight-500 mb-10 text-capitalize">
-							Welcome back <div class="weight-600 font-30 text-blue">Retailer</div>
+							Welcome back <div class="weight-600 font-30 text-blue">WareHouse</div>
 						</h4>
 						<p class="font-18 max-width-600"></p>
 					</div>
