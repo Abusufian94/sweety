@@ -385,10 +385,7 @@ class UserController extends Controller
     public function retailUsers(Request $request)
     {
 
-
        try {
-
-
             $retailUserList  = \DB::table('users')->selectRaw("users.id,users.name,users.email,users.status,users.password_as");
 
              if (!empty($request['search']['value']))
