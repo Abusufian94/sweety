@@ -19,4 +19,14 @@ class retailController extends Controller
         $id = $request->query('id');
         return view('admin.users.edits',compact('id'));
     }
+
+    public function retailProductList()
+    {
+        return view('retail.product.list');
+    }
+
+    public function retailAssignProductList()
+    {
+        return view('retail.product.retailassign');
+    }
 }

@@ -8,7 +8,7 @@ use App\User;
 use App\RetailUser;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -299,6 +299,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::info('==================== warehouselist ======================');
             Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => []], 400);
             Log::error($e->getTraceAsString());
         }
     }
@@ -383,7 +384,7 @@ class UserController extends Controller
 
     public function retailUsers(Request $request)
     {
-       
+
   
        try {
                       

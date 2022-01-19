@@ -12,7 +12,7 @@ use App\Product;
 use App\Stocklog;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 use DataTables;
 
 class StockController extends Controller
@@ -320,6 +320,7 @@ class StockController extends Controller
                 ->take($rowperpage)
                 ->get();
 
+            $total_count = $records->count();
             $data_arr = array();
 
             foreach ($records as $record) {
@@ -337,18 +338,24 @@ class StockController extends Controller
                 );
             }
 
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordswithFilter,
-                "aaData" => $data_arr,
-            );
+            // $response = array(
+            //     "draw" => intval($draw),
+            //     "iTotalRecords" => $totalRecords,
+            //     "iTotalDisplayRecords" => $totalRecordswithFilter,
+            //     "aaData" => $data_arr,
+            // );
 
-            echo json_encode($response);
+            $retailUserList  = json_decode(json_encode($data_arr));
+
+            if ($total_count > 0) {
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "No Data Found", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            }
 
 
         } catch (\Exception $e) {
-            Log::info('==================== retailPoListData ======================');
+            Log::info('==================== rawListData ======================');
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
         }
@@ -499,110 +506,73 @@ class StockController extends Controller
      *  )
      */
 
-    // public function log_list(Request $request){
-    //     try {
-    //         $retailPoList  =  Stocklog::select('*');
-
-
-
-    //         if (!empty($search_text)) {
-
-    //             $searchText = $search_text;
-    //             $retailPoList  =   $retailPoList->where('raw_name', 'LIKE', "%" . $searchText . "%");
-    //         }
-
-    //         $total_count = $retailPoList->count();
-
-    //         if (isset($start) && isset($request['length'])) {
-
-    //             $offset = $start;
-    //             $retailPoList = $retailPoList->offset($offset)->limit($request['length']);
-    //         }
-
-    //         if (isset($request['order']) && $request['order'] == 'asc')
-    //             $retailPoList = $retailPoList->orderBy('raw_stock_log_id', 'asc');
-    //         else {
-    //             $retailPoList = $retailPoList->orderBy('raw_stock_log_id', 'desc');
-    //         }
-
-    //         $retailPoList = $retailPoList->get()->toArray();
-    //         // print_r($retailPoList);
-    //         // exit();
-
-
-    //         if ($total_count > 0) {
-    //             $retailPoList  = json_decode(json_encode($retailPoList));
-    //             $msg = array('status' => 1, 'msg' => 'Success', 'draw' => $request['draw'], 'recordsTotal' => $total_count, 'recordsFiltered' => $total_count,  'data' => $retailPoList);
-    //         } else {
-    //             $msg = array('status' => 1, 'msg' => 'no data found', 'data' => $retailPoList);
-    //         }
-
-    //         return response()->json(["stat" => true, "message" => "list fetch successfully", "data" => $msg], 200);
-    //     } catch (\Exception $e) {
-    //         Log::info('==================== retailPoListData ======================');
-    //         Log::error($e->getMessage());
-    //         Log::error($e->getTraceAsString());
-    //     }
-    // }
 
 
     public function log_list(Request $request){
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $rowperpage = $request->get("length"); // total number of rows per page
 
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
+        try{
+            $draw = $request->get('draw');
+            $start = $request->get("start");
+            $rowperpage = $request->get("length"); // total number of rows per page
 
-        $columnIndex = $columnIndex_arr[0]['column']; // Column index
-        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-        $searchValue = $search_arr['value']; // Search value
+            $columnIndex_arr = $request->get('order');
+            $columnName_arr = $request->get('columns');
+            $order_arr = $request->get('order');
+            $search_arr = $request->get('search');
 
-        // Total records
-        $totalRecords = Stocklog::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Stocklog::select('count(*) as allcount')->where('raw_name', 'like', '%' . $searchValue . '%')->count();
+            $columnIndex = $columnIndex_arr[0]['column']; // Column index
+            $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+            $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+            $searchValue = $search_arr['value']; // Search value
 
-        // Get records, also we have included search filter as well
-        $records = Stocklog::orderBy($columnName, $columnSortOrder)
-            ->leftjoin('users', 'raw_stock_log.user_id', '=', 'users.id')
-            ->where('raw_stock_log.raw_name', 'like', '%' . $searchValue . '%')
-            ->orWhere('raw_stock_log.unit', 'like', '%' . $searchValue . '%')
-            ->orWhere('raw_stock_log.log_type', 'like', '%' . $searchValue . '%')
-            ->orWhere('raw_stock_log.operation', 'like', '%' . $searchValue . '%')
-            ->select('raw_stock_log.*','users.name as name')
-            ->skip($start)
-            ->take($rowperpage)
-            ->get();
+            // Total records
+            $totalRecords = Stocklog::select('count(*) as allcount')->count();
+            $totalRecordswithFilter = Stocklog::select('count(*) as allcount')->where('raw_name', 'like', '%' . $searchValue . '%')->count();
 
-        $data_arr = array();
+            // Get records, also we have included search filter as well
+            $records = Stocklog::orderBy($columnName, $columnSortOrder)
+                ->leftjoin('users', 'raw_stock_log.user_id', '=', 'users.id')
+                ->where('raw_stock_log.raw_name', 'like', '%' . $searchValue . '%')
+                ->orWhere('raw_stock_log.unit', 'like', '%' . $searchValue . '%')
+                ->orWhere('raw_stock_log.log_type', 'like', '%' . $searchValue . '%')
+                ->orWhere('raw_stock_log.operation', 'like', '%' . $searchValue . '%')
+                ->select('raw_stock_log.*','users.name as name')
+                ->skip($start)
+                ->take($rowperpage)
+                ->get();
 
-        foreach ($records as $record) {
+            $total_count = $records->count();
+            $data_arr = array();
 
-            $data_arr[] = array(
-                "id" => $record->raw_stock_log_id,
-                "raw_name" => $record->raw_name,
-                "unit" => $record->unit,
-                "stock" => $record->stock,
-                "price" => $record->price,
-                "log_type" => $record->log_type,
-                "name" => $record->users->name,
-                "operation" => $record->operation,
-                "created_on" => $record->created_at,
-                "updated_on" => $record->updated_at,
-            );
+            foreach ($records as $record) {
+
+                $data_arr[] = array(
+                    "id" => $record->raw_stock_log_id,
+                    "raw_name" => $record->raw_name,
+                    "unit" => $record->unit,
+                    "stock" => $record->stock,
+                    "price" => $record->price,
+                    "log_type" => $record->log_type,
+                    "name" => $record->users->name,
+                    "operation" => $record->operation,
+                    "created_on" => $record->created_at,
+                    "updated_on" => $record->updated_at,
+                );
+            }
+            
+            $retailUserList  = json_decode(json_encode($data_arr));
+
+            if ($total_count > 0) {
+                return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            } else {
+                return response()->json(["stat" => true, "message" => "No Data Found", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+            }
+
+        } catch (\Exception $e) {
+            Log::info('==================== stocklogData ======================');
+            Log::error($e->getMessage());
+            Log::error($e->getTraceAsString());
         }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordswithFilter,
-            "aaData" => $data_arr,
-        );
-
-        echo json_encode($response);
     }
     //Consumption List
     //stock log list
@@ -719,18 +689,20 @@ class StockController extends Controller
                 );
             }
 
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordswithFilter,
-                "aaData" => $data_arr,
-            );
 
             //print_r($records);exit();
-           echo json_encode($response);
+            $total_count = $records->count();
+
+            $retailUserList  = json_decode(json_encode($data_arr));
+
+                if ($total_count > 0) {
+                    return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+                } else {
+                    return response()->json(["stat" => true, "message" => "No Data Found", "draw" => $draw, "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$retailUserList]);
+                }
 
         } catch (\Exception $e) {
-            Log::info('==================== retailPoListData ======================');
+            Log::info('==================== ConsumptionListData ======================');
             Log::error($e->getMessage());
             Log::error($e->getTraceAsString());
         }
