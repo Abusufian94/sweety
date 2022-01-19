@@ -61,7 +61,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
        Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
        Route::get('admin/retail-users', 'UserController@retailUsers');
        Route::delete('admin/retail_user/delete', 'UserController@retailUserDelete');
-       Route::get('retailer/assign/products/{userId}','RetailerController@retailuserproducts');
+       Route::get('retailer/assign/products/','RetailerController@retailuserproducts')->name('retail.assign.products');
 
 
 
