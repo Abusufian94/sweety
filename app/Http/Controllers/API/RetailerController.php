@@ -4,26 +4,38 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use DB;
+
+use App\Product;
 class RetailerController extends Controller
 {
     //
-    public function retailuserproducts($user_id) {
+    public function retailuserproducts(Request $request) {
         try  {
-          $user = \DB::table('users')->select('role')->where('id','=',$user_id)->first();
-          if($user->role == 1){
-              $products = \DB::table('products')->select('*')->get();
-              return response()->json(['status'=>true,'message' =>'Products has been fetched successfully','data'=>$products,'error'=>[]]);
+          $userData = \Auth::user();
+          $products = Product::select('*');
+          if($userData->role == 2){
+            $products = $products->leftJoin('product_retail_assign_log',function($join) {
+             $join->on('products.id','=','product_retail_assign_log.product_id');
+            })->where('product_retail_assign_log.user_id','=',$userData->id);
           }
-          else if($user->role == 2) {
-               $products  = \DB::table('products')->select('products.*','product_retail_assign_log.*')->leftJoin('product_retail_assign_log',function($join) {
-                  $join->on('products.id','=','product_retail_assign_log.product_id');
-               })->where('product_retail_assign_log.user_id','=',$user_id)->get();
-               return response()->json(['status'=>true,'message' =>'Products has been fetched successfully','data'=>$products,'error'=>(object)[]]);
-          }
-        } catch (\Exception $ex) {
-            return response()->json(['status'=>true,'message'=>$ex->getMessage(),'date'=>(object)[]]);
+         $total_count = $products->count();
+         if (isset($request['start']) && isset($request['length'])) {
+
+           $offset = $request['start'];
+           $retailProductList = $products->offset($offset)->limit($request['length']);
+         }
+         $retailProductList = $products->get()->toArray();
+         if ($total_count > 0) {
+           $retailProductList  = json_decode(json_encode($retailProductList));
+           return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProductList]);
+         } else {
+           return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProductList]);
+         }
+        } catch (\Exception $e) {
+            Log::info('==================== Retailer Product ======================');
+            Log::error($e->getMessage());
+            return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+            Log::error($e->getTraceAsString());
         }
     }
 }
