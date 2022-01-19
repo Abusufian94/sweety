@@ -18,9 +18,7 @@ class RetailerController extends Controller
              $join->on('products.id','=','product_retail_assign_log.product_id');
             })->where('product_retail_assign_log.user_id','=',$userData->id);
           }
-         // $products = $products->get();
          $total_count = $products->count();
-
          if (isset($request['start']) && isset($request['length'])) {
 
            $offset = $request['start'];
