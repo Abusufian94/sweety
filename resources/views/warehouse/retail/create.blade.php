@@ -41,23 +41,32 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Select Retail User<small
+                        <label class="col-sm-12 col-md-2 col-form-label">Select Store<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
 
                             <select name="retail_id" id="retail_id" class="form-control" required="required">
-                                <option value="" disabled selected>Select Retail User</option>
+                                <option value="" disabled selected>Select Store</option>
                             </select>
                         </div>
                     </div>
-
+                          <div class="form-group row">
+                             <span class="productTab"></span>
+                          </div>
 
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Product Quantity<small
                                 style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
+                       
+                           
+                           
+
+                         <div class="col-sm-12 col-md-10">
+                        
+                            <span class="warningMsg"></span>
                             <input class="form-control" type="number" placeholder="Quantity" name="quantity" min="1" 
-                                id="quantity" required="required" />
+                                id="curquantity" required="required" / style="border:3px solid #555">
+                            <span id="curquantityWrmsg"></span>
                         </div>
                     </div>
                    
@@ -100,6 +109,7 @@
         });
     </script>
     <script type="text/javascript">
+        var currentQty='';
         $(document).ready(function() {
              loadRetailUser();
              loadProduct();
@@ -181,7 +191,7 @@
                     }
 
                     $('#retail_id').append(
-                        `<option value="">Select Retail User</option>${html}`);
+                        `<option value="">Select Store</option>${html}`);
 
                 }
             });
@@ -221,16 +231,87 @@
         }
 
         $('#product_id').change(function() {
+
             let unit = $(':selected', $(this)).data('unit');
             let quantity = $(':selected', $(this)).data('quantity');
             $("#unity").val(unit).attr("selected","selected");
             $("#aval_quantity").val(quantity);
             $("#quantity").attr('max', quantity);
+                let product_id =  $('#product_id').val();
+                alert(product_id)
+             const token = JSON.parse(localStorage.getItem('loginUser'));
+             $.ajaxSetup({
+                headers: {
+                          'Authorization': 'Bearer ' + token.token
+                         }
+            });
+        $.ajax({
+            url: "{{ url('api/v1/assigned-pending-total-stock?product_id=') }}"+product_id,
+            headers: {
+                    'Accept':'application/json',
+                    'Authorization':'Bearer '+token.token
+                     },
+            type: "GET",
+            dataType: "json",
+          
+            success: function (data) {
+             
 
+              let elArr=[];
+                let qtyCount =0;
+              $.each(data.data, function( index, value ) {
+                    qtyCount+=parseInt(value.quantity);
+              let  selectVal = `<tr>
+                                    <td>${value.retail_name}</td>
+                                    <td>${value.quantity}</td>
+                                    <td>${value.unity}</td>
+                                </tr>`;
+               elArr.push(selectVal);
+              
+              
+              });
+                    let availableQty = $("#aval_quantity").val();
+                   
+                         currentQty = parseInt(availableQty)-parseInt(qtyCount);
+                        if(elArr.length>0)
+                        {
+                        
+              $('.warningMsg').html(`<div class="col-sm-8 col-md-6"><table border="border:3px solid #555"><tr><th>Retail Name </th><th>Qty</th><th>Unit</th></tr><tbody>${elArr.join('')}</tbody></table></div><br><span><b style="color:red">${currentQty} এর  অতিক্রম  পরিমাণ দেয়া যাবেনা ।</b></span>`);
+                        }
+                        else
+                        {
+                              $('.warningMsg').html(`<b> ${currentQty}এর  অতিক্রম  পরিমাণ দেয়া যাবেনা ।</b>`).css("color", "blue");
+                        }
+              
+
+            
+
+            },
+            error: function (xhr, status, error) {
+               alert(error);
+               console.log(error);
+                    }
+                   
+
+        });
         });
 
 
-      
+      $(document).ready(function(){
+  $("#curquantity").keyup(function(){
+    let curVal = $("#curquantity").val();
+    if(curVal>currentQty)
+    {
+       $('#curquantityWrmsg').html(`<div style="background-color:yellow;"><h5>আপনি পরিমান  অতিক্রম করছেন 👿</h5><div>`).css("background-color","red");
+        $(':input[type="submit"]').prop('disabled', true);
+    }
+    else 
+    {
+         $('#curquantityWrmsg').html(' ');
+          $(':input[type="submit"]').prop('disabled', false);
+    }
+  });
+});
     </script>
 
 @endsection
