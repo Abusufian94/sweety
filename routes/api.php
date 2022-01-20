@@ -78,4 +78,9 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
   Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
+
+  // admin/assigned-pending-total-stock
+
+  Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
+
 });
