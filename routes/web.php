@@ -58,5 +58,6 @@ Route::get('retail/product/assign/list','RetailController@retailAssignProductLis
     Route::get('warehouse/retail/list','ProductController@warehouseretaillist')->name('warehouse.retail.list');
     Route::get('warehouse/edit/retail','ProductController@warehouseretailedit')->name('warehouse.retail.edit');
     Route::get('warehouse/retail/create','ProductController@warehouseretailcreate')->name('warehouse.retail.create');
-    
+    Route::get('retail/product/list','ProductController@retailProducts')->name('retail.product.list');
+
 //});

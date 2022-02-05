@@ -44,4 +44,8 @@ class ProductController extends Controller
         $id = $request->query('id');
         return view('warehouse.retail.edits',compact('id'));
     }
+    //Retail assign Products
+    public function retailProducts() {
+        return view('retail.retails-products.list');
+    }
 }

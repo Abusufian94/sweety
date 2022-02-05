@@ -1,5 +1,5 @@
 
- @extends('layouts.admin')
+ @extends('layouts.retailer')
  @section('content')
 <div class="main-container">
 		<div class="pd-ltr-20">
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 				</div>
-			
+
 				<div class="col-md-4 mb-30">
 					<div class="card-box height-100-p widget-style1">
 						<div class="d-flex flex-wrap align-items-center">
@@ -215,7 +215,7 @@
 					</tbody>
 				</table>
 			</div>
-			
+
 		</div>
 	</div>
 	  <script src="{{ asset('js/jquery-min.js')}}"></script>
@@ -248,6 +248,5 @@
  		  }
 });
 	</script>
-	
+
  @endsection
-	
