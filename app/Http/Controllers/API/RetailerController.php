@@ -13,6 +13,11 @@ class RetailerController extends Controller
         try  {
           $userData = \Auth::user();
           $products = Product::select('*');
+          
+            if($userData->role == 1){
+              $products = \DB::table('products')->select('*')->get();
+              return response()->json(['status'=>true,'message' =>'Products has been fetched successfully','data'=>$products,'error'=>[]]);
+          }
           if($userData->role == 2){
             $products = $products->leftJoin('product_retail_assign_log',function($join) {
              $join->on('products.id','=','product_retail_assign_log.product_id');
