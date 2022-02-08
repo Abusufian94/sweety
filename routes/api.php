@@ -73,4 +73,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
   Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
+  /** profile */
+  Route::get('/admin/profile','ProfileController@index');
 });
