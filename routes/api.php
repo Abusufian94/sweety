@@ -75,4 +75,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
   /** profile */
   Route::get('/admin/profile','ProfileController@index');
+  /** suggestion Products */
+  Route::get('/admin/suggestive-product','RetailerController@suggestiveproducts');
 });

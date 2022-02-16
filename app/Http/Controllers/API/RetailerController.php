@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Product;
+use App\Retailproduct;
 class RetailerController extends Controller
 {
     //
@@ -38,4 +39,25 @@ class RetailerController extends Controller
             Log::error($e->getTraceAsString());
         }
     }
+    public function suggestiveproducts(Request $request) {
+        try {
+            $page = !is_null($request->query('page')) ? $request->query('page') : 1;
+            $pageSize  = !is_null($request->query('pageSize')) ? $request->query('pageSize') : 10;
+            $offsets = ($page-1) * $pageSize;
+            $ids = explode(',',$request->query('ids'));
+
+            $product  = Product::where('status','=',1)->join('retail_product',function($q) use($ids){
+                $q->on('product.id','=','retail_product.product_id');
+                $q->where('product.status','=',1);
+                $q->whereIn('retail_product.product_id',$ids);
+            });
+            $product = $product->offset($offsets)->limit($pageSize)->get();
+            $resultArray =  (object)['data' =>$product,"meta"=>(object)["page"=>(int)$page,'limit'=>(int)$pageSize]];
+            return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$resultArray],200);
+        } catch(\Exception $ex) {
+            return response()->json(['stat'=>false ,'message'=>"Something went wrong with this api",'err'=>$ex,'data'=>(object)[]],200);
+        }
+
+    }
+
 }
