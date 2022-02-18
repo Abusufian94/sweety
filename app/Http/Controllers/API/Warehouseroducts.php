@@ -233,4 +233,26 @@ class Warehouseroducts extends Controller
       return response()->json(['stat' => false, 'message' => "Row is not found ", 'data' => []], 404);
     }
   }
+
+  public function assignedPendingTotalStock(Request $request)
+  {
+      try {
+           
+
+           $retailProductAssign = \DB::table('product_retail_assign_log')->where('product_retail_assign_log.product_id', $request->product_id)->where('product_retail_assign_log.status',0)->leftJoin('retail_tbl', 'retail_tbl.retail_id','=','product_retail_assign_log.retail_id')->selectRaw("product_retail_assign_log.product_id, product_retail_assign_log.retail_id,product_retail_assign_log.quantity,product_retail_assign_log.unity, retail_tbl.retail_name")->get();
+           if(count($retailProductAssign)>0)
+             {
+              return response()->json(['stat' => true, 'message' => "Pending products", 'data' => $retailProductAssign]);
+             }
+          else
+             {
+                return response()->json(['stat' => false, 'message' => "no products found", 'data' => []]);
+             }
+      } catch (\Exception $e) {
+      Log::info('==================== assignedPendingTotalStock ======================');
+      Log::error($e->getMessage());
+      return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+      Log::error($e->getTraceAsString());
+    }
+  }
 }

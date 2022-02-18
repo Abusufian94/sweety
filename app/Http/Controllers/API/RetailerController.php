@@ -12,8 +12,19 @@ class RetailerController extends Controller
     //
     public function retailuserproducts(Request $request) {
         try  {
+
+
           $userData = \Auth::user();
           $products = Product::select('*');
+          
+            if($userData->role == 1){
+              $products = \DB::table('products')->select('*')->get();
+              return response()->json(['status'=>true,'message' =>'Products has been fetched successfully','data'=>$products,'error'=>[]]);
+          }
+
+          $userData = \Auth::user();
+          $products = Product::select('*');
+
           if($userData->role == 2){
             $products = $products->innerJoin('product_retail_assign_log',function($join) {
              $join->on('products.id','=','product_retail_assign_log.product_id');
@@ -37,6 +48,9 @@ class RetailerController extends Controller
             Log::error($e->getMessage());
             return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
             Log::error($e->getTraceAsString());
+
+
+
         }
     }
     public function suggestiveproducts(Request $request) {
