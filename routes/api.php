@@ -56,7 +56,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      //ware house apis
      Route::post('product/update','Warehouseroducts@updatewarehouseproduct');
 
-     
+
      /*retail store list*/
        Route::get('admin/retails', 'StockController@retailList');
        Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
@@ -76,5 +76,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   // admin/assigned-pending-total-stock
 
   Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
+  Route::get('admin/suggestive-product','RetailerController@suggestiveproducts');
 
 });

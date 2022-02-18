@@ -58,7 +58,7 @@ class RetailerController extends Controller
             $page = !is_null($request->query('page')) ? $request->query('page') : 1;
             $pageSize  = !is_null($request->query('pageSize')) ? $request->query('pageSize') : 10;
             $offsets = ($page-1) * $pageSize;
-            $ids = explode(',',$request->query('ids'));
+            $ids = !is_null($request->query('ids'))?explode(',',$request->query('ids')): null;
             $productName = $request->query('name');
 
             $product  = Product::where('status','=',1)->join('retail_product',function($q) use($ids){
@@ -66,7 +66,7 @@ class RetailerController extends Controller
                 $q->where('product.status','=',1);
                 //$q->whereIn('retail_product.product_id',$ids);
             });
-            if(!is_null($productName)) {
+            if(isset($productName)) {
                 $product = $product->where('product_name', 'LIKE', "%{$productName}%") ;
             }
            if(isset($ids)) {
