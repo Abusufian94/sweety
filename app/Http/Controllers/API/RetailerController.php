@@ -16,7 +16,7 @@ class RetailerController extends Controller
 
           $userData = \Auth::user();
           $products = Product::select('*');
-          
+
             if($userData->role == 1){
               $products = \DB::table('products')->select('*')->get();
               return response()->json(['status'=>true,'message' =>'Products has been fetched successfully','data'=>$products,'error'=>[]]);
@@ -80,5 +80,6 @@ class RetailerController extends Controller
         }
 
     }
+
 
 }
