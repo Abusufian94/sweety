@@ -6,14 +6,18 @@
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">
                 <div class="form-group row">
-                    <label class="col-sm-12 col-md-2 col-form-label">Product Name<small
-                            style="color:red">*</small></label>
                     <div class="col-sm-12 col-md-10">
-                        <input class="form-control" type="text" name="product_name" id="product_name" required="required"
-                            placeholder="Name"  />
+                        <input type="text" onkeyup="getSuggestiveProduct(this.value)" id="search" class="typeahead form-control" placeholder="Search">
                     </div>
-                    <input class="btn btn-primary" type="submit" value="Submit" />
+
                 </div>
+
+                <div class="form-group row">
+                    <ul class="list-group" id="suggestion">
+
+                    </ul>
+                </div>
+
 
 
                 {{-- <div class="form-group row">
@@ -47,7 +51,105 @@
 
     </div>
     </div>
-    <script src="{{ asset('js/jquery-min.js') }}"></script>
+    <style>
+        .ui-state-active h4,
+        .ui-state-active h4:visited {
+            color: #26004d ;
+        }
+
+        .ui-menu-item{
+            height: 80px;
+            border: 1px solid #ececf9;
+        }
+        .ui-widget-content .ui-state-active {
+            background-color: white !important;
+            border: none !important;
+        }
+        .list_item_container {
+            width:740px;
+            height: 80px;
+            float: left;
+            margin-left: 20px;
+        }
+        .ui-widget-content .ui-state-active .list_item_container {
+            background-color: #f5f5f5;
+        }
+
+        .image {
+            width: 15%;
+            float: left;
+            padding: 10px;
+        }
+        .image img{
+            width: 80px;
+            height : 60px;
+        }
+        .label{
+            width: 85%;
+            float:right;
+            white-space: nowrap;
+            overflow: hidden;
+            color: rgb(124,77,255);
+            text-align: left;
+        }
+        input:focus{
+            background-color: #f5f5f5;
+        }
+
+        </style>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script>
+
+        async function getSuggestiveProduct(query) {
+            var path = "{{url('api/v1/admin/suggestive-product')}}";
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const result  = await $.ajax({
+            headers: {
+            'Accept':'application/json',
+            'Authorization':'Bearer '+token.token
+            },
+             url:path,
+             data: {name:query}});
+             var html = ` <ul class="list-group" id="suggestion">`;
+             $.each( result.data.data, function( index, value ){
+                      html +=`<li><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li>`
+                });
+                html += `</ul>`;
+             $("#suggestion").html(html)
+
+        }
+
+    // $('#search').typeahead({
+
+    //     source:  function (query, process) {
+    //      return $.ajax({
+    //         headers: {
+    //         'Accept':'application/json',
+    //         'Authorization':'Bearer '+token.token
+    //         },
+    //          url:path,
+    //          data: {name:query},
+    //          success: function(data) {
+    //             return process(data);
+    //          }
+    //      })
+    //     // return $.get(path, { name: query }, function (data) {
+    //     //         return process(data);
+    //     //     });
+    //     }
+    // });
+        // $(document).ready(function(){
+        //     $( "#name" ).autocomplete({})
+        //     apiCall("{{url('api/v1/admin/suggestive-product?name=xyz')}}","Get")
+        //     .then(function(data){
+        //        console.log(data)
+        //     })
+        // })
+    </script>
     <script>
         $(document).ready(function() {
              $("#product_name").focus();

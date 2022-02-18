@@ -241,15 +241,8 @@
                         <ul class="submenu">
 							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
 						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="mobile-menu-overlay"></div>
-
-	  @yield('content')
-  <script src="{{ asset('js/jquery-min.js')}}"></script>
+                        <ul class="submenu">
+							<li><a href="{{route('retail.product.billings')}}">Billings</a></l      <script src="{{ asset('js/jquery-min.js')}}"></script>
 	  <script src="{{ asset('deskapp/vendors/scripts/core.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
@@ -304,8 +297,6 @@
 
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
-
-
 
 </body>
 </html>
