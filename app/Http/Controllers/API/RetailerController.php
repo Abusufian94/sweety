@@ -58,20 +58,21 @@ class RetailerController extends Controller
             $page = !is_null($request->query('page')) ? $request->query('page') : 1;
             $pageSize  = !is_null($request->query('pageSize')) ? $request->query('pageSize') : 10;
             $offsets = ($page-1) * $pageSize;
-            $ids = explode(',',$request->query('ids'));
+            $ids = $request->query('ids') ? explode(',',$request->query('ids')): null;
             $productName = $request->query('name');
-
-            $product  = Product::where('status','=',1)->join('retail_product',function($q) use($ids){
+            $product = (object)[];
+            $product  = Product::select('product.*')->where('status','=',1)->join('retail_product',function($q) use($ids){
                 $q->on('product.id','=','retail_product.product_id');
                 $q->where('product.status','=',1);
                 //$q->whereIn('retail_product.product_id',$ids);
             });
-            if(!is_null($productName)) {
-                $product = $product->where('product_name', 'LIKE', "%{$productName}%") ;
+            if(isset($productName)) {
+                $product = $product->where('product.product_name', 'LIKE', "%{$productName}%");
             }
-           if(isset($ids)) {
-              $product = $product->whereIn('retail_product.product_id',$ids);
-           }
+            if(isset($ids)) {
+                $product = $product->whereIn('product.id', $ids);
+            }
+
             $product = $product->offset($offsets)->limit($pageSize)->get();
             $resultArray =  (object)['data' =>$product,"meta"=>(object)["page"=>(int)$page,'limit'=>(int)$pageSize]];
             return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$resultArray],200);
