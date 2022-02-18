@@ -100,7 +100,7 @@
                             <th class="all">Status</th>
                             <th>Created At</th>
                             <th>Updated At</th>
-                            <th class="all datatable-nosort">Action</th>
+                            <th class="" ></th>
 
                         </tr>
                     </thead>
@@ -185,18 +185,15 @@
                                 "targets": 9,
                                 "render": function(data, type, row, meta) {
 
-                                    //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
-                                   //  return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
-                                    // return "<a onclick='remove("+ row.raw_id+")'>" + row.raw_id + "</a>"
+                                   
 
-                                    return `<div class="dropdown">
+                                    return `<div class="dropdown" style="display:none;">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
-                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" >
 
-                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=${row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item" onclick="remove(${row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                          
                                         </div>
                                     </div>`
                                 }

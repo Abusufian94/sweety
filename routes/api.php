@@ -44,7 +44,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::post('cn/add', 'StockController@consumptionCreate')->name('cn.add');
 
 
-
      // Product Routes
      Route::post('pro/create', 'StockController@insertProduct')->name('pinsert');
      Route::get('pro/details/{id}', 'StockController@getProductDetails');
@@ -56,25 +55,23 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      //ware house apis
      Route::post('product/update','Warehouseroducts@updatewarehouseproduct');
 
-     
+
      /*retail store list*/
        Route::get('admin/retails', 'StockController@retailList');
        Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
        Route::get('admin/retail-users', 'UserController@retailUsers');
-      Route::delete('admin/retail_user/delete', 'UserController@retailUserDelete');
+       Route::delete('admin/retail_user/delete', 'UserController@retailUserDelete');
+       Route::get('retailer/assign/products/','RetailerController@retailuserproducts')->name('retail.assign.products');
 
-  Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
-  Route::get('/product-retail-list/{status?}', 'Warehouseroducts@productRetailList')->name('product.retail.list');
-  Route::get('/product-retail-details/{id}', 'Warehouseroducts@getProductRetailDetails');
-  Route::post('productretail/update', 'Warehouseroducts@productRetailLogUpdate');
-  //  Route::get('/product-list', 'Warehouseroducts@productList')->name('productlist');
 
+
+
+  /*retail store list*/
+  Route::get('admin/retails', 'StockController@retailList');
+  Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
+  Route::get('admin/retail-users', 'UserController@retailUsers');
   Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
   Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
-
-  // admin/assigned-pending-total-stock
-
-  Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
-
+   route::get('retailer/assign/products/','retailercontroller@retailuserproducts')->name('retail.assign.products');
 });

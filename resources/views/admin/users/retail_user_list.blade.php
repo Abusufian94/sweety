@@ -94,8 +94,8 @@
                             <th class="all">SL</th>
                             <th class="all">Name</th>
                             <th class="all">Email</th>
-                            <th class="all">Status</th>
-                            <th class="datatable-nosort all">Action</th>
+                            <th class=" datatable-nosort all">Status</th>
+                            <th class=" all">Action</th>
                         </tr>
                     </thead>
                     <tbody id="demo">
