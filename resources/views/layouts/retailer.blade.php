@@ -238,6 +238,9 @@
 						<ul class="submenu">
 							<li><a href="{{route('retail.product.list')}}">Product List</a></li>
 						</ul>
+                        <ul class="submenu">
+							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
+						</ul>
 					</li>
 				</ul>
 			</div>

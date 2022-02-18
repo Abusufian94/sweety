@@ -29,4 +29,8 @@ class retailController extends Controller
     {
         return view('retail.product.retailassign');
     }
+    public function billings()
+    {
+        return view('retail.productBillings.billings');
+    }
 }
