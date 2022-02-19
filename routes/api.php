@@ -74,4 +74,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
   Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
    route::get('retailer/assign/products/','retailercontroller@retailuserproducts')->name('retail.assign.products');
+
+     Route::get('/product-retail-list/{status?}', 'Warehouseroducts@productRetailList')->name('product.retail.list');
 });
