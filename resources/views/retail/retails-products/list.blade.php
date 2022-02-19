@@ -58,22 +58,49 @@
 				</div>
 			</div> --}}
 
-          
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        {{-- <div class="title">
+								<h4>Themify Icons</h4>
+							</div>
+							<nav aria-label="breadcrumb" role="navigation">
+								<ol class="breadcrumb">
+									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+									<li class="breadcrumb-item active" aria-current="page">Icons</li>
+								</ol>
+							</nav> --}}
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-right">
+                        <div class="dropdown">
+                            <a class="btn btn-primary " href="{{ route('product.create') }}">
+                                Create
+                            </a>
+                            {{-- <div class="dropdown-menu dropdown-menu-right">
+									<a class="dropdown-item" href="#">Export List</a>
+									<a class="dropdown-item" href="#">Policies</a>
+									<a class="dropdown-item" href="#">View Assets</a>
+								</div> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="card-box mb-30">
-                <h2 class="h4 pd-20">Retail Product List</h2>
-                <table id="example1" class="table nowrap responsive ">
+                <h2 class="h4 pd-20">Product</h2>
+                <table id="example1" class="table nowrap responsive">
                     <thead>
                         <tr>
                             <th class="all">SL</th>
-                          
-                            <th class="all">Image</th>
-                              <th class="all"> Name</th>
-                            <th class="all">Unit</th>
-                            <th class="all">Stock</th>
-                            <th class="all"> Price</th>
-                            <th class="all"> Retail Name</th>
-                          
+                            <th class="all">Product Name</th>
+                            <th class="all">Product Image</th>
+                            <th class="all">Product Unit</th>
+                            <th class="all">Product Stock</th>
+                            <th class="all">Product Price</th>
+                            <th class="all">Status</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th class="" ></th>
 
                         </tr>
                     </thead>
@@ -107,82 +134,98 @@
                 }
             });
 
-                
-
-      $('#example1').DataTable({
-          "processing": true,
-          "serverSide": true,
-          "destroy": true,
-        //"paging": false,
-           "ajax": {
+                    $('#example1').dataTable({
+                        processing: true,
+                        serverSide: true,
+                        bRetrieve: true ,
+                        "ajax": {
                             "url": "{{ route('retail.assign.products') }}",
                             "type": "GET",
-                            dataSrc: 'data',
                         },
-       
-          "columns": [
-            {
-                "data": "id",  
-                   "orderable": false, 
-                render: function (data, type, full, meta) {
-                    return  meta.row+1;
-                }
-            },
-         
-            {
-                "data": "product_image",      
-                "orderable": true, 
-                render: function (data, type, full, meta) {
-                    return  `<img src="{!! asset('documents/${data}') !!}" / style="height:100px;width:100px;">`;
-                }
-            },
-               {
-                "data": "product_name",  
-                "orderable": true,     
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            {
-                "data": "product_unit",  
-                "orderable": false,     
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            
-            {
-                "data": "quantity",  
-                "orderable": false,     
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            {
-                "data": "product_price",  
-                "orderable": false,     
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-              {
-                "data": "retail_name",  
-                "orderable": false,     
-                render: function (data, type, full, meta) {
-                    return  data;
-                }
-            },
-            
-           
+                        destroy: true,
+                        columns: [{
+                                data: 'id'
+                            },
+                            {
+                                data: 'product_name'
+                            },
+                            {
+                                data: 'product_image'
+                            },
+                            {
+                                data: 'product_unit'
+                            },
+                            {
+                                data: 'product_quantity'
+                            },
+                            {
+                                data: 'product_price'
+                            },
+                            {
+                                data: 'status'
+                            },
 
-          ],
+                            {
+                                data: 'created_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
+                                }
+                            },
+                            {
+                                data: 'updated_on', "render": function (value) {
+                                    if (value === null) return "";
+                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
+                                }
+                            },
+                            {
+                                data: 'status'
+                            },
+                        ],
+                        "columnDefs": [{
+                                "targets": 9,
+                                "render": function(data, type, row, meta) {
 
-          "drawCallback": function (settings) { 
-        // Here the response
-      
-    },
-      });
-});
+                                   
+
+                                    return `<div class="dropdown" style="display:none;">
+                                        <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                                            <i class="dw dw-more"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" >
+
+                                          
+                                        </div>
+                                    </div>`
+                                }
+
+                            },
+                            {
+                                "targets": 6,
+                                "render": function(data, type, row, meta) {
+
+                                    return row.status==1?'Active':'InActive';
+
+                                }
+
+                            },
+                            {
+                                "targets": 2,
+                                "render": function(data, type, row, meta) {
+
+                                    return `<div>
+                                            <img src="{!! asset('documents/${row.product_image}') !!}" />
+                                    </div>`
+                                }
+
+                            },
+                            { "orderable": false, "targets": 0 }
+                        ],
+                        'aaSorting': [[1, 'asc']] ,
+                        "order": [[0, "desc" ]]
+                    });
+
+                });
+
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");
             if (confirms) {
