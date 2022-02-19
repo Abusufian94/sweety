@@ -56,20 +56,23 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
      Route::post('product/update','Warehouseroducts@updatewarehouseproduct');
 
 
-     /*retail store list*/
+    
+     //commited by abu "--start"
+      /*retail store list*/
        Route::get('admin/retails', 'StockController@retailList');
        Route::post('admin/retail-user/create', 'UserController@retailUserCreate');
        Route::get('admin/retail-users', 'UserController@retailUsers');
        Route::delete('admin/retail_user/delete', 'UserController@retailUserDelete');
        Route::get('retailer/assign/products/','RetailerController@retailuserproducts')->name('retail.assign.products');
-
-  Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
-  Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
-  Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
-  
-
+       Route::get('/retail-users', 'Warehouseroducts@retailUserList')->name('retailusers');
+       Route::get('/retail-products', 'RetailProducts@RetailProducts')->name('retail.products');
+       Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
+  //commited by abu --end"
+ //commited by abu "--start"
      Route::get('/product-retail-list/{status?}', 'Warehouseroducts@assignedPendingTotalStock')->name('product.retail.list');
      
-  // Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
-  
+  Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
+  Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
+
+  //commited by abu "--end"
 });
