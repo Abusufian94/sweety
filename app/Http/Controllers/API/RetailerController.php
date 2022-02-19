@@ -15,20 +15,20 @@ class RetailerController extends Controller
     public function retailuserproducts(Request $request) {
         try  {
 
-          $userData = \Auth::user();        
+          $userData = \Auth::user();
           $orderBy = $request->order[0]['dir'];
 
           $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
-          $assignRetailId = $assignRetailId->retail_id;
-           
+
+
           $retailProduct = \DB::table('retail_product')->leftJoin('product', 'retail_product.product_id', '=','product.id' )->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'retail_product.retail_id')->selectRaw("product.id,product.product_name,product.product_image,product.product_price,product.product_unit,retail_product.quantity,retail_tbl.retail_name,retail_tbl.street_name");
 
           $retailProduct=$retailProduct->where('product.status', 1);
 
-             if (!empty($request['search']['value'])) 
+             if (!empty($request['search']['value']))
              {
                 $searchText = $request['search']['value'];
-                $retailProduct  =   $retailProduct->where(function ($q) use ($searchText) 
+                $retailProduct  =   $retailProduct->where(function ($q) use ($searchText)
                 {
                   $q->where('retail_product.quantity', 'LIKE', "%" . $searchText . "%")
                   ->orWhere('product.product_name', 'LIKE', "%" . $searchText . "%")
@@ -39,6 +39,7 @@ class RetailerController extends Controller
 
              if(!empty($assignRetailId))
              {
+                $assignRetailId = $assignRetailId->retail_id;
                 $retailProduct = $retailProduct->where('retail_product.retail_id',$assignRetailId);
              }
 
@@ -52,9 +53,9 @@ class RetailerController extends Controller
           $retailProduct = $retailProduct->orderBy('product.product_name', $orderBy)->get()->toArray();
 
           log::info($retailProduct);
-          
 
-       
+
+
           return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProduct]);
 
         } catch (\Exception $e) {
@@ -97,4 +98,3 @@ class RetailerController extends Controller
     }
 
 }
-  
