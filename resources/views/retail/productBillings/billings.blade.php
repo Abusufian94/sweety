@@ -18,6 +18,28 @@
                     </ul>
                 </div>
 
+                <div class="card-box mb-30">
+                    <table id="example1" class="table nowrap responsive">
+                        <thead>
+                            <tr>
+                                <th class="all">SL</th>
+                                <th class="all">Image</th>
+                                <th class="all">Name</th>
+                                <th class="all">Qty</th>
+                                <th class="all">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="demo">
+                          <td>1</td>
+                          <td><img src="https://www.wordstream.com/wp-content/uploads/2021/07/product-photography-lead-image_800x_0.jpg" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 54.4px; height: 34px; margin: 9.4px 0px;"></td>
+                          <td>xyz</td>
+                          <td><input type="text" value="1" size="1" style="height: 34px"/></td>
+                          <td><button type="button" class="btn btn-danger">X</button></td>
+
+                        </tbody>
+                    </table>
+                </div>
+
 
 
                 {{-- <div class="form-group row">
@@ -116,12 +138,14 @@
              data: {name:query}});
              var html = ` <ul class="list-group" id="suggestion">`;
              $.each( result.data.data, function( index, value ){
-                      html +=`<li><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li>`
+                      html +=`<li class ='list' data='${value.product_id}'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li>`
                 });
                 html += `</ul>`;
              $("#suggestion").html(html)
 
         }
+
+
 
     // $('#search').typeahead({
 
