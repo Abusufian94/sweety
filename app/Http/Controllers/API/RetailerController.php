@@ -70,6 +70,8 @@ class RetailerController extends Controller
     }
     public function suggestiveproducts(Request $request) {
         try {
+            $userData = \Auth::user();
+            $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
             $page = !is_null($request->query('page')) ? $request->query('page') : 1;
             $pageSize  = !is_null($request->query('pageSize')) ? $request->query('pageSize') : 10;
             $offsets = ($page-1) * $pageSize;
@@ -87,10 +89,17 @@ class RetailerController extends Controller
            if(isset($ids)) {
               $product = $product->whereIn('retail_product.product_id',$ids);
            }
+           if(!empty($assignRetailId))
+           {
+              $product = $product->where('retail_product.retail_id','=',$assignRetailId->retail_id);
+           }
+            //$product = $product->whereIn('retail_product.user_id','=',$userData->id);
             $product = $product->offset($offsets)->limit($pageSize)->get();
             $resultArray =  (object)['data' =>$product,"meta"=>(object)["page"=>(int)$page,'limit'=>(int)$pageSize]];
             return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$resultArray],200);
         } catch(\Exception $ex) {
+            Log::info('==================== Retailer billing ======================');
+            Log::error($ex->getMessage());
             return response()->json(['stat'=>false ,'message'=>"Something went wrong with this api",'err'=>$ex,'data'=>(object)[]],200);
         }
 
