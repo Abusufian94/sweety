@@ -7,7 +7,7 @@
                 <form id="myform" method="post" enctype="multipart/form-data">
                 <div class="form-group row">
                     <div class="col-sm-12 col-md-10">
-                        <input type="text" onkeyup="getSuggestiveProduct(this.value)" id="search" class="typeahead form-control" placeholder="Search">
+                        <input type="text"  onkeyup="getSuggestiveProduct(this.value)" id="search" class="typeahead form-control" placeholder="Search">
                     </div>
 
                 </div>
@@ -20,23 +20,8 @@
 
                 <div class="card-box mb-30">
                     <table id="example1" class="table nowrap responsive">
-                        <thead>
-                            <tr>
-                                <th class="all">SL</th>
-                                <th class="all">Image</th>
-                                <th class="all">Name</th>
-                                <th class="all">Qty</th>
-                                <th class="all">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="demo">
-                          <td>1</td>
-                          <td><img src="https://www.wordstream.com/wp-content/uploads/2021/07/product-photography-lead-image_800x_0.jpg" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 54.4px; height: 34px; margin: 9.4px 0px;"></td>
-                          <td>xyz</td>
-                          <td><input type="text" value="1" size="1" style="height: 34px"/></td>
-                          <td><button type="button" class="btn btn-danger">X</button></td>
 
-                        </tbody>
+
                     </table>
                 </div>
 
@@ -127,6 +112,8 @@
     <script>
 
         async function getSuggestiveProduct(query) {
+          var search  = $("#search").val();
+          if(search != '' && search!= null) {
             var path = "{{url('api/v1/admin/suggestive-product')}}";
             const token = JSON.parse(localStorage.getItem('loginUser'));
             const result  = await $.ajax({
@@ -138,41 +125,70 @@
              data: {name:query}});
              var html = ` <ul class="list-group" id="suggestion">`;
              $.each( result.data.data, function( index, value ){
-                      html +=`<li class ='list' data='${value.product_id}'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li>`
+                      html +=`<a href="javascript:getproduct(${value.product_id})"><li class ='list'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li></a>`
                 });
                 html += `</ul>`;
              $("#suggestion").html(html)
+          }
+    }
+   var productIds = [];
+   async function getproduct(id) {
+       if(productIds.indexOf(id) == -1) {
+        productIds.push(id)
+       }
+       var path = "{{url('api/v1/admin/suggestive-product')}}";
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const result  = await $.ajax({
+            headers: {
+            'Accept':'application/json',
+            'Authorization':'Bearer '+token.token
+            },
+             url:path,
+             data: {ids:productIds.toString()}});
+    var html = `<thead>
+                        <tr>
+                            <th class="all">SL</th>
+                            <th class="all">Image</th>
+                            <th class="all">Name</th>
+                            <th class="all">Price</th>
+                            <th class="all">Qty</th>
+                            <th class="all">Total</th>
+                            <th class="all">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="demo">`;
+     $.each(result.data.data, function( index, value ){
+       html += `
+                <tr id='prod_${value.product_id}'>
+                <td>${index + 1}</td>
+                <td><img src="${value.product_image_url}" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 54.4px; height: 34px; margin: 9.4px 0px;"></td>
+                <td>${value.product_name}</td>
+                <td> <i class="fa fa-inr">${value.product_price}</i> </td>
+                <td><input type="number" value="1"  style="height: 34px" onchange="totalPrice(this.value,${value.product_price},${value.product_id})"/></td>
+                <td id="total_${value.product_id}"><i class="fa fa-inr"></i> ${value.product_price}</td>
+                <td><button type="button" class="btn btn-danger" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
+                </tr>`;
+    });
+    html +=`</tbody>`;
+    $("#example1").html(html);
+   }
+   function totalPrice(val,price,product_id) {
 
-        }
+    let result = Number(val) * Number(price)
+    $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result}</i>`);
+   }
+   function remove(id) {
+       console.log(productIds.length)
+    if(productIds.length > 1) {
+        let index  = productIds.indexOf(id);
+        productIds.splice(index, 1);
+        $("#prod_"+id).remove();
+    } else {
+        $("#example1").remove();
+    }
 
 
-
-    // $('#search').typeahead({
-
-    //     source:  function (query, process) {
-    //      return $.ajax({
-    //         headers: {
-    //         'Accept':'application/json',
-    //         'Authorization':'Bearer '+token.token
-    //         },
-    //          url:path,
-    //          data: {name:query},
-    //          success: function(data) {
-    //             return process(data);
-    //          }
-    //      })
-    //     // return $.get(path, { name: query }, function (data) {
-    //     //         return process(data);
-    //     //     });
-    //     }
-    // });
-        // $(document).ready(function(){
-        //     $( "#name" ).autocomplete({})
-        //     apiCall("{{url('api/v1/admin/suggestive-product?name=xyz')}}","Get")
-        //     .then(function(data){
-        //        console.log(data)
-        //     })
-        // })
+   }
     </script>
     <script>
         $(document).ready(function() {
