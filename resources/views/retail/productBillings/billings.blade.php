@@ -2,7 +2,7 @@
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
-
+         <input type="hidden" id= "unit"/>
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
@@ -24,6 +24,17 @@
 
 
                         </table>
+                    </div>
+                    <div class ="row">
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table" id ="final_bill">
+
+                            </table>
+                        </div>
+
                     </div>
                     <div id="outputArea"></div>
                 </form>
@@ -87,12 +98,78 @@
             createHtml(result.data.data)
 
         }
+        var billings = [];
+        async function totalPrice(val, price, product_id) {
+            let unit = $("#unit").val();
+            var result = 0;
+            switch(unit){
+                case "KG":
+                result = Number(val) * Number(price)
+                break;
+                case "GM":
+                result = ((Number(val))/1000) * Number(price);
+                break;
+                default:
+                result = Number(val) * Number(price)
+                break;
+            }
+            var path = "{{ url('api/v1/admin/suggestive-product') }}";
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                url: path,
+                data: {
+                    ids: product_id.toString()
+                }
+            });
+            var payload = {
+                product_image: response.data.data[0].product_image_url,
+                product_name: response.data.data[0].product_name,
+                product_price: response.data.data[0].product_price,
+                product_quantity: val,
+                total_price: result,
+                product_unit: response.data.data[0].product_unit.toUpperCase(),
+            }
 
-        function totalPrice(val, price, product_id) {
-
-            let result = Number(val) * Number(price)
-            $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result}</i>`);
+            var html = ``;
+            var sum = 0;
+            if(val > 0) {
+             billings.push(payload)
+             html = `<thead class='table-success' style="color:blue">
+                            <tr>
+                                <th scope="col">SL</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Unit</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>`;
+            $.each(billings, function(index, value) {
+               sum = Number(value.total_price) + Number(sum);
+              html += `<tr>
+                            <td>${index + 1}</td>
+                            <td><img src="${value.product_image}" style="width: 40px; height: 40px; margin: 0px;"></td>
+                            <td>${value.product_name}</td>
+                            <td><i class="fa fa-inr">${value.product_price}</i></td>
+                            <td>${value.product_quantity}</td>
+                            <td>${value.product_unit}</td>
+                            <td><i class="fa fa-inr">${value.total_price}</i></td>
+                       </tr>`;
+            })
+            html += `<tr>
+                        <td colspan="3" align="center">Grand Total</td>
+                        <td colspan="3" align="center"><i class="fa fa-inr">${sum}</i></td>
+                    </tr>`;
+                }
+            $("#final_bill").html(html)
+            $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
         }
+
         async function remove(id) {
 
             let index = productIds.indexOf(id);
@@ -135,7 +212,8 @@
                 </thead>
                 <tbody id="demo">`;
                 $.each(data, function(index, value) {
-                    let calculateprice  = (value.product_unit == 'kg')?(value.product_quantity / 1000) * value.product_price : value.product_price;
+                    let calculateprice  = (value.product_unit == 'gm') ? ((value.product_price/1000) * 100): value.product_price;
+                    let quantity = (value.product_unit == 'gm') ? 100:1;
                     html += `
                 <tr id='prod_${value.product_id}' class="product">
                 <td>${index + 1}</td>
@@ -143,8 +221,8 @@
                 <td>${value.product_name}</td>
                 <td> <i class="fa fa-inr">${value.product_price}</i> </td>
 
-                <td><input type="number" id ="qty_${value.product_id}" value="1"  style="height: 34px" onchange="totalPrice(this.value,${value.product_price},${value.product_id})"/></td>
-                <td><select onchange = 'unitCalculation(this.value,${value.product_price},${value.product_id})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
+                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id})" onchange="totalPrice(this.value,${value.product_price},${value.product_id})"/></td>
+                <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
                 <td id="total_${value.product_id}"><i class="fa fa-inr"> ${calculateprice} </i></td>
                 <td><button type="button" class="btn btn-danger" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
                 </tr>`;
@@ -154,15 +232,18 @@
             $("#example1").html(html);
 
         }
-        function unitCalculation(unit, price,product_id) {
-            let qty =  $("#qty_"+product_id).val();
+        function unitCalculation(unit,product_id,price) {
 
-           let cal = 0
-         switch(unit) {
-             case 'KG':
-             cal = (price / 1000) * qty;
+         if(unit == "GM"){
+           let result = (100/1000) * Number(price);
+            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+            $("#qty_"+ product_id).val(100);
+         } else {
+            let result = 1 * Number(price);
+            $("#qty_"+ product_id).val(1);
+            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
          }
-         $("total_"+product_id).html(`<i class="fa fa-inr"> ${cal} </i>`);
+         $("#unit").val(unit);
         }
     </script>
     <script>
