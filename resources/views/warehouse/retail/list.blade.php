@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('content')
+
 <div class="main-container">
     <div class="pd-ltr-20">
      
@@ -20,10 +21,30 @@
 
         <div class="card-box mb-30">
             <h2 class="h4 pd-20">Retail Assign Log List</h2>
-              <div class=" row  " style="margin-left: 900px">
+              <div class=" row  pd-20">
+                    <div class="col-md-8 row ">
+                        <div class="form-group row  col-md-4">
+                           <div class="form-group">
+                                    <label>FROM</label>
+                                    <input class="form-control" placeholder="End Date" type="date" id="start_date">
+                            </div>
+                        
+                        </div>
+                         
+                        <div class="form-group row  col-md-4">
+                           <div class="form-group">
+                                    <label>TO</label>
+                                    <input class="form-control" placeholder="End Date" type="date" id="end_date">
+                            </div>
+                        
+                        </div>
+                    </div>
+                <div class="col-md-4">
+                    <br><br>
                     <button type="button" class="btn btn-warning pending" >Pending</button>&nbsp;
-                    <button class="btn btn-success" id="approved">Approved</button>
-                         </div><br>
+                    <button class="btn btn-success" id="approved" >Approved</button>
+                </div>
+              </div><br>
             <table id="example1" class="table  responsive">
               
                 <thead>
@@ -50,7 +71,7 @@
 
                 </tbody>
             </table>
-        </div>
+        </div>  
        
     </div>
 </div>
@@ -60,6 +81,22 @@
     </script>
 
     <script type="text/javascript">
+         $(document).ready(function() {
+             $('#start_date').on('change', function () {
+               
+               
+                loadDataTable()
+             });
+             $('#end_date').on('change', function () {
+               
+                 
+                 
+                
+                   loadDataTable()
+             });
+            
+         });    
+
         $(document).ready(function() {
            
          
@@ -72,11 +109,11 @@
         $(document).ready(function(){
           $("#approved").click(function(){
            
-            var status=1;
+          
 
             $('#example1').DataTable().clear().destroy();
 
-             loadDataTable(status);
+            loadDataTable(status);
           });
 
            $(".pending").click(function(){
@@ -90,8 +127,11 @@
         });
 
 
-         function loadDataTable(status)
+         function loadDataTable(status='')
                 {
+
+                     var start_date= $('#start_date').val();
+                    var end_date= $('#end_date').val();
                    
                   var i = 1;
 
@@ -102,11 +142,11 @@
                             "destroy": true,
                 "processing": true,
                 "serverSide": true,
-                "searching": false,
+                "searching": true,
                 "iDisplayLength": 100,
                 "lengthMenu": [[100, 250, 500], [100, 250, 500]],
               "ajax": {
-                            "url": `{{ url('api/v1/product-retail-list/${status}')}}`,
+                            "url": "{{ url('api/v1/product-retail-list/?status=')}}"+status+'&start_date='+start_date+'&end_date='+end_date,
                             "type": "GET",
                              headers: {
                     'Authorization': 'Bearer ' + x.token
@@ -186,11 +226,14 @@
               ],
           });
 
-           
+             
                  
                 }
 
-             
+
+            
             </script>
 
+
 @endsection
+    

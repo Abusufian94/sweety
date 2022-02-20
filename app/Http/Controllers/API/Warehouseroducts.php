@@ -77,7 +77,6 @@ class Warehouseroducts extends Controller
       $productList  =  Product::select('*')->where('status',  '=', 1);
       $productList = $productList->orderBy('id', 'desc');
 
-
       $total_count = $productList->count();
 
       $productList = $productList->get()->toArray();
@@ -121,42 +120,62 @@ class Warehouseroducts extends Controller
     }
   }
 
-  public function productRetailList(Request $request, $status)
+  public function productRetailList(Request $request)
   {
-    
+
+      $currentDate = date("Y-m-d");
+      log::info($currentDate);
 
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
 
-      // if (!empty($request['search']['value'])) {
-      //   $searchText = $request['search']['value'];
-      //   $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
-      //     $q->where('unity', 'LIKE', "%" . $searchText . "%")
-      //       ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
-      //   });
-      //   // ->orWhereHas('products', function($q) use($searchText){
-      //   //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
-      //   // ->orWhereHas('users', function($q) use($searchText){
-      //   //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
-      //   //     ->orWhereHas('retails', function($q) use($searchText){
-      //   //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
+      if (!empty($request['search']['value'])) {
+        $searchText = $request['search']['value'];
+        $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
+          $q->where('unity', 'LIKE', "%" . $searchText . "%")
+            ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
+        });
+        // ->orWhereHas('products', function($q) use($searchText){
+        //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
+        // ->orWhereHas('users', function($q) use($searchText){
+        //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
+        //     ->orWhereHas('retails', function($q) use($searchText){
+        //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
 
-      //   $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
-      //     $q->where(function ($q) use ($searchText) {
-      //       $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
-      //     });
-      //   });
+        $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
 
-      //   $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
-      //     $q->where(function ($q) use ($searchText) {
-      //       $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
-      //     });
-      //   });
-      // }
-      if($status!=null)
-      {
-          $retailUserList = $retailUserList->where('status', $status);
+        $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
       }
+
+      if(!$request->start_date)
+      {
+        $retailUserList = $retailUserList->where('updated_at','>=',$currentDate." 00:00:00");
+      }
+
+      if($request->start_date)
+      {
+       
+        $retailUserList   = $retailUserList->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+
+      }
+            
+        if($request->end_date)
+            $retailUserList   = $retailUserList->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+
+      
+      if($request->status!=null)
+      {
+          $retailUserList = $retailUserList->where('status', $request->status);
+      }
+
       // $retailUserList = $retailUserList->where('status', 0);
 
       $total_count = $retailUserList->count();
