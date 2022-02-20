@@ -69,7 +69,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
        Route::post('/retail-products-approve', 'RetailProducts@approveProduct')->name('retail.approve');
   //commited by abu --end"
  //commited by abu "--start"
-     Route::get('/product-retail-list/{status?}', 'Warehouseroducts@assignedPendingTotalStock')->name('product.retail.list');
+     Route::get('/product-retail-list/{status}', 'Warehouseroducts@productRetailList')->name('product.retail.pendin.approval.list');
      
   Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
   Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
