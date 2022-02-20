@@ -121,38 +121,41 @@ class Warehouseroducts extends Controller
     }
   }
 
-  public function productRetailList(Request $request, $status=null)
+  public function productRetailList(Request $request, $status)
   {
+    
+
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
 
-      if (!empty($request['search']['value'])) {
-        $searchText = $request['search']['value'];
-        $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
-          $q->where('unity', 'LIKE', "%" . $searchText . "%")
-            ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
-        });
-        // ->orWhereHas('products', function($q) use($searchText){
-        //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
-        // ->orWhereHas('users', function($q) use($searchText){
-        //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
-        //     ->orWhereHas('retails', function($q) use($searchText){
-        //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
+      // if (!empty($request['search']['value'])) {
+      //   $searchText = $request['search']['value'];
+      //   $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
+      //     $q->where('unity', 'LIKE', "%" . $searchText . "%")
+      //       ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
+      //   });
+      //   // ->orWhereHas('products', function($q) use($searchText){
+      //   //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
+      //   // ->orWhereHas('users', function($q) use($searchText){
+      //   //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
+      //   //     ->orWhereHas('retails', function($q) use($searchText){
+      //   //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
 
-        $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
-          $q->where(function ($q) use ($searchText) {
-            $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
-          });
-        });
+      //   $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
+      //     $q->where(function ($q) use ($searchText) {
+      //       $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
+      //     });
+      //   });
 
-        $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
-          $q->where(function ($q) use ($searchText) {
-            $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
-          });
-        });
-      }
-      if($status!=null){
-          $retailUserList = $retailUserList->where('status', 0);
+      //   $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
+      //     $q->where(function ($q) use ($searchText) {
+      //       $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
+      //     });
+      //   });
+      // }
+      if($status!=null)
+      {
+          $retailUserList = $retailUserList->where('status', $status);
       }
       // $retailUserList = $retailUserList->where('status', 0);
 

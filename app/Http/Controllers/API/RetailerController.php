@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Product;
-use App\RetailUser;
 use App\Retailproduct;
-use Log;
+use App\RetailUser;
 class RetailerController extends Controller
 {
     //
     public function retailuserproducts(Request $request) {
         try  {
+
 
           $userData = \Auth::user();
           $orderBy = $request->order[0]['dir'];

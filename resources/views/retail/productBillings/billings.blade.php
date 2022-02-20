@@ -99,10 +99,11 @@
 
         }
         var billings = [];
-        async function totalPrice(val, price, product_id) {
-            let unit = $("#unit").val();
+        async function totalPrice(val, price, product_id,unit) {
+            console.log(unit)
+            let mesurment = !unit? $("#unit").val().toUpperCase(): unit.toUpperCase();
             var result = 0;
-            switch(unit){
+            switch(mesurment){
                 case "KG":
                 result = Number(val) * Number(price)
                 break;
@@ -130,8 +131,8 @@
                 product_name: response.data.data[0].product_name,
                 product_price: response.data.data[0].product_price,
                 product_quantity: val,
-                total_price: result,
-                product_unit: response.data.data[0].product_unit.toUpperCase(),
+                total_price: result.toFixed(2),
+                product_unit: unit.toUpperCase(),
             }
 
             var html = ``;
@@ -163,7 +164,7 @@
             })
             html += `<tr>
                         <td colspan="3" align="center">Grand Total</td>
-                        <td colspan="3" align="center"><i class="fa fa-inr">${sum}</i></td>
+                        <td colspan="3" align="center"><i class="fa fa-inr">${sum.toFixed(2)}</i></td>
                     </tr>`;
                 }
             $("#final_bill").html(html)
@@ -221,7 +222,7 @@
                 <td>${value.product_name}</td>
                 <td> <i class="fa fa-inr">${value.product_price}</i> </td>
 
-                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id})" onchange="totalPrice(this.value,${value.product_price},${value.product_id})"/></td>
+                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')"/></td>
                 <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
                 <td id="total_${value.product_id}"><i class="fa fa-inr"> ${calculateprice} </i></td>
                 <td><button type="button" class="btn btn-danger" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
@@ -233,7 +234,6 @@
 
         }
         function unitCalculation(unit,product_id,price) {
-
          if(unit == "GM"){
            let result = (100/1000) * Number(price);
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
