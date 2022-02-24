@@ -100,7 +100,7 @@
                             <th class="all">Status</th>
                             <th>Created At</th>
                             <th>Updated At</th>
-                            <th class="" ></th>
+                            <th class="all datatable-nosort" ></th>
 
                         </tr>
                     </thead>
@@ -156,7 +156,7 @@
                                 data: 'product_unit'
                             },
                             {
-                                data: 'product_quantity'
+                                data: 'quantity'
                             },
                             {
                                 data: 'product_price'
@@ -203,7 +203,7 @@
                                 "targets": 6,
                                 "render": function(data, type, row, meta) {
 
-                                    return row.status==1?'Active':'InActive';
+                                    return row.status==1?'Active':'Active';
 
                                 }
 
@@ -224,7 +224,12 @@
                         "order": [[0, "desc" ]]
                     });
 
+
+
+
                 });
+
+
 
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");

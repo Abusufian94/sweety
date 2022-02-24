@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use App\Product;
 use App\Retailproduct;
+use App\RetailUser;
+use Log;
 class RetailerController extends Controller
 {
     //

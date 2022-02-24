@@ -124,7 +124,7 @@ class Warehouseroducts extends Controller
   {
 
       $currentDate = date("Y-m-d");
-      log::info($currentDate);
+    
 
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
