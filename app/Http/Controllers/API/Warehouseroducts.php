@@ -13,6 +13,7 @@ use App\Retail;
 use Validator;
 use Illuminate\Support\Facades\Log;
 
+
 class Warehouseroducts extends Controller
 {
 
@@ -72,7 +73,7 @@ class Warehouseroducts extends Controller
   {
     try {
 
-
+      log::info($request);
 
       $productList  =  Product::select('*')->where('status',  '=', 1);
       $productList = $productList->orderBy('id', 'desc');
@@ -128,7 +129,9 @@ class Warehouseroducts extends Controller
 
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
+     log::info($request);
 
+      
       if (!empty($request['search']['value'])) {
         $searchText = $request['search']['value'];
         $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
