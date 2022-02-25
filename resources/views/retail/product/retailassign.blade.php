@@ -55,7 +55,7 @@
                         serverSide: true,
                         bRetrieve: true ,
                         "ajax": {
-                            "url": "{{ url('api/v1/product-retail-list') }}/" + status,
+                            "url": "{{ url('api/v1/retail-assigned-product-list') }}/" + status,
                             "type": "GET",
 
                         },
