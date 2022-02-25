@@ -11,7 +11,7 @@ use App\ProductRetailLog;
 use Validator;
 use Illuminate\Support\Facades\Log;
 use App\RetailProduct;
-
+ use App\RetailUser;
 class RetailProducts extends Controller
 {
 
@@ -73,8 +73,15 @@ class RetailProducts extends Controller
 
   public function approveProduct(Request $request)
   {
-   
+   try {
+     
+  
       //Check For entry Retail Product Table
+
+          $userData = \Auth::user();
+          $orderBy = $request->order[0]['dir'];
+
+          $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
 
       $ProductRetailLog = ProductRetailLog::where(['product_retail_assign_log_id' => $request->product_retail_assign_log_id])->first();
@@ -83,9 +90,22 @@ class RetailProducts extends Controller
         
         if($request->product_status ==1){
 
-            $product =  Product::where('id', $ProductRetailLog->product_id)->first();
+            $product =  Product::where('id', $ProductRetailLog->product_id)->where('status',1)->first();
             $product->product_quantity =  $product->product_quantity - $ProductRetailLog->quantity;
             $product->save();
+            $checkExistingProduct = RetailProduct::where('product_id', $ProductRetailLog->product_id)->where('retail_id',$ProductRetailLog->retail_id)->first();
+            if( count($checkExistingProduct)>0)
+            {
+              
+              $rtProduct = RetailProduct::findOrFail($checkExistingProduct->retail_product_id);
+              $rtProduct->quantity+= $ProductRetailLog->quantity;
+
+              $rtProduct->save();
+              $ProductRetailLog->status = $request->product_status;
+              $ProductRetailLog->save();
+              return response()->json(['stat' => true, 'message' => "Updated successfully ", 'data' => "Success"], $this->successStatus);
+
+            }
             if($product){
               $retailProduct = new RetailProduct();
               $retailProduct->product_id = $ProductRetailLog->product_id;
@@ -109,4 +129,12 @@ class RetailProducts extends Controller
     }
   }
 
+catch (\Exception $e) {
+      Log::info('==================== approveProduct ======================');
+      Log::error($e->getMessage());
+      return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+      Log::error($e->getTraceAsString());
+    }
+
+  }
 }

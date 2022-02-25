@@ -74,6 +74,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::post('/retail-assign-log', 'Warehouseroducts@productRetailLogCreate')->name('retail.add');
   Route::get('assigned-pending-total-stock', 'Warehouseroducts@assignedPendingTotalStock');
 
-    Route::get('/retail-assigned-product-list/{status?}', 'Warehouseroducts@retailAssignedProductList');
+    Route::get('/retail-assigned-product-list', 'Warehouseroducts@retailAssignedProductList');
   //commited by abu "--end"
 });

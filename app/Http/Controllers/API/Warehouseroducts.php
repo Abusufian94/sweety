@@ -281,22 +281,23 @@ class Warehouseroducts extends Controller
     }
   }
 
-   public function retailAssignedProductList(Request $request, $status=null)
+
+   public function retailAssignedProductList(Request $request)
   {
   
-        
+    //    log::info($request);
         try {
-
+           $currentDate = date("Y-m-d");
           $userData = \Auth::user();
           $orderBy = $request->order[0]['dir'];
 
           $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
-      $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
+      $retailAssignProuct  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
 
       if (!empty($request['search']['value'])) {
         $searchText = $request['search']['value'];
-        $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
+        $retailAssignProuct  =   $retailAssignProuct->where(function ($q) use ($searchText) {
           $q->where('unity', 'LIKE', "%" . $searchText . "%")
             ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
         });
@@ -307,13 +308,13 @@ class Warehouseroducts extends Controller
         //     ->orWhereHas('retails', function($q) use($searchText){
         //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
 
-        $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
+        $retailAssignProuct->orWhereHas('products', function ($q) use ($searchText) {
           $q->where(function ($q) use ($searchText) {
             $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
           });
         });
 
-        $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
+        $retailAssignProuct->orWhereHas('retails', function ($q) use ($searchText) {
           $q->where(function ($q) use ($searchText) {
             $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
           });
@@ -322,36 +323,54 @@ class Warehouseroducts extends Controller
        if(!empty($assignRetailId))
              {
                 $assignRetailId = $assignRetailId->retail_id;
-                $retailUserList = $retailUserList->where('retail_id',$assignRetailId);
+                $retailAssignProuct = $retailAssignProuct->where('retail_id',$assignRetailId);
              }
 
-      if($status!=null){
-          $retailUserList = $retailUserList->where('status', 0);
+    
+       if(!$request->start_date)
+      {
+        $retailAssignProuct = $retailAssignProuct->where('updated_at','>=',$currentDate." 00:00:00");
       }
+
+      if($request->start_date)
+      {
+       
+        $retailAssignProuct   = $retailAssignProuct->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+
+      }
+            
+        if($request->end_date)
+            $retailAssignProuct   = $retailAssignProuct->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+            if($request->status!=null){
+          $retailAssignProuct = $retailAssignProuct->where('status', $request->status);
+      }
+
       // $retailUserList = $retailUserList->where('status', 0);
 
-      $total_count = $retailUserList->count();
+      $total_count = $retailAssignProuct->count();
 
       if (isset($request['start']) && isset($request['length'])) {
 
         $offset = $request['start'];
-        $retailUserList = $retailUserList->offset($offset)->limit($request['length']);
+        $retailAssignProuct = $retailAssignProuct->offset($offset)->limit($request['length']);
       }
+      log::info($retailAssignProuct->toSql());
 
-      $retailUserList = $retailUserList->get()->toArray();
+      $retailAssignProuct = $retailAssignProuct->get()->toArray();
 
 
 
 
       if ($total_count > 0) {
-        $retailUserList  = json_decode(json_encode($retailUserList));
+        $retailAssignProuct  = json_decode(json_encode($retailAssignProuct));
 
-        return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailUserList]);
+        return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailAssignProuct]);
       } else {
-        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailUserList]);
+        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailAssignProuct]);
       }
-    } catch (\Exception $e) {
-      Log::info('==================== warehouselist ======================');
+    } 
+    catch (\Exception $e) {
+      Log::info('==================== retailAssignedProductList ======================');
       Log::error($e->getMessage());
       return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
       Log::error($e->getTraceAsString());
