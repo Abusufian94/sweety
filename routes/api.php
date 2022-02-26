@@ -77,5 +77,7 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
   Route::post('admin/save-billings','RetailerController@saveBilling');
 
     Route::get('/retail-assigned-product-list', 'Warehouseroducts@retailAssignedProductList');
+    Route::get('invoice/list','RetailerController@invoiceList');
+    Route::get('invoice/sold/products/{id}','RetailerController@soldProduct');
   //commited by abu "--end"
 });

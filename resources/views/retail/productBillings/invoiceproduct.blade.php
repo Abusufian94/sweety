@@ -139,7 +139,7 @@
                         serverSide: true,
                         bRetrieve: true ,
                         "ajax": {
-                            "url": "{{ route('retail.assign.products') }}",
+                            "url": "{{ url('/api/v1/invoice/sold/products') }}/{{$id}}",
                             "type": "GET",
                         },
                         destroy: true,

@@ -33,4 +33,10 @@ class retailController extends Controller
     {
         return view('retail.productBillings.billings');
     }
+    public function invoices() {
+        return view('retail.productBillings.invoices');
+    }
+    public function invoiceDetails($id) {
+        return view('retail.productBillings.invoiceproduct',compact('id'));
+    }
 }

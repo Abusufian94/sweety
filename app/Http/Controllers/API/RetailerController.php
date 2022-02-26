@@ -147,4 +147,130 @@ class RetailerController extends Controller
        return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex->getMessage(), "data"=>[]]);
    }
 }
+public function invoiceList(Request $request) {
+    try {
+        log::info($request);
+        $currentDate = date("Y-m-d");
+    $userData = \Auth::user();
+    //$orderBy = $request->order[0]['dir'];
+    $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
+
+     $invoice = \DB::table('invoice')->select();
+   // ->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at");
+       if(!empty($request['search']['value']))
+        {
+            $searchText = $request['search']['value'];
+            $invoice  =   $invoice->where(function ($q) use ($searchText)
+            {
+              $q->where('invoice_number', 'LIKE', "%" . $searchText . "%")
+                ->orWhere('total_price', 'LIKE', "%" . $searchText . "%");
+             });
+        }
+        if(!is_null( $assignRetailId ))
+        {
+            $invoice  =   $invoice->where('retail_id', $assignRetailId ->retail_id);
+        }
+        if(!$request->start_date)
+      {
+        $invoice = $invoice->where('updated_at','>=',$currentDate." 00:00:00");
+      }
+
+      if($request->start_date)
+      {
+
+        $invoice   = $invoice->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+
+      }
+
+        if($request->end_date)
+            $invoice   = $invoice->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+
+     if($request->status!=null){
+                $invoice = $invoice->where('payment_method', $request->status);
+            }
+
+        if(isset($request['start']) && isset($request['length']))
+        {
+          $offset = $request['start'];
+          $invoice = $invoice->offset($offset)->limit($request['length']);
+        }
+        $total_count = $invoice->count();
+        if(isset($request->order[0]['dir']))
+        {
+            $invoice = $invoice->orderBy('id',$request->order[0]['dir']);
+        }
+        $invoice = $invoice->get()->toArray();
+        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$invoice]);
+    }
+    catch (\Exception $ex) {
+        Log::info('==================== Retailer billing ======================');
+        Log::error($ex->getMessage());
+        return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex->getMessage(), "data"=>[]]);
+    }
+ }
+
+
+ public function soldProduct(Request $request,$id) {
+    try  {
+
+
+      $userData = \Auth::user();
+     // $orderBy = $request->order[0]['dir'];
+
+      $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
+
+
+      $retailProduct = \DB::table('invoice')->leftJoin('sold_product', 'sold_product.invoice_id', '=','invoice.id' )->leftJoin('product', 'sold_product.product_id', '=','product.id' )->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'sold_product.retail_id')->selectRaw("invoice.id as invoiceId, invoice.invoice_number, product.id,product.product_name,product.product_image,product.product_price,product.product_unit,sold_product.quantity,retail_tbl.retail_name,retail_tbl.street_name");
+
+    //  $retailProduct=$retailProduct->where('product.status', 1);
+      $retailProduct=$retailProduct->where('sold_product.invoice_id', $id);
+
+         if (!empty($request['search']['value']))
+         {
+            $searchText = $request['search']['value'];
+            $retailProduct  =   $retailProduct->where(function ($q) use ($searchText)
+            {
+              $q->where('sold_product.quantity', 'LIKE', "%" . $searchText . "%")
+              ->orWhere('product.product_name', 'LIKE', "%" . $searchText . "%")
+              ->orWhere('retail_tbl.retail_name', 'LIKE', "%" . $searchText . "%")
+              ->orWhere('retail_tbl.street_name', 'LIKE', "%" . $searchText . "%");
+             });
+         }
+
+         if(!empty($assignRetailId))
+         {
+            $assignRetailId = $assignRetailId->retail_id;
+            $retailProduct = $retailProduct->where('sold_product.retail_id',$assignRetailId);
+         }
+
+         if(isset($request['start']) && isset($request['length']))
+         {
+           $offset = $request['start'];
+           $retailProduct = $retailProduct->offset($offset)->limit($request['length']);
+         }
+
+      $total_count = $retailProduct->count();
+      if(isset( $request->order[0]['dir']))
+      {
+        $retailProduct=$retailProduct->orderBy('product.product_name', $orderBy);
+      }
+
+      $retailProduct = $retailProduct->get()->toArray();
+
+      log::info($retailProduct);
+
+
+
+      return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProduct]);
+
+    } catch (\Exception $e) {
+        Log::info('==================== Retailer Product ======================');
+        Log::error($e->getMessage());
+        return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+        Log::error($e->getTraceAsString());
+
+
+
+    }
+}
 }

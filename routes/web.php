@@ -60,5 +60,8 @@ Route::get('retail/product/assign/list','RetailController@retailAssignProductLis
     Route::get('warehouse/retail/create','ProductController@warehouseretailcreate')->name('warehouse.retail.create');
     Route::get('retail/product/lists','ProductController@retailProducts')->name('retail.product.list');
     Route::get('retail/product/billings','retailController@billings')->name('retail.product.billings');
+    Route::get('retails/invoices','retailController@invoices')->name('retail.invoices');
+    Route::get('retails/invoice/details/{id}','retailController@invoiceDetails')->name('retail.invoices.details');
+
 
 //});

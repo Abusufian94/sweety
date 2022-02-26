@@ -230,10 +230,9 @@
 
 						</ul>
 					</li>
-
-					<li class="dropdown">
+                    <li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
+							<span class="micon dw dw-house-1"></span><span class="mtext">Billings</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="{{route('retail.product.list')}}">Product List</a></li>
@@ -242,7 +241,25 @@
 							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
 						</ul>
                         <ul class="submenu">
-							<li><a href="{{route('retail.product.billings')}}">Billings</a></l      <script src="{{ asset('js/jquery-min.js')}}"></script>
+							<li><a href="{{route('retail.invoices')}}">Invoices</a></li>
+						</ul>
+					</li>
+
+					{{-- <li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
+						</a>
+						<ul class="submenu">
+
+						</ul>
+                        <ul class="submenu">
+							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
+						</ul>
+                        <ul class="submenu">
+							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
+						</ul> --}}
+
+        <script src="{{ asset('js/jquery-min.js')}}"></script>
 	  <script src="{{ asset('deskapp/vendors/scripts/core.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
