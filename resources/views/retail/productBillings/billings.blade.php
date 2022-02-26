@@ -18,7 +18,7 @@
 
                         </ul>
                     </div>
-
+                    <input type ="hidden" id ="total" value ="0"/>
                     <div class="card-box mb-30">
                         <table id="example1" class="table nowrap responsive">
 
@@ -29,6 +29,7 @@
                         <div class="col-md-6">
 
                         </div>
+
                         <div class="col-md-6">
                             <table class="table" id ="final_bill">
 
@@ -45,6 +46,7 @@
 
     </div>
     </div>
+
 
 
 
@@ -95,12 +97,13 @@
                     ids: productIds.toString()
                 }
             });
+
             createHtml(result.data.data)
 
         }
         var billings = [];
+
         async function totalPrice(val, price, product_id,unit) {
-            console.log(unit)
             let mesurment = !unit? $("#unit").val().toUpperCase(): unit.toUpperCase();
             var result = 0;
             switch(mesurment){
@@ -127,47 +130,29 @@
                 }
             });
             var payload = {
-                product_image: response.data.data[0].product_image_url,
+                 product_id : response.data.data[0].product_id,
+                 product_image: response.data.data[0].product_image_url,
                 product_name: response.data.data[0].product_name,
                 product_price: response.data.data[0].product_price,
                 product_quantity: val,
                 total_price: result.toFixed(2),
                 product_unit: unit.toUpperCase(),
             }
-
-            var html = ``;
-            var sum = 0;
-            if(val > 0) {
-             billings.push(payload)
-             html = `<thead class='table-success' style="color:blue">
-                            <tr>
-                                <th scope="col">SL</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Qty</th>
-                                <th scope="col">Unit</th>
-                                <th scope="col">Total</th>
-                            </tr>
-                        </thead>`;
-            $.each(billings, function(index, value) {
-               sum = Number(value.total_price) + Number(sum);
-              html += `<tr>
-                            <td>${index + 1}</td>
-                            <td><img src="${value.product_image}" style="width: 40px; height: 40px; margin: 0px;"></td>
-                            <td>${value.product_name}</td>
-                            <td><i class="fa fa-inr">${value.product_price}</i></td>
-                            <td>${value.product_quantity}</td>
-                            <td>${value.product_unit}</td>
-                            <td><i class="fa fa-inr">${value.total_price}</i></td>
-                       </tr>`;
+            index = billings.findIndex(el => el.product_id ===product_id);
+            if(index == -1){
+                billings.push(payload)
+            }
+            else {
+                billings.splice(index,1);
+                billings.push(payload)
+            }
+            let sum = 0;
+            $.each(billings, function(index, item){
+                sum = sum + Number(item.total_price);
+                $("#total").val(sum);
             })
-            html += `<tr>
-                        <td colspan="3" align="center">Grand Total</td>
-                        <td colspan="3" align="center"><i class="fa fa-inr">${sum.toFixed(2)}</i></td>
-                    </tr>`;
-                }
-            $("#final_bill").html(html)
+            let grandTotal =  Number($("#total").val());
+            $("#grandtotal").html(`<i class="fa fa-inr">${grandTotal.toFixed(2)}</i>`);
             $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
         }
 
@@ -175,7 +160,6 @@
 
             let index = productIds.indexOf(id);
             productIds.splice(index, 1);
-            console.log(productIds.length);
             var html = '';
             if (productIds.length > 0) {
                 var path = "{{ url('api/v1/admin/suggestive-product') }}";
@@ -197,6 +181,7 @@
         }
 
         function createHtml(data = null) {
+
             var html = ``;
             if (data != null) {
                  html = `<thead>
@@ -211,35 +196,70 @@
                         <th class="all">Action</th>
                     </tr>
                 </thead>
-                <tbody id="demo">`;
+                <tbody id="demo">
+                `
+                ;
+                // var total = $(`input[name^=total]`).val();
+                //     console.log(total);
+
+             //   $("#grandtotal").html(`<i class="fa fa-inr">${totalCost.toFixed(2)}</i>`)
+                var sum = 0;
+
                 $.each(data, function(index, value) {
+
                     let calculateprice  = (value.product_unit == 'gm') ? ((value.product_price/1000) * 100): value.product_price;
                     let quantity = (value.product_unit == 'gm') ? 100:1;
+                    billings[index] = {
+                        product_id : value.id,
+                       product_image: value.product_image_url,
+                       product_name: value.product_name,
+                        product_price: value.product_price,
+                        product_quantity: quantity,
+                        total_price: calculateprice,
+                        product_unit: value.product_unit.toUpperCase()
+                    }
+                     sum = sum + Number(value.product_price);
+                     $("#total").val(sum);
+
+
                     html += `
                 <tr id='prod_${value.product_id}' class="product">
                 <td>${index + 1}</td>
                 <td><img src="${value.product_image_url}" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 54.4px; height: 34px; margin: 9.4px 0px;"></td>
                 <td>${value.product_name}</td>
-                <td> <i class="fa fa-inr">${value.product_price}</i> </td>
+                <td><i class="fa fa-inr">${value.product_price}</i> </td>
 
                 <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')"/></td>
+
                 <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
-                <td id="total_${value.product_id}"><i class="fa fa-inr"> ${calculateprice} </i></td>
+                <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice} </i></td>
                 <td><button type="button" class="btn btn-danger" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
-                </tr>`;
+                </tr>
+                `;
+
                 });
-                html += `</tbody>`;
+                let total = Number($("#total").val());
+               // $("#grandtotal").html(`<i class="fa fa-inr">${Number(total).toFixed(2)}</i>`)
+                html += `<tr>
+                <td colspan ='6'>Total</td>
+                <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
+                </tr></tbody>`;
+
             }
+
+
             $("#example1").html(html);
 
         }
-        function unitCalculation(unit,product_id,price) {
+        function unitCalculation(val,unit,product_id,price) {
          if(unit == "GM"){
            let result = (100/1000) * Number(price);
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
             $("#qty_"+ product_id).val(100);
+
          } else {
             let result = 1 * Number(price);
+            console.log(result)
             $("#qty_"+ product_id).val(1);
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
          }
@@ -248,6 +268,7 @@
     </script>
     <script>
         $(document).ready(function() {
+
             $("#product_name").focus();
             var x = localStorage.getItem("loginUser");
 
