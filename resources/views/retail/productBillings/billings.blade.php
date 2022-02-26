@@ -26,11 +26,13 @@
                         </table>
                     </div>
                     <div class ="row">
-                        <div class="col-md-6">
-
+                        <div class="col-md-4" id="bill_button" style="display:none">
+                            <button type="button" class="btn btn-primary">Save billing Details</button>
                         </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-primary">Create Invoice</button>
+                        </div>
+                        <div class="col-md-4">
                             <table class="table" id ="final_bill">
 
                             </table>
@@ -246,7 +248,11 @@
                 </tr></tbody>`;
 
             }
-
+            if(billings.length > 0) {
+                $("#final_bill").css({"display":"block"})
+            } else {
+                $("#final_bill").css({"display":"none"})
+            }
 
             $("#example1").html(html);
 

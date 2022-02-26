@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\Retailproduct;
 use App\RetailUser;
+use App\Invoice;
+use App\SoldProduct;
 use Log;
 class RetailerController extends Controller
 {
@@ -103,6 +105,48 @@ class RetailerController extends Controller
             Log::error($ex->getMessage());
             return response()->json(['stat'=>false ,'message'=>"Something went wrong with this api",'err'=>$ex,'data'=>(object)[]],200);
         }
+
+    }
+    public function saveBilling(Request $request) {
+   try {
+    $validator = \Validator::make($request->all(), [
+        'totalPrice' => 'required',
+        'retail_id' => 'required',
+    ]);
+    if ($validator->fails()) {
+        return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+    }
+    $products = $request->input('products');
+    $product = json_decode($products,true);
+    if (is_array($product)) {
+    $userData = \Auth::user();
+    $invoices = new Invoice();
+    $invoices->invoice_number = 'Inv'.rand(10000,99999).time();
+    $invoices->retail_id = $request->retail_id;
+    $invoices->user_id = $userData->id;
+    $invoices->payment_method = $request->paymentMethod;
+    $invoices->total_price = $request->totalPrice;
+   $invoices->save();
+     foreach($product as $item){
+         $soldProducts = new SoldProduct();
+         $soldProducts->invoice_id = $invoices->id;
+         $soldProducts->product_id = $item['product_id'];
+         $soldProducts->retail_id = $invoices->retail_id;
+         $soldProducts->quantity = $item['quantity'];
+         $soldProducts->unit = $item['unit'];
+         $soldProducts->price = $item['price'];
+         $soldProducts->save();
+     }
+    return response()->json(['message'=>"billing Details has been save Successfully",'stat'=>true,"error"=>[],'data'=>[]]);
+    } else {
+        return response()->json(['message'=>"Please provide sold Product in arrays of object format",'stat'=>true,"error"=>[],'data'=>[]]);
+    }
+
+
+   } catch (\Exception $ex) {
+       return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex, "data"=>[]]);
+   }
+
 
     }
 
