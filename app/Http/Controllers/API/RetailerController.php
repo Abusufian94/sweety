@@ -111,18 +111,18 @@ class RetailerController extends Controller
    try {
     $validator = \Validator::make($request->all(), [
         'totalPrice' => 'required',
-        'retail_id' => 'required',
     ]);
     if ($validator->fails()) {
         return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
     }
+    $userData = \Auth::user();
     $products = $request->input('products');
+    $retailUser = RetailUser::where('user_id',$userData->id)->first();
     $product = json_decode($products,true);
     if (is_array($product)) {
-    $userData = \Auth::user();
     $invoices = new Invoice();
     $invoices->invoice_number = 'Inv'.rand(10000,99999).time();
-    $invoices->retail_id = $request->retail_id;
+    $invoices->retail_id = $retailUser->retail_id;
     $invoices->user_id = $userData->id;
     $invoices->payment_method = $request->paymentMethod;
     $invoices->total_price = $request->totalPrice;
@@ -131,7 +131,7 @@ class RetailerController extends Controller
          $soldProducts = new SoldProduct();
          $soldProducts->invoice_id = $invoices->id;
          $soldProducts->product_id = $item['product_id'];
-         $soldProducts->retail_id = $invoices->retail_id;
+         $soldProducts->retail_id = $retailUser->retail_id;
          $soldProducts->quantity = $item['quantity'];
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
@@ -144,11 +144,7 @@ class RetailerController extends Controller
 
 
    } catch (\Exception $ex) {
-       return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex, "data"=>[]]);
+       return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex->getMessage(), "data"=>[]]);
    }
-
-
-    }
-
-
+}
 }
