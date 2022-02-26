@@ -72,7 +72,7 @@
                 var html = ` <ul class="list-group" id="suggestion">`;
                 $.each(result.data.data, function(index, value) {
                     html +=
-                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.product_quantity}</b></li></a>`
+                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.quantity}</b></li></a>`
                 });
                 html += `</ul>`;
                 $("#suggestion").html(html)
