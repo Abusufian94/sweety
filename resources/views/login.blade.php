@@ -131,7 +131,7 @@ $('#onsign').click(function(){
   document.getElementById("onsign").disabled = true;
   var email = $('#email').val();
   var password = $('#password').val();
-  $('.load').html(`<img src="{{url('/loaders.gif')}}" style="height:30px"> <strong id="nd" style="color:orange"><i>Loadind ....</i></strong>`);
+  $('.load').html(`<img src="{{url('/loaders.gif')}}" style="height:30px"> <strong id="nd" style="color:orange"><i>Loading ....</i></strong>`);
 
 
  $.ajax({

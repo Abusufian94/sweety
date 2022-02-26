@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>RETAIL DASHBOARD</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -28,19 +28,7 @@
 
 </head>
 <body>
-	<div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.png')}}" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>0%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div>
-
+	
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>

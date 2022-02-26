@@ -22,7 +22,7 @@ class RetailerController extends Controller
           $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
 
-          $retailProduct = \DB::table('retail_product')->leftJoin('product', 'retail_product.product_id', '=','product.id' )->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'retail_product.retail_id')->selectRaw("product.id,product.product_name,product.product_image,product.product_price,product.product_unit,retail_product.quantity,retail_tbl.retail_name,retail_tbl.street_name");
+          $retailProduct = \DB::table('retail_product')->leftJoin('product', 'retail_product.product_id', '=','product.id' )->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'retail_product.retail_id')->selectRaw("product.id,product.product_name,product.product_image,product.product_price,product.product_unit,retail_product.quantity,retail_tbl.retail_name,retail_tbl.street_name, retail_tbl.retail_name,retail_tbl.street_name");
 
           $retailProduct=$retailProduct->where('product.status', 1);
 
