@@ -159,7 +159,8 @@ $('#onsign').click(function(){
     localStorage.setItem("loginUser", JSON.stringify(data.success));
     localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
     localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
-    setCookie('token',data.success.token,'10');
+    setCookie('loginUser',data.success.role,'10');
+    
 
    if(x!=null && x.token)
       {

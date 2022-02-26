@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('admin/dashboard', 'webController@profile');
-Route::get('retail/dashboard', 'webController@profile2');
+Route::get('retail/dashboard', 'retailController@billings');
 Route::get('warehouse/dashboard', 'webController@profile3');
 Route::get('logout', 'webController@logout');
 Route::get('/warehouses','WarehouseController@index')->name('warehouse.home');

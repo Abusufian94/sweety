@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Services\GuzzleService;
 use Illuminate\Http\Request;
-
+use Log;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 class retailController extends Controller
 {
     public function index()
@@ -25,9 +27,18 @@ class retailController extends Controller
         return view('retail.product.list');
     }
 
-    public function retailAssignProductList()
-    {
-        return view('retail.product.retailassign');
+    public function retailAssignProductList(Request $request)
+    {    
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+             return view('retail.product.retailassign');
+        }
+        else 
+        {
+          return view('retail.product.retailassignretail');  
+        }
+       
     }
     public function billings()
     {

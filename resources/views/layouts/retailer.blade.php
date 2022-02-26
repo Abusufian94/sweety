@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>RETAIL DASHBOARD</title>
+	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -14,7 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 	<!-- Google Font -->
-
+	
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
@@ -28,7 +28,13 @@
 
 </head>
 <body>
-	
+<!-- 	<div class="pre-loader">
+		<div class="pre-loader-box">
+			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.gif')}}" alt=""></div>
+			
+		</div>
+	</div> -->
+
 	<div class="header">
 		<div class="header-left">
 			<div class="menu-icon dw dw-menu"></div>
@@ -198,7 +204,7 @@
 
 	<div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.html">
+			<a href="{{url('retail/dashboard')}}">
 				<img src="{{ asset('deskapp/vendors/images/logo.png')}}" alt="" class="dark-logo"  style="width:200px;padding-left: 20px;">
 				<img src="{{ asset('deskapp/vendors/images/logo.png')}}" alt="" class="light-logo" style="width:200px;padding-left: 20px;" >
 			</a>
@@ -214,23 +220,46 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
+							<li><a href="{{url('retail/dashboard')}}">Dashboard</a></li>
 
 						</ul>
 					</li>
-
+					
+					
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
+							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{route('retail.product.list')}}">Product List</a></li>
+							<li><a href="{{route('retail.product.list')}}"> List</a></li>
 						</ul>
-                        <ul class="submenu">
-							<li><a href="{{route('retail.product.billings')}}">Billings</a></li>
+						<ul class="submenu">
+							<li><a href="{{route('retail.assign.product.list')}}">  Oders</a></li>
+
 						</ul>
-                        <ul class="submenu">
-							<li><a href="{{route('retail.product.billings')}}">Billings</a></l      <script src="{{ asset('js/jquery-min.js')}}"></script>
+						
+					</li>
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-calculator"></span><span class="mtext">BILLING</span>
+						</a>
+						
+						<ul class="submenu">
+							<li><a href="{{route('retail.product.billings')}}">  Billing</a></li>
+
+						</ul>
+					</li>
+					
+				
+				</ul>
+				@yield('menu')
+			</div>
+		</div>
+	</div>
+	<div class="mobile-menu-overlay"></div>
+
+	  @yield('content')
+  <script src="{{ asset('js/jquery-min.js')}}"></script>
 	  <script src="{{ asset('deskapp/vendors/scripts/core.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
 	<script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
@@ -243,7 +272,7 @@
 			$(document).ready(function(){
 				var x = JSON.parse(localStorage.getItem("loginUser"));
 				$('.user-name').html(x.name);
-
+			
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
@@ -285,6 +314,8 @@
 
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
+
+	
 
 </body>
 </html>
