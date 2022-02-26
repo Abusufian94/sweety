@@ -12,6 +12,7 @@ use App\RetailProduct;
 use App\Retail;
 use Validator;
 use Illuminate\Support\Facades\Log;
+use App\RetailUser;
 
 class Warehouseroducts extends Controller
 {
@@ -72,11 +73,10 @@ class Warehouseroducts extends Controller
   {
     try {
 
-
+    
 
       $productList  =  Product::select('*')->where('status',  '=', 1);
       $productList = $productList->orderBy('id', 'desc');
-
 
       $total_count = $productList->count();
 
@@ -121,42 +121,64 @@ class Warehouseroducts extends Controller
     }
   }
 
-  public function productRetailList(Request $request, $status)
+  public function productRetailList(Request $request)
   {
+
+      $currentDate = date("Y-m-d");
     
 
     try {
       $retailUserList  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
+     log::info($request);
 
-      // if (!empty($request['search']['value'])) {
-      //   $searchText = $request['search']['value'];
-      //   $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
-      //     $q->where('unity', 'LIKE', "%" . $searchText . "%")
-      //       ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
-      //   });
-      //   // ->orWhereHas('products', function($q) use($searchText){
-      //   //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
-      //   // ->orWhereHas('users', function($q) use($searchText){
-      //   //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
-      //   //     ->orWhereHas('retails', function($q) use($searchText){
-      //   //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
+      
+      if (!empty($request['search']['value'])) {
+        $searchText = $request['search']['value'];
+        $retailUserList  =   $retailUserList->where(function ($q) use ($searchText) {
+          $q->where('unity', 'LIKE', "%" . $searchText . "%")
+            ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
+        });
+        // ->orWhereHas('products', function($q) use($searchText){
+        //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
+        // ->orWhereHas('users', function($q) use($searchText){
+        //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
+        //     ->orWhereHas('retails', function($q) use($searchText){
+        //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
 
-      //   $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
-      //     $q->where(function ($q) use ($searchText) {
-      //       $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
-      //     });
-      //   });
+        $retailUserList->orWhereHas('products', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
 
-      //   $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
-      //     $q->where(function ($q) use ($searchText) {
-      //       $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
-      //     });
-      //   });
-      // }
-      if($status!=null)
-      {
-          $retailUserList = $retailUserList->where('status', $status);
+        $retailUserList->orWhereHas('retails', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
       }
+
+      if(!$request->start_date)
+      {
+        $retailUserList = $retailUserList->where('updated_at','>=',$currentDate." 00:00:00");
+      }
+
+      if($request->start_date)
+      {
+       
+        $retailUserList   = $retailUserList->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+
+      }
+            
+        if($request->end_date)
+            $retailUserList   = $retailUserList->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+
+      
+      if($request->status!=null)
+      {
+          $retailUserList = $retailUserList->where('status', $request->status);
+      }
+
       // $retailUserList = $retailUserList->where('status', 0);
 
       $total_count = $retailUserList->count();
@@ -258,4 +280,103 @@ class Warehouseroducts extends Controller
       Log::error($e->getTraceAsString());
     }
   }
+
+
+   public function retailAssignedProductList(Request $request)
+  {
+  
+    //    log::info($request);
+        try {
+           $currentDate = date("Y-m-d");
+          $userData = \Auth::user();
+          $orderBy = $request->order[0]['dir'];
+
+          $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
+
+      $retailAssignProuct  =  ProductRetailLog::with('users', 'retails', 'products')->select('*');
+
+      if (!empty($request['search']['value'])) {
+        $searchText = $request['search']['value'];
+        $retailAssignProuct  =   $retailAssignProuct->where(function ($q) use ($searchText) {
+          $q->where('unity', 'LIKE', "%" . $searchText . "%")
+            ->orWhere('quantity', 'LIKE', "%" . $searchText . "%");
+        });
+        // ->orWhereHas('products', function($q) use($searchText){
+        //   $q->orWhere('product_name', 'LIKE', "%" . $searchText . "%");})
+        // ->orWhereHas('users', function($q) use($searchText){
+        //     $q->orWhere('name', 'LIKE', "%" . $searchText . "%");})
+        //     ->orWhereHas('retails', function($q) use($searchText){
+        //       $q->orWhere('name', 'LIKE', "%" . $searchText . "%");});
+
+        $retailAssignProuct->orWhereHas('products', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('product_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
+
+        $retailAssignProuct->orWhereHas('retails', function ($q) use ($searchText) {
+          $q->where(function ($q) use ($searchText) {
+            $q->orWhere('retail_name', 'LIKE', '%' . $searchText . '%');
+          });
+        });
+      }
+       if(!empty($assignRetailId))
+             {
+                $assignRetailId = $assignRetailId->retail_id;
+                $retailAssignProuct = $retailAssignProuct->where('retail_id',$assignRetailId);
+             }
+
+    
+       if(!$request->start_date)
+      {
+        $retailAssignProuct = $retailAssignProuct->where('updated_at','>=',$currentDate." 00:00:00");
+      }
+
+      if($request->start_date)
+      {
+       
+        $retailAssignProuct   = $retailAssignProuct->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+
+      }
+            
+        if($request->end_date)
+            $retailAssignProuct   = $retailAssignProuct->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+            if($request->status!=null){
+          $retailAssignProuct = $retailAssignProuct->where('status', $request->status);
+      }
+
+      // $retailUserList = $retailUserList->where('status', 0);
+
+      $total_count = $retailAssignProuct->count();
+
+      if (isset($request['start']) && isset($request['length'])) {
+
+        $offset = $request['start'];
+        $retailAssignProuct = $retailAssignProuct->offset($offset)->limit($request['length']);
+      }
+      log::info($retailAssignProuct->toSql());
+
+      $retailAssignProuct = $retailAssignProuct->get()->toArray();
+
+
+
+
+      if ($total_count > 0) {
+        $retailAssignProuct  = json_decode(json_encode($retailAssignProuct));
+
+        return response()->json(["stat" => true, "message" => "list fetch successfully", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailAssignProuct]);
+      } else {
+        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailAssignProuct]);
+      }
+    } 
+    catch (\Exception $e) {
+      Log::info('==================== retailAssignedProductList ======================');
+      Log::error($e->getMessage());
+      return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+      Log::error($e->getTraceAsString());
+    }
+    
+
+  }
+
 }

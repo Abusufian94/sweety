@@ -100,7 +100,7 @@
                             <th class="all">Status</th>
                             <th>Created At</th>
                             <th>Updated At</th>
-                            <th class="" ></th>
+                            <th class="all datatable-nosort" ></th>
 
                         </tr>
                     </thead>
@@ -116,7 +116,7 @@
 
         </div>
     </div>
-
+    <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
 
     </script>
@@ -156,7 +156,7 @@
                                 data: 'product_unit'
                             },
                             {
-                                data: 'product_quantity'
+                                data: 'quantity'
                             },
                             {
                                 data: 'product_price'
@@ -185,7 +185,7 @@
                                 "targets": 9,
                                 "render": function(data, type, row, meta) {
 
-                                   
+
 
                                     return `<div class="dropdown" style="display:none;">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
@@ -193,7 +193,7 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" >
 
-                                          
+
                                         </div>
                                     </div>`
                                 }
@@ -203,7 +203,7 @@
                                 "targets": 6,
                                 "render": function(data, type, row, meta) {
 
-                                    return row.status==1?'Active':'InActive';
+                                    return row.status==1?'Active':'Active';
 
                                 }
 
@@ -224,7 +224,12 @@
                         "order": [[0, "desc" ]]
                     });
 
+
+
+
                 });
+
+
 
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");

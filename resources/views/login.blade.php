@@ -81,6 +81,7 @@
                       <input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
                     -->
                     <button class="btn btn-primary btn-lg btn-block" href="#" id="onsign">Sign In</button>
+                    <span class="load"></span>
                   </div>
 
                 </div>
@@ -127,8 +128,10 @@
 
 
 $('#onsign').click(function(){
+  document.getElementById("onsign").disabled = true;
   var email = $('#email').val();
   var password = $('#password').val();
+  $('.load').html(`<img src="{{url('/loaders.gif')}}" style="height:30px"> <strong id="nd" style="color:orange"><i>Loadind ....</i></strong>`);
 
 
  $.ajax({
@@ -149,6 +152,9 @@ $('#onsign').click(function(){
                 // alert(data);
              // var perform= data.changedone;
              var x = data.success
+
+             $('.load').html(`<strong id="nd" style="color:green"><i class="icon-copy fa fa-check" aria-hidden="true"></i><i>Success: You are logeed in</i></strong> `);
+
   console.log(dataLayer.success);
     localStorage.setItem("loginUser", JSON.stringify(data.success));
     localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
@@ -176,7 +182,14 @@ $('#onsign').click(function(){
       }
      //  alert(perform.product_name);
                // jQuery('.alert').html(result.success);
-             }
+             },
+             error: function (request, status, error) {
+
+
+         document.getElementById("onsign").disabled = false;
+          $('.load').html(` <strong id="nd" style="color:red"><i class="icon-copy fa fa-warning" aria-hidden="true"></i><i>${error}</i></strong>`);
+
+    }
 
 
 
