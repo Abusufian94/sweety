@@ -224,12 +224,14 @@
 
 						</ul>
 					</li>
+
 					
 					
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
-						</a>
+
+                    	</a>
 						<ul class="submenu">
 							<li><a href="{{route('retail.product.list')}}"> List</a></li>
 						</ul>
@@ -237,6 +239,7 @@
 							<li><a href="{{route('retail.assign.product.list')}}">  Oders</a></li>
 
 						</ul>
+
 						
 					</li>
 					<li class="dropdown">
@@ -248,6 +251,12 @@
 							<li><a href="{{route('retail.product.billings')}}">  Billing</a></li>
 
 						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.invoices')}}">Invoices</a></li>
+
+						</ul>
+						
+
 					</li>
 					
 				

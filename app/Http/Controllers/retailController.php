@@ -44,4 +44,31 @@ class retailController extends Controller
     {
         return view('retail.productBillings.billings');
     }
+    public function invoices() {
+
+     
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+               return view('retail.productBillings.invoice_admin');
+        }
+        else 
+        {
+             return view('retail.productBillings.invoices');
+        }
+    }
+    public function invoiceDetails($id) {
+       
+
+         $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+               return view('retail.productBillings.invoiceproduct_admin',compact('id'));
+        }
+        else 
+        {
+              return view('retail.productBillings.invoiceproduct',compact('id'));
+        }
+        
+    }
 }

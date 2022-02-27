@@ -26,11 +26,11 @@
                         </table>
                     </div>
                     <div class ="row">
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
 
                         </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <table class="table" id ="final_bill">
 
                             </table>
@@ -102,7 +102,7 @@
 
         }
         var billings = [];
-
+        var payloads = [];
         async function totalPrice(val, price, product_id,unit) {
             let mesurment = !unit? $("#unit").val().toUpperCase(): unit.toUpperCase();
             var result = 0;
@@ -151,9 +151,28 @@
                 sum = sum + Number(item.total_price);
                 $("#total").val(sum);
             })
+           let payloadIndex = payloads.findIndex(el => el.product_id == product_id)
+
+            if(payloadIndex  == -1) {
+                payloads.push({
+                        product_id: response.data.data[0].product_id,
+                        quantity: val,
+                        price: result,
+                        unit: unit.toUpperCase()
+                     });
+            } else  {
+                payloads.splice(payloadIndex,1);
+                payloads.push({
+                        product_id: response.data.data[0].product_id,
+                        quantity: val,
+                        price: result,
+                        unit: unit.toUpperCase()
+                     });
+            }
             let grandTotal =  Number($("#total").val());
             $("#grandtotal").html(`<i class="fa fa-inr">${grandTotal.toFixed(2)}</i>`);
             $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+
         }
 
         async function remove(id) {
@@ -199,10 +218,7 @@
                 <tbody id="demo">
                 `
                 ;
-                // var total = $(`input[name^=total]`).val();
-                //     console.log(total);
 
-             //   $("#grandtotal").html(`<i class="fa fa-inr">${totalCost.toFixed(2)}</i>`)
                 var sum = 0;
 
                 $.each(data, function(index, value) {
@@ -211,8 +227,8 @@
                     let quantity = (value.product_unit == 'gm') ? 100:1;
                     billings[index] = {
                         product_id : value.id,
-                       product_image: value.product_image_url,
-                       product_name: value.product_name,
+                        product_image: value.product_image_url,
+                        product_name: value.product_name,
                         product_price: value.product_price,
                         product_quantity: quantity,
                         total_price: calculateprice,
@@ -220,7 +236,12 @@
                     }
                      sum = sum + Number(value.product_price);
                      $("#total").val(sum);
-
+                     payloads[index] = {
+                        product_id: value.id,
+                        unit: value.unit,
+                        quantity: 1,
+                        price: value.product_price,
+                     }
 
                     html += `
                 <tr id='prod_${value.product_id}' class="product">
@@ -243,10 +264,11 @@
                 html += `<tr>
                 <td colspan ='6'>Total</td>
                 <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
-                </tr></tbody>`;
+                <td></td>
+                </tr><tr><td colspan ='4'><button type="button" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'><button type="button" class="btn btn-warning">Invoice</button></td></tr></tbody>
+                `;
 
             }
-
 
             $("#example1").html(html);
 
@@ -265,6 +287,30 @@
          }
          $("#unit").val(unit);
         }
+        /** save bill details **/
+        async function saveBill() {
+            let products = JSON.stringify(payloads)
+            let totalPrice = Number($("#total").val());
+            var path = "{{ url('api/v1/admin/save-billings') }}";
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            const response = await $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                url: path,
+                type:"POST",
+                data: {
+                    totalPrice: totalPrice,
+                    paymentMethod: 'cash',
+                    products: products
+                }
+            });
+            if(response.stat == true) {
+                alert(response.message)
+            }
+        }
+
     </script>
     <script>
         $(document).ready(function() {
