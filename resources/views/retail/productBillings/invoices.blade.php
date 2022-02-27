@@ -182,7 +182,7 @@
                  {
                     "data": "id",  "orderable": false,
                     render: function (data, type, full, meta) {
-                        return  `<a class="btn btn-primary" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>`;
+                        return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
                     }
                 },
 

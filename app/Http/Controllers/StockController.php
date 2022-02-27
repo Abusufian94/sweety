@@ -21,16 +21,60 @@ class StockController extends Controller
     }
     public function indexLog()
     {
-        return view('stocklog.stock');
+          $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+      
+       return view('stock.stock')->with('extend', $extend);
+       
     }
 
     public function consumption()
     {
-        return view('consumption.list');
+         $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+      
+       return view('consumption.list')->with('extend', $extend);
+       
     }
 
     public function consumptionCreate()
     {
-        return view('consumption.add');
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        
+        return view('consumption.add')->with('extend', $extend);
     }
 }

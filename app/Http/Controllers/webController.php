@@ -65,7 +65,22 @@ class webController extends Controller
 
     public function profile3(Request $request)
     {
-     return view('warehouse.profile2');
+    // return view('warehouse.profile3');
+       $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        //return$extend;
+       return view('warehouse.product.list')->with('extend', $extend);
     }
 
   public function logout()

@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>KALAMANDIR - WAREHOUSE</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -226,7 +226,7 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
+							<li><a href="{{url('warehouse/dashboard')}}">Dashboard</a></li>
 
 						</ul>
 					</li>
@@ -235,13 +235,10 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">WAREHOUSE</span>
 						</a>
 						<ul class="submenu">
-                            <li><a href="#">User Profile</a></li>
-                            <li><a href="#">Stock Log</a></li>
-                            <li><a href="#">Consumption entries</a></li>
+                            <li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
+							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
 
-							{{-- <li><a href="#">Raw Stock</a></li>
-							<li><a href="#">Stock Log</a></li>
-							<li><a href="#">Consumption Entries</a></li> --}}
+							
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -249,7 +246,7 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+							<li><a href="{{route('warehouse.product.list')}}">Update Product</a></li>
 						</ul>
 					</li>
 				</ul>
