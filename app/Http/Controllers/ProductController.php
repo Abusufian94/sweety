@@ -46,7 +46,20 @@ class ProductController extends Controller
     //assign product to retail
     public function warehouseretaillist()
     {
-        return view('warehouse.retail.list');
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        return view('warehouse.retail.list')->with('extend', $extend);
     }
     public function warehouseretailcreate()
     {
