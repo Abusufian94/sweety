@@ -10,7 +10,10 @@ use App\Retailproduct;
 use App\RetailUser;
 use App\Invoice;
 use App\SoldProduct;
+use App\Retail;
 use Log;
+use PDF;
+use File;
 class RetailerController extends Controller
 {
     //
@@ -115,6 +118,7 @@ class RetailerController extends Controller
     if ($validator->fails()) {
         return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
     }
+    $payload = [];
     $userData = \Auth::user();
     $products = $request->input('products');
     $retailUser = RetailUser::where('user_id',$userData->id)->first();
@@ -136,7 +140,11 @@ class RetailerController extends Controller
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
+         //$payload = ["retail_info"=>$storeDetail,"invoice"=>$invoices,"Products"=>$products];
+         $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
      }
+
+
     return response()->json(['message'=>"billing Details has been save Successfully",'stat'=>true,"error"=>[],'data'=>[]]);
     } else {
         return response()->json(['message'=>"Please provide sold Product in arrays of object format",'stat'=>true,"error"=>[],'data'=>[]]);
@@ -273,4 +281,27 @@ public function invoiceList(Request $request) {
 
     }
 }
+    public function genaratePdf($retail_id,$invoice_id,$products) {
+        $storeDetail = Retail::where('retail_id',$retail_id)->first();
+        $invoiceDetails = Invoice::where('id',$invoice_id)->first();
+
+
+    $data = [
+    'Retailer_name' => $storeDetail->retail_name,
+    'Invoice_No'=>$invoiceDetails->invoice_number,
+    'total_price'=>$invoiceDetails->total_price,
+    'sold_product'=>$products,
+     ];
+
+
+     $filename = "invoice_".rand(100000,99999);
+     $path = public_path().'/invoices/';
+
+     if(!File::exists($path)) {
+        File::makeDirectory($path);
+    }
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename.'.pdf');
+    return  $pdf->download('invoice.pdf');
+
+    }
 }
