@@ -34,14 +34,14 @@
                 <thead>
                     <tr>
                         <th class="all">SL</th>
-                        <th class="all">Invpoice Number</th>
+                        <th class="all">Invoice Number</th>
                        
                         <th class="all">Pay Mode</th>
                          <th class="all">Price</th>
 
                         <th class="all">Created At</th>
                         <th class="all ">Action</th>
-
+                      
                     </tr>
                 </thead>
                 <tbody id="demo">
@@ -179,60 +179,20 @@
                         return  data;
                     }
                 },
-
-                {
-                    "data": "status","orderable": false,
+                 {
+                    "data": "id",  "orderable": false,
                     render: function (data, type, full, meta) {
-                    return  (data == 0) ?`<div class="dropdown">
-                                                    <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                                        <i class="dw dw-more"></i>
-                                                     </a>
-                                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                                         <a class="dropdown-item" onclick="changeStatus(${full.product_retail_assign_log_id},1)"><i class="dw dw-edit2"></i> Aprrove!</a>
-
-
-                                                         </div>
-                                                 </div>`:'';
-
+                        return  `<a class="btn btn-primary" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>`;
                     }
                 },
+
+
+                
               ],
           });
         }
 
-        function changeStatus(id,status) {
-                var id = id;
-                const token = JSON.parse(localStorage.getItem('loginUser'));
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + token.token
-                    },
-                    url: "{{ url('api/v1/retail-products-approve') }}",
-                    dataType: "JSON",
-                    data: {
-                        product_retail_assign_log_id: id,
-                        user_id: token.id,
-                        product_status:status,
 
-                    },
-                    success: function(data) {
-                    swal(
-                    {
-                        position: 'top-end',
-                        type: 'success',
-                        title: "Approved Successfully",
-                        showConfirmButton: false,
-                        timer: 1000
-                    }
-                        );
-                    $('#example1').DataTable().clear().destroy();
-                    loadDataTable();
-                    }
-                });
-
-            }
     </script>
 
 @endsection
