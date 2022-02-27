@@ -1,6 +1,12 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
+
 @section('content')
     <div class="main-container">
+           <div class="page-header">
+            <div class="row">
+              <h1>Update Stock</h1>
+            </div>
+        </div>
         <div class="pd-ltr-20">
             <input type="hidden" id="pid" value="{{ $id }}" />
 

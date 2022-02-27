@@ -163,38 +163,42 @@ public function invoiceList(Request $request) {
     //$orderBy = $request->order[0]['dir'];
     $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
-     $invoice = \DB::table('invoice')->select();
-   // ->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at");
+     $invoice = \DB::table('invoice')->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
+     $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name ");
+     
        if(!empty($request['search']['value']))
         {
             $searchText = $request['search']['value'];
             $invoice  =   $invoice->where(function ($q) use ($searchText)
             {
-              $q->where('invoice_number', 'LIKE', "%" . $searchText . "%")
-                ->orWhere('total_price', 'LIKE', "%" . $searchText . "%");
+              $q->where('invoice.invoice_number', 'LIKE', "%" . $searchText . "%")
+                ->orWhere('invoice.total_price', 'LIKE', "%" . $searchText . "%")
+                 ->orWhere('retail_tbl.retail_name', 'LIKE', "%" . $searchText . "%")
+                 ->orWhere('users.name', 'LIKE', "%" . $searchText . "%")
+                 ;
              });
         }
         if(!is_null( $assignRetailId ))
         {
-            $invoice  =   $invoice->where('retail_id', $assignRetailId ->retail_id);
+            $invoice  =   $invoice->where('invoice.retail_id', $assignRetailId ->retail_id);
         }
         if(!$request->start_date)
       {
-        $invoice = $invoice->where('updated_at','>=',$currentDate." 00:00:00");
+        $invoice = $invoice->where('invoice.updated_at','>=',$currentDate." 00:00:00");
       }
 
       if($request->start_date)
       {
 
-        $invoice   = $invoice->where('updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
+        $invoice   = $invoice->where('invoice.updated_at','>=',date("Y-m-d", strtotime($request->start_date)).' 00:00:00');
 
       }
 
         if($request->end_date)
-            $invoice   = $invoice->where('updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
+            $invoice   = $invoice->where('invoice.updated_at','<=',date("Y-m-d", strtotime($request->end_date)).' 23:59:59');
 
      if($request->status!=null){
-                $invoice = $invoice->where('payment_method', $request->status);
+                $invoice = $invoice->where('invoice.payment_method', $request->status);
             }
 
         if(isset($request['start']) && isset($request['length']))
@@ -205,10 +209,10 @@ public function invoiceList(Request $request) {
         $total_count = $invoice->count();
         if(isset($request->order[0]['dir']))
         {
-            $invoice = $invoice->orderBy('id',$request->order[0]['dir']);
+            $invoice = $invoice->orderBy('invoice.id',$request->order[0]['dir']);
         }
         $invoice = $invoice->get()->toArray();
-        return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$invoice]);
+        return response()->json(["stat" => true, "message" => "Success", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' =>$invoice]);
     }
     catch (\Exception $ex) {
         Log::info('==================== Retailer billing ======================');

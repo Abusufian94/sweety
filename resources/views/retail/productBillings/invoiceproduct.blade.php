@@ -1,4 +1,4 @@
-@extends('layouts.retailer')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">

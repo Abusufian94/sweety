@@ -1,7 +1,20 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
+            <div class="page-header">
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                </div>
+                <div class="col-md-6 col-sm-12 text-right">
+                    <div class="dropdown">
+                        <a class="btn btn-primary " href="{{ route('warehouse.retail.create') }}">
+                            Create
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">

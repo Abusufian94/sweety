@@ -47,28 +47,46 @@ class retailController extends Controller
     public function invoices() {
 
      
-        $role = $_COOKIE['loginUser'];
-        if($role==1)
-        {
-               return view('retail.productBillings.invoice_admin');
-        }
-        else 
-        {
-             return view('retail.productBillings.invoices');
-        }
-    }
-    public function invoiceDetails($id) {
-       
-
          $role = $_COOKIE['loginUser'];
         if($role==1)
         {
-               return view('retail.productBillings.invoiceproduct_admin',compact('id'));
+           $extend="admin";
         }
-        else 
+         if($role==2)
         {
-              return view('retail.productBillings.invoiceproduct',compact('id'));
+           $extend="retailer";
         }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        return view('retail.productBillings.invoices')->with('extend', $extend);
+        
+            
+        
+    }
+    public function invoiceDetails($id) {
+       
+         $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+         return view('retail.productBillings.invoiceproduct',compact('id'))->with('extend', $extend)->with('id', $id);
+
+        
+            
+         
+             
+       
         
     }
 }

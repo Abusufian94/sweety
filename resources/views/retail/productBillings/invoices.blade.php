@@ -1,4 +1,4 @@
-@extends('layouts.retailer')
+@extends('layouts.'.$extend)
 @section('content')
 <div class="main-container">
     <div class="pd-ltr-20">
@@ -38,7 +38,8 @@
                        
                         <th class="all">Pay Mode</th>
                          <th class="all">Price</th>
-
+                         <th class="all">Store</th>
+                         <th class="all">Created By</th>
                         <th class="all">Created At</th>
                         <th class="all ">Action</th>
                       
@@ -164,6 +165,20 @@
                 },
                 {
                     "data": "total_price",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "retail_name",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "name",
                     "orderable": false,
                     render: function (data, type, full, meta) {
                         return  data;

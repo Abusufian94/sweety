@@ -39,8 +39,23 @@ class ProductController extends Controller
        return view('warehouse.product.list')->with('extend', $extend);
     }
     public function warehouseproductedit(Request $request) {
-        $id = $request->query('id');
-        return view('warehouse.product.edits',compact('id'));
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        //return$extend;
+          $id = $request->query('id');
+            return view('warehouse.product.edits')->with('extend', $extend)->with('id', $id);
+    
     }
 
     //assign product to retail
@@ -63,12 +78,41 @@ class ProductController extends Controller
     }
     public function warehouseretailcreate()
     {
-        return view('warehouse.retail.create');
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+        return view('warehouse.retail.create')->with('extend', $extend);
+        
     }
     public function warehouseretailedit(Request $request)
     {
-        $id = $request->query('id');
-        return view('warehouse.retail.edits',compact('id'));
+        $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+         $id = $request->query('id');
+        return view('warehouse.retail.edits')->with('extend', $extend)->with('id',$id);
+       
+       
     }
     //Retail assign Products
     public function retailProducts() {
