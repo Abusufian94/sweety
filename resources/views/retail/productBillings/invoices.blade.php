@@ -191,7 +191,7 @@
                         "orderable": false,
                         render: function(data, type, full, meta) {
                            // console.log(full.file)
-                            return full.invoice_url != null ? `<a href=${full.invoice_url} download>Download</a>`:'N/A';
+                            return full.invoice_url != null ? `<a class="btn btn-primary" href=${full.invoice_url} download>Download</a>`:'N/A';
                         }
                     },
 
