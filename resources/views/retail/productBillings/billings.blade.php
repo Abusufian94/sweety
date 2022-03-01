@@ -310,21 +310,9 @@
                 }
             });
             if(response.stat == true) {
-                console.log(response.data)
                 window.open(response.data, '_blank');
-              // getFile(response.data)
             }
         }
-
-        // function getFile(filename) {
-        //     var win = 'w' + Math.floor(Math.random() * 10000000000000);
-        //     window.open('', win,'width=250,height=100');
-        //     var f = $('<form></form>').attr({target: win, method:'post', action: '/echo/html/'}).appendTo(document.body);
-        //     f.append('<input type="hidden" name="html" value="' + filename + '">');
-        //     f[0].submit();
-        //     f.remove();
-        //     }
-
     </script>
     <script>
         $(document).ready(function() {
