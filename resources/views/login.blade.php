@@ -2,7 +2,7 @@
 <html>
 <head>
   <!-- Basic Page Info -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
 
   <meta charset="utf-8">
   <title>Sweety</title>
@@ -11,26 +11,17 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/apple-touch-icon.png')}}">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('deskapp/vendors/images/favicon-32x32.png')}}">
   <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('deskapp/vendors/images/favicon-16x16.png')}}">
-
+  <link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.css')}}">
   <!-- Mobile Specific Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
    <meta name="csrf-token" content="{{ csrf_token() }}" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <!-- CSS -->
+  
   <link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
   <link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
   <link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/style.css')}}">
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-119386393-1');
-  </script>
+ 
 </head>
 <body class="login-page">
   <div class="login-header box-shadow">
@@ -61,14 +52,14 @@
 
 
               <div class="input-group custom">
-                <input type="email" class="form-control form-control-lg" placeholder="email" name="email" id="email">
+                <input type="email" class="form-control form-control-lg" placeholder="email" name="email" id="email" required>
                 <div class="input-group-append custom">
                   <span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
                 </div>
               </div>
               <div class="input-group custom">
                 <input type="password" class="form-control form-control-lg" placeholder="**********" name="password" id="password">
-                <div class="input-group-append custom">
+                <div class="input-group-append custom" required>
                   <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
                 </div>
               </div>
@@ -97,6 +88,8 @@
   <script src="{{ asset('deskapp/vendors/scripts/script.min.js')}}"></script>
   <script src="{{ asset('deskapp/vendors/scripts/process.js')}}"></script>
   <script src="{{ asset('deskapp/vendors/scripts/layout-settings.js')}}"></script>
+  <script src="{{ asset('deskapp/src/plugins/sweetalert2/sweetalert2.all.js')}}"></script>
+  <script src="{{ asset('deskapp/src/plugins/sweetalert2/sweet-alert.init.js')}}"></script>
 </body>
 </html>
 
@@ -131,6 +124,9 @@ $('#onsign').click(function(){
   document.getElementById("onsign").disabled = true;
   var email = $('#email').val();
   var password = $('#password').val();
+ 
+   
+  
   $('.load').html(`<img src="{{url('/loaders.gif')}}" style="height:30px"> <strong id="nd" style="color:orange"><i>Loading ....</i></strong>`);
 
 
@@ -155,7 +151,7 @@ $('#onsign').click(function(){
 
              $('.load').html(`<strong id="nd" style="color:green"><i class="icon-copy fa fa-check" aria-hidden="true"></i><i>Success: You are logeed in</i></strong> `);
 
-  console.log(dataLayer.success);
+
     localStorage.setItem("loginUser", JSON.stringify(data.success));
     localStorage.setItem("unAuthorizedMessage", " Sorry, You are not authorized");
     localStorage.setItem("loggedInMessage", " welcome back to the Sweety");
@@ -188,13 +184,27 @@ $('#onsign').click(function(){
 
 
          document.getElementById("onsign").disabled = false;
-          $('.load').html(` <strong id="nd" style="color:red"><i class="icon-copy fa fa-warning" aria-hidden="true"></i><i>${error}</i></strong>`);
+         var errorMsg= ` <strong id="nd" style="color:red"><i class="icon-copy fa fa-warning" aria-hidden="true"></i><i>${request.responseJSON.error}</i></strong>`
+          $('.load').html(errorMsg);
+           swal(
+                {
+                    position: 'top-end',
+                    type: 'error',
+                    
+                    title: 'Oops...',
+                    text: request.responseJSON.error,
+                    showConfirmButton: false,
+                    timer: 3000
+                }
+            );
 
     }
 
 
 
 });
+
+
 });
 })
       function setCookie(key, value, expiry) {

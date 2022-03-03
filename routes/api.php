@@ -79,6 +79,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     Route::get('/retail-assigned-product-list', 'Warehouseroducts@retailAssignedProductList');
     Route::get('invoice/list','RetailerController@invoiceList');
     Route::get('invoice/sold/products/{id}','RetailerController@soldProduct');
- //   Route::get('invoice/pdf','RetailerController@genaratePdf');
+  Route::get('change-user-status','UserController@changeUserStatus');
   //commited by abu "--end"
 });

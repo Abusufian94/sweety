@@ -290,6 +290,8 @@
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
+			//$.removeCookie("loginUser");
+
 			 window.location.replace("{{ url('/') }}");
 		});
 

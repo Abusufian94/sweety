@@ -63,6 +63,10 @@ class UserController extends Controller
     {
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
+           if($user->status==0)
+           {
+              return response()->json(['error' => 'Account Deactivated: Please contact Admin'], 403);
+           }
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['role'] = $user->roles;
             $success['id'] = $user->id;
@@ -260,7 +264,7 @@ class UserController extends Controller
     public function warehouselist(Request $request)
     {
         try {
-            $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as");
+            $retailUserList  = \DB::table('users')->selectRaw("users.name,users.email,users.status,users.password_as, users.id");
 
              if (!empty($request['search']['value']))
              {
@@ -271,8 +275,7 @@ class UserController extends Controller
 
 
                 }
-            $retailUserList = $retailUserList->where('status', 1)
-                        ->where('roles', 3);
+            $retailUserList = $retailUserList->where('roles', 3);
 
             $total_count = $retailUserList->count();
 
@@ -386,7 +389,7 @@ class UserController extends Controller
     {
 
        try {
-            $retailUserList  = \DB::table('users')->selectRaw("users.id,users.name,users.email,users.status,users.password_as");
+            $retailUserList  = \DB::table('users')->leftJoin('retail_user', 'retail_user.user_id', '=', 'users.id')->leftJoin('retail_tbl','retail_tbl.retail_id','=','retail_user.retail_id')->selectRaw("users.id,users.name,users.email,users.status,users.password_as, retail_tbl.retail_name");
 
              if (!empty($request['search']['value']))
              {
@@ -397,8 +400,8 @@ class UserController extends Controller
 
 
                 }
-            $retailUserList = $retailUserList->where('status', 1)
-                        ->where('roles', 2);
+            $retailUserList = $retailUserList->where('users.status', 1)
+                        ->where('users.roles', 2);
 
             $total_count = $retailUserList->count();
 
@@ -430,5 +433,34 @@ class UserController extends Controller
         }
 
 
+    }
+
+        function changeUserStatus(Request $request)
+    {
+     try {
+
+        
+
+         $warehosueUser = User::find($request->id);
+         
+         if($warehosueUser->status==0)
+         {
+            $warehosueUser->status=1;
+         }
+         else if($warehosueUser->status==1)
+         {
+            $warehosueUser->status=0;
+         }
+        // log::info($warehosueUser);
+         $warehosueUser->save();
+        return response()->json(["stat" => true, "message" => "Status Changed Successfully"]);
+
+
+     } catch (\Exception $e) {
+           Log::info('==================== warehoseUserStatus ======================');
+            Log::error($e->getMessage());
+              return response()->json(["stat" => true, "message" => "Something went wrong", "data" => $e->getMessage()], 400);
+            Log::error($e->getTraceAsString());
+     }
     }
 }

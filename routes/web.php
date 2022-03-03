@@ -46,8 +46,8 @@ Route::get('admin/retail-user-list', 'webController@retalUserList');
 Route::get('admin/retail-user-list', 'retailController@index')->name('retail-user-list');
 Route::get('/admin/retail-user-create','retailController@create')->name('retail_user.create');
 
-Route::get('retail/product/approvedlist','RetailController@retailProductList')->name('retail.product.list');
-Route::get('retail/product/assign/list','RetailController@retailAssignProductList')->name('retail.assign.product.list');
+Route::get('retail/product/approvedlist','retailController@retailProductList')->name('retail.product.list');
+Route::get('retail/product/assign/list','retailController@retailAssignProductList')->name('retail.assign.product.list');
 
 //Route::group(['middleware' => 'Warehouse'], function()
 //{
