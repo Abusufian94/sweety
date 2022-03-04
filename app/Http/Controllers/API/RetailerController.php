@@ -14,6 +14,7 @@ use App\Retail;
 use Log;
 use PDF;
 use File;
+use App\ReturnFormalities;
 class RetailerController extends Controller
 {
     //
@@ -313,5 +314,30 @@ public function invoiceList(Request $request) {
        if($retailProduct->quantity <= 0) {
          return response()->json(['stat'=>false,'message'=>"Quantity is not enough for create billing"]);
        }
+    }
+    public function returnFormalities(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'product_id' => 'required',
+            'retail_id' =>'required',
+            'warehouse_user_id'=>'required',
+            'quantity'=>'required',
+            'user_id'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+       $returnProduct = new ReturnFormalities();
+       $returnProduct->product_id = $request->product_id;
+       $returnProduct->retail_id = $request->retail_id;
+       $returnProduct->warehouse_user_id = $request->warehouse_user_id;
+       $returnProduct->quantity = $request->quantity;
+       $returnProduct->user_id = \Auth::user()->id;
+       $returnProduct->save();
+       return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$returnProduct],200);
+
+    }
+    public function getRefundProduct() {
+         $products = \DB::table('return_product_log')->select(['return_product_log.*','product.*'])->join('product','product.id','=','return_product_log.product_id')->where('return_product_log.user_id',\Auth::user()->id)->get();
+        return response()->json(['stat'=>true,'message'=>"Return products fetch successfully",'error'=>[],'data'=>$products]);
     }
 }
