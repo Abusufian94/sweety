@@ -1,14 +1,17 @@
-@extends('layouts.retailer')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
+        <h1>BILLING SECTION</h1>
+        <br>
+
          <input type="hidden" id= "unit"/>
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
                         <div class="col-sm-12 col-md-10">
                             <input type="text" onkeyup="getSuggestiveProduct(this.value)" id="search"
-                                class="typeahead form-control" placeholder="Search">
+                                class="typeahead form-control" placeholder="Search Sweets">
                         </div>
 
                     </div>
@@ -49,7 +52,7 @@
 
 
 
-
+      <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         async function getSuggestiveProduct(query) {
             var search = $("#search").val();
@@ -69,7 +72,15 @@
                 var html = ` <ul class="list-group" id="suggestion">`;
                 $.each(result.data.data, function(index, value) {
                     html +=
-                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.quantity}</b></li></a>`
+                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'>                              
+                            <img src ="${value.product_image_url}" height="50" width="50">
+                            &nbsp;&nbsp;
+                            <strong>${value.product_name}</strong>
+                            [${value.quantity}]
+                            
+                          
+                            
+                            </li></a>`
                 });
                 html += `</ul>`;
                 $("#suggestion").html(html)
