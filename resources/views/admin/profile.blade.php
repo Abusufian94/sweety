@@ -218,6 +218,15 @@
  		  if(!x.token && x.role!=1)
  		  {
  		  	 localStorage.setItem("unAuthorized", " Sorry, You are not authorized");
+ 		  	  swal(
+                {
+                    position: 'top-end',
+                    type: 'success',
+                    title: localStorage.getItem("loggedInMessage"),
+                    showConfirmButton: false,
+                    timer: 3000
+                }
+            );
  		  	   window.location.replace("{{ url('/login') }}");
  		  }
  		  else

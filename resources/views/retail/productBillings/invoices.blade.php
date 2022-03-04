@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
@@ -28,22 +28,24 @@
                         <button type="button" class="btn btn-warning online">Online</button>&nbsp;
                         <button class="btn btn-success" id="cash">Cash</button>
 
-                    </div>
-                </div><br>
-                <table id="example1" class="table nowrap responsive">
-                    <thead>
-                        <tr>
-                            <th class="all">SL</th>
-                            <th class="all">Invpoice Number</th>
-                            <th class="all">Price</th>
+                </div>
+              </div><br>
+            <table id="example1" class="table nowrap responsive">
+                <thead>
+                    <tr>
+                        <th class="all">SL</th>
+                        <th class="all">Invoice Number</th>
 
-                            <th class="all">Pay Mode</th>
-                            <th class="all">Created At</th>
-                            <th class="all datatable-nosort">Action</th>
+                        <th class="all">Pay Mode</th>
+                         <th class="all">Price</th>
+                         <th class="all">Store</th>
+                         <th class="all">Created By</th>
+                        <th class="all">Created At</th>
+                        <th class="all ">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody id="demo">
+                    </tr>
+                </thead>
+                <tbody id="demo">
 
 
 
@@ -153,98 +155,71 @@
 
                             return i++;
                         },
-                    },
-                    {
-                        "data": "invoice_number",
-                        "orderable": false,
-                        render: function(data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "data": "payment_method",
-                        "orderable": true,
-                        render: function(data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "data": "total_price",
-                        "orderable": false,
-                        render: function(data, type, full, meta) {
-                            return data;
-                        }
-                    },
+                         destroy: true,
+              "columns": [
+                {
+                    "data": "id", "orderable": false,
+                    render: function (data, type, full, meta) {
+
+                      return i++;
+                },},
+                {
+                    "data": "invoice_number",  "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {
+                    "data": "payment_method",
+                    "orderable": true,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {
+                    "data": "total_price",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "retail_name",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "name",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
 
 
 
 
-                    {
-                        "data": "updated_at",
-                        "orderable": false,
-                        render: function(data, type, full, meta) {
-                            return data;
-                        }
-                    },
-                    {
-                        "data": "Action",
-                        "orderable": false,
-                        render: function(data, type, full, meta) {
-                           // console.log(full.file)
-                            return full.invoice_url != null ? `<a class="btn btn-primary" href=${full.invoice_url} download>Download</a>`:'N/A';
-                        }
-                    },
-
-                    // {
-                    //     "data": "status","orderable": false,
-                    //     render: function (data, type, full, meta) {
-                    //     return  (data == 0) ?`<div class="dropdown">
-                //                                     <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                //                                         <i class="dw dw-more"></i>
-                //                                      </a>
-                //                                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                //                                          <a class="dropdown-item" onclick="changeStatus(${full.product_retail_assign_log_id},1)"><i class="dw dw-edit2"></i> Aprrove!</a>
+                 {
+                    "data": "updated_at",  "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "id",  "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
+                    }
+                },
 
 
-                //                                          </div>
-                //                                  </div>`:'';
 
-                    //     }
-                    // }
-                ],
-            });
+              ],
+          });
         }
 
-        function changeStatus(id, status) {
-            var id = id;
-            const token = JSON.parse(localStorage.getItem('loginUser'));
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + token.token
-                },
-                url: "{{ url('api/v1/retail-products-approve') }}",
-                dataType: "JSON",
-                data: {
-                    product_retail_assign_log_id: id,
-                    user_id: token.id,
-                    product_status: status,
 
-                },
-                success: function(data) {
-                    swal({
-                        position: 'top-end',
-                        type: 'success',
-                        title: "Approved Successfully",
-                        showConfirmButton: false,
-                        timer: 1000
-                    });
-                    $('#example1').DataTable().clear().destroy();
-                    loadDataTable();
-                }
-            });
-
-        }
     </script>
 @endsection

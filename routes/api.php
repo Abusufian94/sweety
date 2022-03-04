@@ -81,5 +81,6 @@ Route::group(["prefix" => "/v1", "middleware" => ['auth:api'], "namespace" => '\
     Route::get('invoice/sold/products/{id}','RetailerController@soldProduct');
     Route::Post('check/retail-quantity','RetailerController@checkQuantity');
  //   Route::get('invoice/pdf','RetailerController@genaratePdf');
+  Route::get('change-user-status','UserController@changeUserStatus');
   //commited by abu "--end"
 });

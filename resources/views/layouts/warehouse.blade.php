@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>WAREHOUSE DASHBOARD</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -25,21 +25,15 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/src/plugins/datatables/css/responsive.bootstrap4.min.css')}}">
 
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	
+
 </head>
 <body>
-	<div class="pre-loader">
+<!-- 	<div class="pre-loader">
 		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.png')}}" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>0%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
+			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.gif')}}" alt=""></div>
+			
 		</div>
-	</div>
+	</div> -->
 
 	<div class="header">
 		<div class="header-left">
@@ -226,7 +220,7 @@
 							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{url('admin/dashboard')}}">Dashboard</a></li>
+							<li><a href="{{url('warehouse/dashboard')}}">Dashboard</a></li>
 
 						</ul>
 					</li>
@@ -235,13 +229,10 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">WAREHOUSE</span>
 						</a>
 						<ul class="submenu">
-                            <li><a href="#">User Profile</a></li>
-                            <li><a href="#">Stock Log</a></li>
-                            <li><a href="#">Consumption entries</a></li>
+                            <li><a href="{{route('stocklog.home')}}">Stock Log</a></li>
+							<li><a href="{{route('consumption.home')}}">Consumption Entries</a></li>
 
-							{{-- <li><a href="#">Raw Stock</a></li>
-							<li><a href="#">Stock Log</a></li>
-							<li><a href="#">Consumption Entries</a></li> --}}
+							
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -249,7 +240,8 @@
 							<span class="micon dw dw-factory1"></span><span class="mtext">Product</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="{{route('warehouse.product.list')}}">Update</a></li>
+							<li><a href="{{route('warehouse.product.list')}}">Update Product Stock</a></li>
+							<li><a href="{{route('warehouse.retail.list')}}"> Assign to Retail</a></li>
 						</ul>
 					</li>
 				</ul>
@@ -272,7 +264,7 @@
 			$(document).ready(function(){
 				var x = JSON.parse(localStorage.getItem("loginUser"));
 				$('.user-name').html(x.name);
-
+			
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
@@ -319,4 +311,3 @@
 
 </body>
 </html>
- 

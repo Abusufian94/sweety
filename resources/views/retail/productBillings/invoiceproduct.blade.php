@@ -1,102 +1,29 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
-            <!-- 	<div class="card-box pd-20 height-100-p mb-30">
-                <div class="row align-items-center">
-                 <div class="col-md-4">
-                  <img src="{{ asset('deskapp/vendors/images/banner-img.png') }}" alt="">
-                 </div>
-                 <div class="col-md-8">
-                  <h4 class="font-20 weight-500 mb-10 text-capitalize">
-                   Welcome back <div class="weight-600 font-30 text-blue">Nishan Paul</div>
-                  </h4>
-                  <p class="font-18 max-width-600"></p>
-                 </div>
-                </div>
-               </div> -->
-            {{-- <div class="row">
-				<div class="col-md-4 col-sm-12 mb-30 ">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h2 mb-0"><span class="micon dw dw-house-11"></span>1</div>
-								<div class="weight-600 font-14">KALAMANDIR</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-sm-12 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart2"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h2 mb-0"><span class="micon dw dw-house-11"></span>2</div>
-								<div class="weight-600 font-14">KALAMANDIR</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-4  col-sm-12 mb-30">
-					<div class="card-box height-100-p widget-style1">
-						<div class="d-flex flex-wrap align-items-center">
-							<div class="progress-data">
-								<div id="chart4"></div>
-							</div>
-							<div class="widget-data">
-								<div class="h2 mb-0"><span class="micon dw dw-factory1"></span></div>
-								<div class="weight-600 font-14">WARHOUSE</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div> --}}
+           
 
             <div class="page-header">
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        {{-- <div class="title">
-								<h4>Themify Icons</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Icons</li>
-								</ol>
-							</nav> --}}
+                        
                     </div>
-                    <div class="col-md-6 col-sm-12 text-right">
-                        <div class="dropdown">
-                            <a class="btn btn-primary " href="{{ route('product.create') }}">
-                                Create
-                            </a>
-                            {{-- <div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div> --}}
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
 
             <div class="card-box mb-30">
-                <h2 class="h4 pd-20">Product</h2>
+                <h2 class="h4 pd-20">Invoice Product</h2>
                 <table id="example1" class="table nowrap responsive">
                     <thead>
                         <tr>
                             <th class="all">SL</th>
-                            <th class="all">Product Name</th>
-                            <th class="all">Product Image</th>
-                            <th class="all">Product Unit</th>
-                            <th class="all">Product Stock</th>
-                            <th class="all">Product Price</th>
+                            <th class="all">Invoice Number</th>
+                            <th class="all"> Name</th>
+                            <th class="all">Unit</th>
+                            <th class="all"> Quantity</th>
+                            <th class="all"> Price</th>
                             <th class="all">Status</th>
                             <th>Created At</th>
                             <th>Updated At</th>
@@ -146,12 +73,13 @@
                         columns: [{
                                 data: 'id'
                             },
+                             {
+                                data: 'invoice_number'
+                            },
                             {
                                 data: 'product_name'
                             },
-                            {
-                                data: 'product_image'
-                            },
+                           
                             {
                                 data: 'product_unit'
                             },
@@ -208,16 +136,7 @@
                                 }
 
                             },
-                            {
-                                "targets": 2,
-                                "render": function(data, type, row, meta) {
-
-                                    return `<div>
-                                            <img src="{!! asset('documents/${row.product_image}') !!}" />
-                                    </div>`
-                                }
-
-                            },
+                          
                             { "orderable": false, "targets": 0 }
                         ],
                         'aaSorting': [[1, 'asc']] ,

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.retailer')
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
@@ -55,9 +55,6 @@
     </style>
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
     <script>
         async function getSuggestiveProduct(query) {
             var search = $("#search").val();

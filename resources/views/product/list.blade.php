@@ -126,106 +126,112 @@
 
             var x = localStorage.getItem("loginUser");
             x = JSON.parse(x);
+            var i=1;
+
+            // $.ajaxSetup({
+            //     headers: {
+            //         'Authorization': 'Bearer ' + x.token
+            //     }
+            // });
 
 
-            $.ajaxSetup({
-                headers: {
+
+             $('#example1').DataTable({
+                "destroy": true,
+                "processing": true,
+                "serverSide": true,
+                "searching": true,
+                "iDisplayLength": 100,
+                "lengthMenu": [[100, 250, 500], [100, 250, 500]],
+              "ajax": {
+                               "url": "{{ route('product.list') }}",
+                             "type": "GET",
+                             headers: {
                     'Authorization': 'Bearer ' + x.token
-                }
-            });
-
-                    $('#example1').dataTable({
-                        processing: true,
-                        serverSide: true,
-                        bRetrieve: true ,
-                        "ajax": {
-                            "url": "{{ route('product.list') }}",
-                            "type": "GET",
+                },
                         },
-                        destroy: true,
-                        columns: [{
-                                data: 'id'
-                            },
-                            {
-                                data: 'product_name'
-                            },
-                            {
-                                data: 'product_image'
-                            },
-                            {
-                                data: 'product_unit'
-                            },
-                            {
-                                data: 'product_quantity'
-                            },
-                            {
-                                data: 'product_price'
-                            },
-                            {
-                                data: 'status'
-                            },
-                           
-                            {
-                                data: 'created_on', "render": function (value) {
-                                    if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
-                                }
-                            },
-                            {
-                                data: 'updated_on', "render": function (value) {
-                                    if (value === null) return "";
-                                    return moment(value).format('DD/MM/YYYY :hh:mm:ss A');
-                                }
-                            },
-                            {
-                                data: 'status'
-                            },
-                        ],
-                        "columnDefs": [{
-                                "targets": 9,
-                                "render": function(data, type, row, meta) {
-                                    
-                                    //return '<a class="dropdown-item" href="{{ url('/stock/edit/?id=${value.raw_id}') }}"><i class="dw dw-edit2"></i> Edit</a>';
-                                   //  return "<a href='/stock/edit/?id="+ row.raw_id +"'>" + 'Edit' + "</a> | <a onclick='remove("+ row.raw_id+")'>" + 'Delete' + "</a>"
-                                    // return "<a onclick='remove("+ row.raw_id+")'>" + row.raw_id + "</a>"
+              "columns": [
+                {
+                    "data": "id",       
+                    render: function (data, type, full, meta) {
+                      
+                      return i++;
+                },},
+                {
+                    "data": "product_name",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+               
+                {
+                    "data": "product_image",       
+                    render: function (data, type, full, meta) {
+                        return    `<div>
+                                            <img src="{!! asset('documents/${data}') !!}" />
+                                    </div>`;
+                    }
+                },
+                 
+                {
+                    "data": "product_unit",       
+                    render: function (data, type, full, meta) {
+                        console.log(full)
+                        return  data;
+                    }
+                },
 
-                                    return `<div class="dropdown">
+                {
+                    "data": "product_quantity",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {
+                    "data": "product_price",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "status",       
+                    render: function (data, type, full, meta) {
+                        return  data==1?'Active':'InActive';
+                    }
+                },
+                 {
+                    "data": "created_at",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                 {
+                    "data": "updated_at",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {
+                    "data": "id",       
+                    render: function (data, type, full, meta) {
+                        return `<div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 
-                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=${row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item" onclick="remove(${row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <a class="dropdown-item" href="{{ url('/product/edit/?id=${data}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" onclick="remove(${data})"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
-                                    </div>`
-                                }
-                               
-                            },
-                            {
-                                "targets": 6,
-                                "render": function(data, type, row, meta) {
+                                    </div>`;
+                    }
+                },
+                 
 
-                                    return row.status==1?'Active':'InActive';
-
-                                }
-
-                            },
-                            {
-                                "targets": 2,
-                                "render": function(data, type, row, meta) {
-                                    
-                                    return `<div>
-                                            <img src="{!! asset('documents/${row.product_image}') !!}" />
-                                    </div>`
-                                }
-                               
-                            },
-                            { "orderable": false, "targets": 0 }
-                        ],
-                        'aaSorting': [[1, 'asc']] ,
-                        "order": [[0, "desc" ]]
-                    });
+                 
+                
+              ],
+          });
 
                 });
 

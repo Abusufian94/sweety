@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>ADMIN DASHBOARD</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -259,6 +259,10 @@
 						<ul class="submenu">
 							<li><a href="{{route('retail.assign.product.list')}}"> Assign Products</a></li>
 						</ul>
+						<ul class="submenu">
+							<li><a href="{{route('retail.invoices')}}">Invoices</a></li>
+
+						</ul>
 					</li>
 
 				</ul>
@@ -286,6 +290,8 @@
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
+			//$.removeCookie("loginUser");
+
 			 window.location.replace("{{ url('/') }}");
 		});
 

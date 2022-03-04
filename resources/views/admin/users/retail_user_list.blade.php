@@ -94,8 +94,9 @@
                             <th class="all">SL</th>
                             <th class="all">Name</th>
                             <th class="all">Email</th>
-                            <th class=" datatable-nosort all">Status</th>
-                            <th class=" all">Action</th>
+                            <th class="all">Assigned Store</th>
+                            <th class="  all">Status</th>
+                            <th class=" all datatable-nosort">Action</th>
                         </tr>
                     </thead>
                     <tbody id="demo">
@@ -130,64 +131,132 @@
                     'Authorization': 'Bearer ' + x.token
                 }
             });
-            $('#example1').dataTable({
-                processing: true,
-                serverSide: true,
-                bRetrieve: true,
-                "ajax": {
-                    "url": "{{ url('api/v1/admin/retail-users') }}",
-                    "type": "GET",
+            // $('#example1').dataTable({
+            //     processing: true,
+            //     serverSide: true,
+            //     bRetrieve: true,
+            //     "ajax": {
+            //         "url": "{{ url('api/v1/admin/retail-users') }}",
+            //         "type": "GET",
+            //     },
+            //     destroy: true,
+            //     columns: [{
+            //             data: 'id',
+            //             "sortable": false,
+            //             render: function(data, type, row, meta) {
+            //                 return meta.row + meta.settings._iDisplayStart + 1;
+            //             }
+            //         },
+            //         {
+            //             data: 'name'
+            //         },
+            //         {
+            //             data: 'email'
+            //         },
+            //         {
+            //             data: 'retail_name'
+            //         },
+            //         {
+            //             data: 'status'
+            //         }
+            //     ],
+            //     "columnDefs": [{
+            //             "targets": 5,
+            //             "render": function(data, type, row, meta) {
+            //                 return `<div class="dropdown">
+            //                             <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+            //                                 <i class="dw dw-more"></i>
+            //                             </a>
+            //                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+            //                                 <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
+            //                                 <a class="dropdown-item" onclick="remove(${ row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+            //                             </div>
+            //                         </div>`
+            //             }
+            //         },
+            //         {
+            //             "targets": 4,
+            //             "render": function(data, type, row, meta) {
+            //                 return row.status == 1 ? 'Active' : 'InActive';
+            //             }
+            //         },
+            //         {
+            //             "orderable": false,
+            //             "targets": 0
+            //         }
+            //     ],
+            //     'aaSorting': [
+            //         [1, 'asc']
+            //     ]
+            // });
+            var i =1;
+             $('#example1').DataTable({
+                "destroy": true,
+                "processing": true,
+                "serverSide": true,
+                "searching": true,
+                "iDisplayLength": 100,
+                "lengthMenu": [[100, 250, 500], [100, 250, 500]],
+              "ajax": {
+                        "url": "{{ url('api/v1/admin/retail-users') }}",
+                        "type": "GET",
+                             headers: {
+                    'Authorization': 'Bearer ' + x.token
                 },
-                destroy: true,
-                columns: [{
-                        data: 'id',
-                        "sortable": false,
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    },
-                    {
-                        data: 'name'
-                    },
-                    {
-                        data: 'email'
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'status'
+                        },
+              "columns": [
+                {
+                    "data": "id",       
+                    render: function (data, type, full, meta) {
+                      
+                      return i++;
+                },},
+               
+                {
+                    "data": "name",       
+                    render: function (data, type, full, meta) {
+                        return    data;
                     }
-                ],
-                "columnDefs": [{
-                        "targets": 4,
-                        "render": function(data, type, row, meta) {
-                            return `<div class="dropdown">
+                },
+                 {
+                    "data": "email",       
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                {
+                    "data": "retail_name",       
+                    render: function (data, type, full, meta) {
+                       
+                        return  data;
+                    }
+                },
+
+                {
+                    "data": "status",       
+                    render: function (data, type, full, meta) {
+                        return   data == 1 ? 'Active' : 'InActive';
+                    }
+                },
+                {
+                    "data": "id",       
+                    render: function (data, type, full, meta) {
+                        return  `<div class="dropdown">
                                         <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
                                             <i class="dw dw-more"></i>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                            <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${ row.id}') }}"><i class="dw dw-edit2"></i> Edit</a>
-                                            <a class="dropdown-item" onclick="remove(${ row.id})"><i class="dw dw-delete-3"></i> Delete</a>
+                                            <a class="dropdown-item" href="{{ url('/warehouse/edit/?id=${data}') }}"><i class="dw dw-edit2"></i> Edit</a>
+                                            <a class="dropdown-item" onclick="remove(${data})"><i class="dw dw-delete-3"></i> Delete</a>
                                         </div>
-                                    </div>`
-                        }
-                    },
-                    {
-                        "targets": 3,
-                        "render": function(data, type, row, meta) {
-                            return row.status == 1 ? 'Active' : 'InActive';
-                        }
-                    },
-                    {
-                        "orderable": false,
-                        "targets": 0
+                                    </div>`;
                     }
-                ],
-                'aaSorting': [
-                    [1, 'asc']
-                ]
-            });
+                },
+                
+                 
+                
+              ],
+          });
         }
         function remove(id) {
             var confirms = confirm("Are you sure want to delete this?");

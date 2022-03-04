@@ -1,4 +1,5 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
+
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
