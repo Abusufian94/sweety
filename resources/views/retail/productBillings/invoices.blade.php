@@ -58,9 +58,6 @@
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
-    <script>
-
-    </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -155,51 +152,30 @@
 
                             return i++;
                         },
-                         destroy: true,
-              "columns": [
-                {
-                    "data": "id", "orderable": false,
-                    render: function (data, type, full, meta) {
-
-                      return i++;
-                },},
-                {
-                    "data": "invoice_number",  "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
-                {
-                    "data": "payment_method",
-                    "orderable": true,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
-                {
-                    "data": "total_price",
-                    "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
-                 {
-                    "data": "retail_name",
-                    "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
-                 {
-                    "data": "name",
-                    "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
 
 
-
+                    },
+                    {
+                        "data": "invoice_number",
+                        "orderable": false,
+                        render: function(data, type, full, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "payment_method",
+                        "orderable": true,
+                        render: function(data, type, full, meta) {
+                            return data;
+                        }
+                    },
+                    {
+                        "data": "total_price",
+                        "orderable": false,
+                        render: function(data, type, full, meta) {
+                            return data;
+                        }
+                    },
 
                  {
                     "data": "updated_at",  "orderable": false,
@@ -213,13 +189,31 @@
                         return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
                     }
                 },
+                    {
+                        "data": "updated_at",
+                        "orderable": false,
+                        render: function(data, type, full, meta) {
+                            return data;
+                        }
+                    product_retail_assign_log_id: id,
+                    user_id: token.id,
+                    product_status: status,
 
+                },
+                success: function(data) {
+                    swal({
+                        position: 'top-end',
+                        type: 'success',
+                        title: "Approved Successfully",
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    $('#example1').DataTable().clear().destroy();
+                    loadDataTable();
+                }
+            });
 
-
-              ],
-          });
         }
-
 
     </script>
 @endsection
