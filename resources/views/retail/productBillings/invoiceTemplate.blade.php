@@ -27,14 +27,14 @@
         @foreach ($sold_product as $key=>$product)
         <tr>
         <td>{{$key + 1}}</td>
-        <td>Name</td>
+        <td>{{getProductName($product['product_id'])}}</td>
         <td>{{$product['quantity']}}</td>
-        <td>{{$product['price']}}</td>
+        <td>{{number_format($product['price'], 2)}}</td>
         </tr>
         @endforeach
         <tr>
             <td colspan="2">Grand Total</td>
-            <td colspan="2">{{$total_price}}</td>
+            <td colspan="2">{{number_format($total_price, 2)}}</td>
         </tr>
     </table>
 

@@ -140,12 +140,13 @@ class RetailerController extends Controller
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
-         //$payload = ["retail_info"=>$storeDetail,"invoice"=>$invoices,"Products"=>$products];
-         $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
+         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->first();
+         $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
+         $retailProduct->save();
+         $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
      }
 
-
-    return response()->json(['message'=>"billing Details has been save Successfully",'stat'=>true,"error"=>[],'data'=>[]]);
+    return response()->json(['message'=>"Billing Details has been save Successfully",'stat'=>true,"error"=>[],'data'=>$url]);
     } else {
         return response()->json(['message'=>"Please provide sold Product in arrays of object format",'stat'=>true,"error"=>[],'data'=>[]]);
     }
@@ -155,6 +156,7 @@ class RetailerController extends Controller
        return response()->json(['msg'=>'error','stat'=>false, 'error'=>$ex->getMessage(), "data"=>[]]);
    }
 }
+
 public function invoiceList(Request $request) {
     try {
         log::info($request);
@@ -163,9 +165,14 @@ public function invoiceList(Request $request) {
     //$orderBy = $request->order[0]['dir'];
     $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
+
      $invoice = \DB::table('invoice')->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
      $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name ");
      
+
+     $invoice = \App\Invoice::query();
+   // ->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at");
+
        if(!empty($request['search']['value']))
         {
             $searchText = $request['search']['value'];
@@ -272,6 +279,7 @@ public function invoiceList(Request $request) {
      
 
 
+
       return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProduct]);
 
     } catch (\Exception $e) {
@@ -297,14 +305,16 @@ public function invoiceList(Request $request) {
      ];
 
 
-     $filename = "invoice_".rand(100000,99999);
+     $filename = "invoice_".rand(100000,99999).time().'.pdf';
      $path = public_path().'/invoices/';
-
      if(!File::exists($path)) {
         File::makeDirectory($path);
     }
-    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename.'.pdf');
-    return  $pdf->download('invoice.pdf');
+    $update = Invoice::find($invoice_id);
+    $update->file =  $filename;
+    $update->save();
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
+    return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
     }
 }

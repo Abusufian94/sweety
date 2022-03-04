@@ -262,7 +262,7 @@
                 <td colspan ='6'>Total</td>
                 <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
                 <td></td>
-                </tr><tr><td colspan ='4'><button type="button" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'><button type="button" class="btn btn-warning">Invoice</button></td></tr></tbody>
+                </tr><tr><td colspan ='4'><button type="button" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
                 `;
 
             }
@@ -297,6 +297,9 @@
                 },
                 url: path,
                 type:"POST",
+                dataType: 'text',
+                dataType: 'json',
+
                 data: {
                     totalPrice: totalPrice,
                     paymentMethod: 'cash',
@@ -304,10 +307,9 @@
                 }
             });
             if(response.stat == true) {
-                alert(response.message)
+                window.open(response.data, '_blank');
             }
         }
-
     </script>
     <script>
         $(document).ready(function() {
