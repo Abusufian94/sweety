@@ -154,6 +154,7 @@
                         },
 
 
+
                     },
                     {
                         "data": "invoice_number",
@@ -176,25 +177,66 @@
                             return data;
                         }
                     },
+                     {
+                        "data": "retail_name",
+                        "orderable": false,
+                        render: function(data, type, full, meta) {
+                            return data;
+                        }
+                    },
 
-                 {
+
+
+                  {
+                    "data": "name",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                  {
                     "data": "updated_at",  "orderable": false,
                     render: function (data, type, full, meta) {
                         return  data;
                     }
                 },
-                 {
-                    "data": "id",  "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
-                    }
-                },
+                //  {
+                //     "data": "id",  "orderable": false,
+                //     render: function (data, type, full, meta) {
+                //         return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
+                //     }
+                // },
+
+
+
+
                     {
-                        "data": "updated_at",
+                        "data": "Action",
                         "orderable": false,
                         render: function(data, type, full, meta) {
-                            return data;
+                           // console.log(full.file)
+                            // return full.invoice_url != null ? `<a class="btn btn-primary" href="${full.invoice_url}" target="_blank">Download</a>`:'N/A';
+                           return `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${full.id}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="${full.invoice_url}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
                         }
+                    },
+
+
+                ],
+            });
+        }
+
+        function changeStatus(id, status) {
+            var id = id;
+            const token = JSON.parse(localStorage.getItem('loginUser'));
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token.token
+                },
+                url: "{{ url('api/v1/retail-products-approve') }}",
+                dataType: "JSON",
+                data: {
                     product_retail_assign_log_id: id,
                     user_id: token.id,
                     product_status: status,
@@ -214,6 +256,5 @@
             });
 
         }
-
     </script>
 @endsection

@@ -1,5 +1,6 @@
 /node_modules
 /public/hot
+/public/invoices
 /public/storage
 /storage/logs
 /storage/*.key

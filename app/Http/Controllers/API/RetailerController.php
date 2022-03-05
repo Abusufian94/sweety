@@ -14,6 +14,7 @@ use App\Retail;
 use Log;
 use PDF;
 use File;
+use App\ReturnFormalities;
 class RetailerController extends Controller
 {
     //
@@ -121,22 +122,25 @@ class RetailerController extends Controller
     $product = json_decode($products,true);
     if (is_array($product)) {
     $invoices = new Invoice();
-    $invoices->invoice_number = 'Inv'.rand(10000,99999).time();
+    $invoices->invoice_number = 'KLM'.date('Y').date("m").date("d").time();
     $invoices->retail_id = $retailUser->retail_id;
     $invoices->user_id = $userData->id;
     $invoices->payment_method = $request->paymentMethod;
     $invoices->total_price = $request->totalPrice;
    $invoices->save();
+
      foreach($product as $item){
          $soldProducts = new SoldProduct();
          $soldProducts->invoice_id = $invoices->id;
          $soldProducts->product_id = $item['product_id'];
+         $productPrice = Product::findOrFail($item['product_id']);
+         $soldProducts->product_price =$productPrice->product_price;
          $soldProducts->retail_id = $retailUser->retail_id;
          $soldProducts->quantity = $item['quantity'];
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
-         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->first();
+         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
          $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
          $retailProduct->save();
          $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
@@ -161,8 +165,10 @@ public function invoiceList(Request $request) {
     //$orderBy = $request->order[0]['dir'];
     $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
-     $invoice = \DB::table('invoice')->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
-     $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name ");
+
+     $invoice = Invoice::leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
+     $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name, invoice.file ");
+
 
        if(!empty($request['search']['value']))
         {
@@ -270,4 +276,74 @@ public function invoiceList(Request $request) {
 
 
 
+      return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProduct]);
+
+    } catch (\Exception $e) {
+        Log::info('==================== Sold Product ======================');
+        Log::error($e->getMessage());
+        return response()->json(["stat" => true, "message" => $e->getMessage(), "data" => []], 400);
+        Log::error($e->getTraceAsString());
+
+
+
     }
+}
+public function genaratePdf($retail_id,$invoice_id,$products) {
+
+    $storeDetail = Retail::where('retail_id',$retail_id)->first();
+    $invoiceDetails = Invoice::where('id',$invoice_id)->first();
+
+    $data = [
+    'Retailer_name' => $storeDetail->retail_name,
+    'street_name' => $storeDetail->street_name,
+    'Invoice_No'=>$invoiceDetails->invoice_number,
+    'total_price'=>$invoiceDetails->total_price,
+    'sold_product'=>$products,
+    'created_at'=>$invoiceDetails->created_at
+    ];
+
+    $filename = "invoice_".rand(100000,99999).time().'.pdf';
+    $path = public_path().'/invoices/';
+    if(!File::exists($path)) {
+        File::makeDirectory($path);
+    }
+    $update = Invoice::find($invoice_id);
+    $update->file =  $filename;
+    $update->save();
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
+    return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
+
+}
+    public function checkQuantity(Request $request) {
+       $productId = $request->product_id;
+       $retailProduct =  Retailproduct::where('product_id','=',$productId)->first();
+       if($retailProduct->quantity <= 0) {
+         return response()->json(['stat'=>false,'message'=>"Quantity is not enough for create billing"]);
+       }
+    }
+    public function returnFormalities(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'product_id' => 'required',
+            'retail_id' =>'required',
+            'warehouse_user_id'=>'required',
+            'quantity'=>'required',
+            'user_id'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+       $returnProduct = new ReturnFormalities();
+       $returnProduct->product_id = $request->product_id;
+       $returnProduct->retail_id = $request->retail_id;
+       $returnProduct->warehouse_user_id = $request->warehouse_user_id;
+       $returnProduct->quantity = $request->quantity;
+       $returnProduct->user_id = \Auth::user()->id;
+       $returnProduct->save();
+       return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$returnProduct],200);
+
+    }
+    public function getRefundProduct() {
+         $products = \DB::table('return_product_log')->select(['return_product_log.*','product.*'])->join('product','product.id','=','return_product_log.product_id')->where('return_product_log.user_id',\Auth::user()->id)->get();
+        return response()->json(['stat'=>true,'message'=>"Return products fetch successfully",'error'=>[],'data'=>$products]);
+    }
+}
