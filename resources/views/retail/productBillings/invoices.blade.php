@@ -58,7 +58,7 @@
         </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
-    
+
     <script type="text/javascript">
         $(document).ready(function() {
             $('#start_date').on('change', function() {
@@ -186,7 +186,7 @@
                     },
 
 
-               
+
                   {
                     "data": "name",
                     "orderable": false,
@@ -207,9 +207,9 @@
                 //     }
                 // },
 
-               
 
-                   
+
+
                     {
                         "data": "Action",
                         "orderable": false,
@@ -220,7 +220,7 @@
                         }
                     },
 
-               
+
                 ],
             });
         }
@@ -256,7 +256,5 @@
             });
 
         }
-
-
     </script>
 @endsection

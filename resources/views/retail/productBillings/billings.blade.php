@@ -77,14 +77,14 @@
                 var html = ` <ul class="list-group" id="suggestion">`;
                 $.each(result.data.data, function(index, value) {
                     html +=
-                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'>                              
+                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'>
                             <img src ="${value.product_image_url}" height="50" width="50">
                             &nbsp;&nbsp;
                             <strong>${value.product_name}</strong>
                             [${value.quantity}]
-                            
-                          
-                            
+
+
+
                             </li></a>`
                 });
                 html += `</ul>`;
@@ -189,6 +189,7 @@
             $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
             $("#qty_"+product_id).removeClass('validator');
             $("#span_"+product_id).hide();
+            $("#bill").prop('disabled', false);
             } else {
                  $('#bill').prop('disabled', true);
                 $("#span_"+product_id).addClass('validator').text("Sorry no more product Available");
@@ -196,7 +197,9 @@
                 $("#span_"+product_id).show();
                 $("#qty_"+product_id).blur(function() {
                     $(this).focus()
+
                 });
+                $("#bill").prop('disabled', true);
             }
 
         }
@@ -280,7 +283,7 @@
 
                 <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
                 <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice} </i></td>
-                <td><button type="button" class="btn btn-danger" id="bill" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
+                <td><button type="button" class="btn btn-danger"  onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
                 </tr>
                 `;
 
@@ -291,7 +294,7 @@
                 <td colspan ='6'>Total</td>
                 <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
                 <td></td>
-                </tr><tr><td colspan ='4'><button type="button" id = "bill" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
+                </tr><tr><td colspan ='4'><button type="button" id ="bill" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
                 `;
 
             }

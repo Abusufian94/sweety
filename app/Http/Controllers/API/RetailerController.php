@@ -288,10 +288,10 @@ public function invoiceList(Request $request) {
 
     }
 }
-    public function genaratePdf($retail_id,$invoice_id,$products) {
-        $storeDetail = Retail::where('retail_id',$retail_id)->first();
-        $invoiceDetails = Invoice::where('id',$invoice_id)->first();
+public function genaratePdf($retail_id,$invoice_id,$products) {
 
+    $storeDetail = Retail::where('retail_id',$retail_id)->first();
+    $invoiceDetails = Invoice::where('id',$invoice_id)->first();
 
     $data = [
     'Retailer_name' => $storeDetail->retail_name,
@@ -300,12 +300,11 @@ public function invoiceList(Request $request) {
     'total_price'=>$invoiceDetails->total_price,
     'sold_product'=>$products,
     'created_at'=>$invoiceDetails->created_at
-     ];
+    ];
 
-
-     $filename = "invoice_".rand(100000,99999).time().'.pdf';
-     $path = public_path().'/invoices/';
-     if(!File::exists($path)) {
+    $filename = "invoice_".rand(100000,99999).time().'.pdf';
+    $path = public_path().'/invoices/';
+    if(!File::exists($path)) {
         File::makeDirectory($path);
     }
     $update = Invoice::find($invoice_id);
@@ -314,7 +313,7 @@ public function invoiceList(Request $request) {
     $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
     return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
-    }
+}
     public function checkQuantity(Request $request) {
        $productId = $request->product_id;
        $retailProduct =  Retailproduct::where('product_id','=',$productId)->first();
@@ -341,7 +340,6 @@ public function invoiceList(Request $request) {
        $returnProduct->user_id = \Auth::user()->id;
        $returnProduct->save();
        return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$returnProduct],200);
-
     }
     public function getRefundProduct() {
          $products = \DB::table('return_product_log')->select(['return_product_log.*','product.*'])->join('product','product.id','=','return_product_log.product_id')->where('return_product_log.user_id',\Auth::user()->id)->get();
