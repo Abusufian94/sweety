@@ -50,7 +50,12 @@
     </div>
     </div>
 
-
+    <style>
+        .validator {
+            border:solid 1px red;
+            color:red;
+        }
+    </style>
 
       <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
@@ -111,7 +116,7 @@
         }
         var billings = [];
         var payloads = [];
-        async function totalPrice(val, price, product_id,unit) {
+        async function totalPrice(val, price, product_id,unit, quantity) {
             let mesurment = !unit? $("#unit").val().toUpperCase(): unit.toUpperCase();
             var result = 0;
             switch(mesurment){
@@ -125,6 +130,8 @@
                 result = Number(val) * Number(price)
                 break;
             }
+            if(Number(val) < Number(quantity)) {
+                await checkQuantity(product_id);
             var path = "{{ url('api/v1/admin/suggestive-product') }}";
             const token = JSON.parse(localStorage.getItem('loginUser'));
             const response = await $.ajax({
@@ -180,6 +187,16 @@
             let grandTotal =  Number($("#total").val());
             $("#grandtotal").html(`<i class="fa fa-inr">${grandTotal.toFixed(2)}</i>`);
             $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+            $("#qty_"+product_id).removeClass('validator');
+            $("#span_"+product_id).hide();
+            } else {
+                $("#span_"+product_id).addClass('validator').text("Sorry no more product Available");
+                $("#qty_"+product_id).addClass('validator');
+                $("#span_"+product_id).show();
+                $("#qty_"+product_id).blur(function() {
+                    $(this).focus()
+                });
+            }
 
         }
 
@@ -258,11 +275,11 @@
                 <td>${value.product_name}</td>
                 <td><i class="fa fa-inr">${value.product_price}</i> </td>
 
-                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}')"/></td>
+                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})"/><br/><small id='span_${value.product_id}'></small</td>
 
                 <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
                 <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice} </i></td>
-                <td><button type="button" class="btn btn-danger" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
+                <td><button type="button" class="btn btn-danger" id="bill" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
                 </tr>
                 `;
 
@@ -273,7 +290,7 @@
                 <td colspan ='6'>Total</td>
                 <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
                 <td></td>
-                </tr><tr><td colspan ='4'><button type="button" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
+                </tr><tr><td colspan ='4'><button type="button" id = "bill" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
                 `;
 
             }
@@ -319,6 +336,24 @@
             });
             if(response.stat == true) {
                 window.open(response.data, '_blank');
+            }
+        }
+    </script>
+    <script>
+        async function checkQuantity(productId){
+            let response = await apiCall("{{ url('api/v1/check/retail-quantity') }}","POST",{product_id: productId});
+            if(response.stat == false){
+              $("#qty_"+productId).css({
+                "border-style": "solid",
+                "border-color": "red",
+              });
+              $("#span_"+productId).focus();
+              $("#span_"+productId).css({"color":"red"}).text(response.message);
+              $("#span_"+productId).show();
+            //  document.getElementById("bill").disabled = false;
+
+            } else {
+                $("#span_"+productId).hide();
             }
         }
     </script>

@@ -35,18 +35,17 @@
                     <tr>
                         <th class="all">SL</th>
                         <th class="all">Invoice Number</th>
-                       
+
                         <th class="all">Pay Mode</th>
                          <th class="all">Price</th>
                          <th class="all">Store</th>
                          <th class="all">Created By</th>
                         <th class="all">Created At</th>
                         <th class="all ">Action</th>
-                      
+
                     </tr>
                 </thead>
                 <tbody id="demo">
-
 
 
 
@@ -155,6 +154,7 @@
                         },
 
 
+
                     },
                     {
                         "data": "invoice_number",
@@ -177,31 +177,39 @@
                             return data;
                         }
                     },
-
-                 {
-                    "data": "updated_at",  "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  data;
-                    }
-                },
-                 {
-                    "data": "id",  "orderable": false,
-                    render: function (data, type, full, meta) {
-                        return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
-                    }
-                },
-
-
-                
-       
-
-                    {
-                        "data": "updated_at",
+                     {
+                        "data": "retail_name",
                         "orderable": false,
                         render: function(data, type, full, meta) {
                             return data;
                         }
                     },
+
+
+               
+                  {
+                    "data": "name",
+                    "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                  {
+                    "data": "updated_at",  "orderable": false,
+                    render: function (data, type, full, meta) {
+                        return  data;
+                    }
+                },
+                //  {
+                //     "data": "id",  "orderable": false,
+                //     render: function (data, type, full, meta) {
+                //         return  `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="{{ url('retails/invoice/details/${data}') }}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
+                //     }
+                // },
+
+               
+
+                   
                     {
                         "data": "Action",
                         "orderable": false,
@@ -211,22 +219,7 @@
                         }
                     },
 
-                    // {
-                    //     "data": "status","orderable": false,
-                    //     render: function (data, type, full, meta) {
-                    //     return  (data == 0) ?`<div class="dropdown">
-                //                                     <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                //                                         <i class="dw dw-more"></i>
-                //                                      </a>
-                //                                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                //                                          <a class="dropdown-item" onclick="changeStatus(${full.product_retail_assign_log_id},1)"><i class="dw dw-edit2"></i> Aprrove!</a>
-
-
-                //                                          </div>
-                //                                  </div>`:'';
-
-                    //     }
-                    // }
+               
                 ],
             });
         }
@@ -262,6 +255,7 @@
             });
 
         }
+
 
     </script>
 @endsection

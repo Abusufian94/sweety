@@ -14,6 +14,7 @@ use App\Retail;
 use Log;
 use PDF;
 use File;
+use App\ReturnFormalities;
 class RetailerController extends Controller
 {
     //
@@ -57,11 +58,7 @@ class RetailerController extends Controller
 
           $total_count = $retailProduct->count();
           $retailProduct = $retailProduct->orderBy('product.product_name', $orderBy)->get()->toArray();
-
           log::info($retailProduct);
-
-
-
           return response()->json(["stat" => true, "message" => "No Records Found", "draw" => intval($request['draw']), "recordsTotal" => $total_count, "recordsFiltered" =>  $total_count, 'data' => $retailProduct]);
 
         } catch (\Exception $e) {
@@ -168,10 +165,7 @@ public function invoiceList(Request $request) {
 
      $invoice = \DB::table('invoice')->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
      $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name ");
-     
 
-     $invoice = \App\Invoice::query();
-   // ->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at");
 
        if(!empty($request['search']['value']))
         {
@@ -276,7 +270,6 @@ public function invoiceList(Request $request) {
 
       $retailProduct = $retailProduct->get()->toArray();
 
-     
 
 
 
@@ -316,5 +309,37 @@ public function invoiceList(Request $request) {
     $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
     return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
+    }
+    public function checkQuantity(Request $request) {
+       $productId = $request->product_id;
+       $retailProduct =  Retailproduct::where('product_id','=',$productId)->first();
+       if($retailProduct->quantity <= 0) {
+         return response()->json(['stat'=>false,'message'=>"Quantity is not enough for create billing"]);
+       }
+    }
+    public function returnFormalities(Request $request) {
+        $validator = \Validator::make($request->all(), [
+            'product_id' => 'required',
+            'retail_id' =>'required',
+            'warehouse_user_id'=>'required',
+            'quantity'=>'required',
+            'user_id'=>'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['stat' => false, 'message' => "Please fill the mendatory fields", 'error' => $validator->errors(), "data" => []], 400);
+        }
+       $returnProduct = new ReturnFormalities();
+       $returnProduct->product_id = $request->product_id;
+       $returnProduct->retail_id = $request->retail_id;
+       $returnProduct->warehouse_user_id = $request->warehouse_user_id;
+       $returnProduct->quantity = $request->quantity;
+       $returnProduct->user_id = \Auth::user()->id;
+       $returnProduct->save();
+       return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$returnProduct],200);
+
+    }
+    public function getRefundProduct() {
+         $products = \DB::table('return_product_log')->select(['return_product_log.*','product.*'])->join('product','product.id','=','return_product_log.product_id')->where('return_product_log.user_id',\Auth::user()->id)->get();
+        return response()->json(['stat'=>true,'message'=>"Return products fetch successfully",'error'=>[],'data'=>$products]);
     }
 }
