@@ -148,14 +148,7 @@
                     },
                 },
                 destroy: true,
-                "columns": [{
-                        "data": "id",
-                        "orderable": false,
-                        render: function(data, type, full, meta) {
-
-                            return i++;
-                        },
-                         destroy: true,
+                
               "columns": [
                 {
                     "data": "id", "orderable": false,
