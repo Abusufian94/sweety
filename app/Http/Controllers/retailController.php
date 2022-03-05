@@ -31,17 +31,17 @@ class retailController extends Controller
     }
 
     public function retailAssignProductList(Request $request)
-    {    
+    {
         $role = $_COOKIE['loginUser'];
         if($role==1)
         {
              return view('retail.product.retailassign');
         }
-        else 
+        else
         {
-          return view('retail.product.retailassignretail');  
+          return view('retail.product.retailassignretail');
         }
-       
+
     }
     public function billings()
     {
@@ -50,24 +50,17 @@ class retailController extends Controller
         return view('retail.productBillings.billings')->with('extend', $extend);
     }
     public function invoices() {
-     
+
           $extend = $this->extendLayout();
-       
+
         return view('retail.productBillings.invoices')->with('extend', $extend);
-        
-            
-        
+
+
+
     }
     public function invoiceDetails($id) {
-       
+
           $extend = $this->extendLayout();
          return view('retail.productBillings.invoiceproduct',compact('id'))->with('extend', $extend)->with('id', $id);
-
-        
-            
-         
-             
-       
-        
     }
 }
