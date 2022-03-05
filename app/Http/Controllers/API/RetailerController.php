@@ -122,22 +122,25 @@ class RetailerController extends Controller
     $product = json_decode($products,true);
     if (is_array($product)) {
     $invoices = new Invoice();
-    $invoices->invoice_number = 'Inv'.rand(10000,99999).time();
+    $invoices->invoice_number = 'KLM'.date('Y').date("m").date("d").time();
     $invoices->retail_id = $retailUser->retail_id;
     $invoices->user_id = $userData->id;
     $invoices->payment_method = $request->paymentMethod;
     $invoices->total_price = $request->totalPrice;
    $invoices->save();
+
      foreach($product as $item){
          $soldProducts = new SoldProduct();
          $soldProducts->invoice_id = $invoices->id;
          $soldProducts->product_id = $item['product_id'];
+         $productPrice = Product::findOrFail($item['product_id']);
+         $soldProducts->product_price =$productPrice->product_price;
          $soldProducts->retail_id = $retailUser->retail_id;
          $soldProducts->quantity = $item['quantity'];
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
-         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->first();
+         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
          $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
          $retailProduct->save();
          $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
@@ -163,8 +166,8 @@ public function invoiceList(Request $request) {
     $assignRetailId = RetailUser::where('user_id', $userData->id)->select('retail_id')->first();
 
 
-     $invoice = \DB::table('invoice')->leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
-     $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name ");
+     $invoice = Invoice::leftJoin('retail_tbl', 'retail_tbl.retail_id', '=', 'invoice.retail_id')->leftJoin('users', 'users.id', '=','invoice.user_id');
+     $invoice = $invoice->selectRaw("invoice.id as id, invoice.invoice_number,invoice.payment_method, invoice.total_price,invoice.updated_at, users.name, retail_tbl.retail_name, invoice.file ");
 
 
        if(!empty($request['search']['value']))
@@ -292,9 +295,11 @@ public function invoiceList(Request $request) {
 
     $data = [
     'Retailer_name' => $storeDetail->retail_name,
+    'street_name' => $storeDetail->street_name,
     'Invoice_No'=>$invoiceDetails->invoice_number,
     'total_price'=>$invoiceDetails->total_price,
     'sold_product'=>$products,
+    'created_at'=>$invoiceDetails->created_at
      ];
 
 

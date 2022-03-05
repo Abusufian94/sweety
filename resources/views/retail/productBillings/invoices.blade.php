@@ -215,7 +215,8 @@
                         "orderable": false,
                         render: function(data, type, full, meta) {
                            // console.log(full.file)
-                            return full.invoice_url != null ? `<a class="btn btn-primary" href=${full.invoice_url} download>Download</a>`:'N/A';
+                            // return full.invoice_url != null ? `<a class="btn btn-primary" href="${full.invoice_url}" target="_blank">Download</a>`:'N/A';
+                           return `<a class="btn btn-outline-dark" href="{{ url('retails/invoice/details/${full.id}') }}" target="_blank"><i class="icon-copy dw dw-eye"></i></a>&nbsp;<a class="btn btn-outline-success" href="${full.invoice_url}" target="_blank"><i class="icon-copy dw dw-print"></i></a>`;
                         }
                     },
 
