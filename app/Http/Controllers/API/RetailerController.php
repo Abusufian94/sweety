@@ -334,7 +334,6 @@ public function invoiceList(Request $request) {
        $returnProduct->user_id = \Auth::user()->id;
        $returnProduct->save();
        return response()->json(['stat'=>true ,'message'=>"suggestion Listing products has been fetch successfully",'err'=>(object)[],'data'=>$returnProduct],200);
-
     }
     public function getRefundProduct() {
          $products = \DB::table('return_product_log')->select(['return_product_log.*','product.*'])->join('product','product.id','=','return_product_log.product_id')->where('return_product_log.user_id',\Auth::user()->id)->get();
