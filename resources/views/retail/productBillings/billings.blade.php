@@ -130,7 +130,7 @@
                 result = Number(val) * Number(price)
                 break;
             }
-            if(Number(val) < Number(quantity)) {
+            if(Number(val) <= Number(quantity)) {
                 await checkQuantity(product_id);
             var path = "{{ url('api/v1/admin/suggestive-product') }}";
             const token = JSON.parse(localStorage.getItem('loginUser'));
@@ -190,6 +190,7 @@
             $("#qty_"+product_id).removeClass('validator');
             $("#span_"+product_id).hide();
             } else {
+                 $('#bill').prop('disabled', true);
                 $("#span_"+product_id).addClass('validator').text("Sorry no more product Available");
                 $("#qty_"+product_id).addClass('validator');
                 $("#span_"+product_id).show();
