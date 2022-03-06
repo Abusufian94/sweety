@@ -46,15 +46,24 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Password<small style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
+                        <label class="col-sm-12 col-md-2 col-form-label ">Password<small style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10 row">
+                              <div class="col-md-8 ">
                             <input class="form-control" type="password" placeholder="Password" name="password" id="password" required>
+                            </div>
+                            <div class="col-md-2">
+                               <span class="eyeShow"><button class="btn btn-outline-dark eyeShowClick"><i class="icon-copy fa fa-eye" aria-hidden="true"></i></button></span>
+                               <span class="eyeHide" style="display:none;"><button class="btn btn-outline-dark eyeHideClick"><i class="icon-copy fa fa-eye-slash" aria-hidden="true"></i></button>
+                               </span>
+                              </div>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Confirm Password<small style="color:red">*</small></label>
-                        <div class="col-sm-12 col-md-10">
+                        <div class="col-sm-12 col-md-10 row ">
+                           <div class="col-md-8 ">
                             <input class="form-control" type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                          </div>
                         </div>
                     </div>
                     <input type="hidden" name='roles' value="2"/>
@@ -178,6 +187,19 @@
     <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         $(document).ready(function() {
+                    $('.eyeShowClick').on('click', function () {
+          $('#password').attr('type', 'text'); 
+          $('#password_confirmation').attr('type', 'text'); 
+          $('.eyeHide').css("display","");
+          $('.eyeShow').css("display","none");
+});
+         
+          $('.eyeHideClick').on('click', function () {
+          $('#password').attr('type', 'password'); 
+          $('#password_confirmation').attr('type', 'password'); 
+          $('.eyeHide').css("display","none");
+          $('.eyeShow').css("display","");
+});
 
             var x = localStorage.getItem("loginUser");
             x = JSON.parse(x);

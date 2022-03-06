@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 class StockController extends Controller
 {
     public function index()
-    {
-        return view('stock.stock');
+    {  $extend = $this->extendLayout();
+        return view('stock.stock')->with('extend', $extend);
     }
     public function create()
     {
@@ -21,39 +21,14 @@ class StockController extends Controller
     }
     public function indexLog()
     {
-          $role = $_COOKIE['loginUser'];
-        if($role==1)
-        {
-           $extend="admin";
-        }
-         if($role==2)
-        {
-           $extend="retailer";
-        }
-         if($role==3)
-        {
-           $extend="warehouse";
-        }
-      
-       return view('stock.stock')->with('extend', $extend);
+         $extend = $this->extendLayout();
+       return view('stocklog.stock')->with('extend', $extend);
        
     }
 
     public function consumption()
     {
-         $role = $_COOKIE['loginUser'];
-        if($role==1)
-        {
-           $extend="admin";
-        }
-         if($role==2)
-        {
-           $extend="retailer";
-        }
-         if($role==3)
-        {
-           $extend="warehouse";
-        }
+         $extend = $this->extendLayout();
       
        return view('consumption.list')->with('extend', $extend);
        
@@ -61,19 +36,7 @@ class StockController extends Controller
 
     public function consumptionCreate()
     {
-        $role = $_COOKIE['loginUser'];
-        if($role==1)
-        {
-           $extend="admin";
-        }
-         if($role==2)
-        {
-           $extend="retailer";
-        }
-         if($role==3)
-        {
-           $extend="warehouse";
-        }
+       $extend = $this->extendLayout();
         
         return view('consumption.add')->with('extend', $extend);
     }

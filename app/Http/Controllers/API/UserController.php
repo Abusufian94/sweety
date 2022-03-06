@@ -400,7 +400,7 @@ class UserController extends Controller
 
 
                 }
-            $retailUserList = $retailUserList->where('users.status', 1)
+            $retailUserList = $retailUserList
                         ->where('users.roles', 2);
 
             $total_count = $retailUserList->count();

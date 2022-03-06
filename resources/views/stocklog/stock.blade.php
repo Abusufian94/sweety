@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
@@ -6,7 +6,7 @@
 
 
             <div class="card-box mb-30">
-                <h2 class="h4 pd-20">Stocks</h2>
+                <h2 class="h4 pd-20">Stock Logs</h2>
                 <table id='example3' class="table nowrap responsive example">
                     <thead>
                         <tr>

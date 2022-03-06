@@ -294,12 +294,12 @@ a {
                                                             &nbsp;{{$product['quantity']}}({{$product['unit']}})
                                                 </td>
                                                             
-                                                            <td class="alignright">Rs {{number_format($product['price'], 2)}}</td>
+                                                            <td class="alignright">Rs. {{number_format($product['price'], 2)}}</td>
                                                         </tr>
                                                        @endforeach
                                                         <tr class="total">
                                                             <td class="alignright" width="80%">Total</td>
-                                                            <td class="alignright">Rs{{number_format($total_price, 2)}}</td>
+                                                            <td class="alignright">Rs. {{number_format($total_price, 2)}}</td>
                                                         </tr>
                                                        
                                                     </tbody></table>

@@ -24,8 +24,8 @@
 								<div id="chart"></div>
 							</div>
 							<div class="widget-data">
-								<div class="h2 mb-0"><span class="micon dw dw-house-11"></span>1</div>
-								<div class="weight-600 font-14">KALAMANDIR</div>
+								<div class="h2 mb-0"><!-- <span class="micon dw dw-house-11"></span> -->1</div>
+								<div class="weight-600 font-14">KALAMANDIR(PANCHLA)</div>
 							</div>
 						</div>
 					</div>
@@ -37,8 +37,8 @@
 								<div id="chart2"></div>
 							</div>
 							<div class="widget-data">
-								<div class="h2 mb-0"><span class="micon dw dw-house-11"></span>2</div>
-								<div class="weight-600 font-14">KALAMANDIR</div>
+								<div class="h2 mb-0"><!-- <span class="micon dw dw-house-11"></span> -->2</div>
+								<div class="weight-600 font-14">KALAMANDIR(BASUDEVPUR)</div>
 							</div>
 						</div>
 					</div>

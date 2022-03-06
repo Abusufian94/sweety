@@ -96,6 +96,7 @@ class RetailerController extends Controller
            {
               $product = $product->where('retail_product.retail_id','=',$assignRetailId->retail_id);
            }
+            $product =  $product->where('retail_product.quantity','>',0);
             //$product = $product->whereIn('retail_product.user_id','=',$userData->id);
             $product = $product->offset($offsets)->limit($pageSize)->get();
             $resultArray =  (object)['data' =>$product,"meta"=>(object)["page"=>(int)$page,'limit'=>(int)$pageSize]];

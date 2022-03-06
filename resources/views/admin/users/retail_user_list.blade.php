@@ -232,10 +232,11 @@
                     }
                 },
 
-                {
+               {
                     "data": "status",       
                     render: function (data, type, full, meta) {
-                        return   data == 1 ? 'Active' : 'InActive';
+                      //console.log(full);
+                         return data == 1 ? `<a href="#" class="badge badge-success " onclick="changeStatus(${ full.id})" data-status="${full.status}">Active</a>` :`<a href="#" class="badge badge-warning changeStatus" onclick="changeStatus(${ full.id})" data-status="${data}">Inactive</a>` 
                     }
                 },
                 {
@@ -280,6 +281,22 @@
                     })
             }
         }
+
+         function  changeStatus(id){
+      
+   $('#example1').DataTable().clear().destroy();
+ apiCall("{{ url('api/v1/change-user-status') }}", "get", {
+                      
+                        "id": id,
+                    })
+                    .then(function(data) {
+                       
+                       //window.location.reload();
+                       loadDataTable();
+                    })
+    
+
+    }
     </script>
 
 @endsection
