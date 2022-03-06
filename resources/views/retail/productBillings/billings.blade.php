@@ -134,6 +134,9 @@
             });
             $("#subtotal_"+product_id).val(result);
             $("#grandtotal").text(totalCal.toFixed(2));
+            if(mesurment === "GM") {
+                quantity *= 1000;
+            }
 
             if(Number(val) <= Number(quantity) && Number(val)>0) {
                 await checkQuantity(product_id);
