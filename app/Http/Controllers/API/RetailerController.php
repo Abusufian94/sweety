@@ -140,6 +140,11 @@ class RetailerController extends Controller
          $soldProducts->price = $item['price'];
          $soldProducts->save();
          $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
+         $item['quantity']=number_format($item['quantity'],2,'.','');
+         if( $soldProducts->unit=="GM")
+         {
+            $item['quantity']=$item['quantity']/1000;
+         }
          $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
          $retailProduct->save();
          $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
