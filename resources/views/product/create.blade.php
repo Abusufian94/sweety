@@ -14,11 +14,19 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">Product Bengali<small
+                            style="color:red">*</small></label>
+                    <div class="col-sm-12 col-md-10">
+                        <input class="form-control" type="text" name="bangla_name" id="bangla_name"
+                            placeholder="Product Bengali"  />
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-sm-12 col-md-2 col-form-label">Product Unit<small
                             style="color:red">*</small></label>
                     <div class="col-sm-12 col-md-10" style="width:100%;">
 
-                        <select 
+                        <select
                             name="product_unit" id="product_unit" class="form-control"  required="required">
                             <option value="" disabled selected>Select Unit</option>
                             <option value="kg">KG</option>
@@ -77,7 +85,7 @@
             </div>
         </div>
     </div>
-    
+
     </div>
     </div>
     <script src="{{ asset('js/jquery-min.js') }}"></script>
@@ -147,18 +155,20 @@
 
 
                     var product_name = $("#product_name").val();
+                    var product_bang_name = $("#bangla_name").val();
                     var product_unit = $('[name="product_unit"]').val();
                     var product_quantity = $('[name="product_quantity"]').val();
                     var product_price = $('[name="product_price"]').val();
                     var product_image = $('[name="product_image"]').val();
 
-                    var form_data = new FormData(form); 
+                    var form_data = new FormData(form);
                     form_data.append("product_name", product_name);
+                    form_data.append("bangla_name", product_bang_name);
                     form_data.append("product_unit", product_unit);
                     form_data.append("product_quantity", product_quantity);
                     form_data.append("product_price", product_price);
                     form_data.append("user_id", user_id);
-                 
+
                      var product_price = $('[name="product_price"]').val();
                     $.ajax({
                         url: "{{ url('api/v1/pro/create') }}",
@@ -174,8 +184,8 @@
                         dataType: "json", // what to expect back from the server
                         data: form_data,
                         success: function(response) {
-                            $(form)[0].reset()
-                            window.location = "{{ route('product.home') }}"
+                           $(form)[0].reset()
+                           window.location = "{{ route('product.home') }}"
                         }
                     });
 
@@ -225,13 +235,13 @@
         //    // var result = [];
         //     var options = select && select.options;
         //     var html = '';
-           
+
         //     $.each(options,function(index,item){
-           
+
         //         if(item.selected)
         //         {
         //           let names = $(item).text();
-        //           html +=  `<label>${names}</label> 
+        //           html +=  `<label>${names}</label>
         //                         <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
         //                         <div class="form-group row">
         //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
@@ -253,7 +263,7 @@
         //                             <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
         //                             </div>
         //                         </div>`;
-                                
+
         //         }
         //     });
         //     $('#outputArea').append(html);

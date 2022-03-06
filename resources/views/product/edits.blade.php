@@ -18,11 +18,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Bengali<small
+                                style="color:red">*</small></label>
+                        <div class="col-sm-12 col-md-10">
+                            <input class="form-control" type="text" name ="bangla_name" id="bangla_name"
+                                placeholder="Product Bengali"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label class="col-sm-12 col-md-2 col-form-label">Productd Unit<small
                                 style="color:red">*</small></label>
                         <div class="col-sm-12 col-md-10" style="width:100%;">
-    
-                           
+
+
                              <input class="form-control" type="text" name="product_unit" id="product_unit"
                                 placeholder="Name" required />
                         </div>
@@ -62,7 +70,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-12 col-md-2 col-form-label">Product Image</label> 
+                        <label class="col-sm-12 col-md-2 col-form-label">Product Image</label>
                         <div class="col-sm-12 col-md-10">
                             <input class="form-control" type="file" name="product_image" id="product_image"  />
                         </div>
@@ -108,14 +116,14 @@
               </tr>
             </thead>
             <tbody id="attr_table">
-             
+
             </tbody>
 
           </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-         
+
         </div>
       </div>
     </div>
@@ -123,7 +131,7 @@
     <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         $(document).ready(function() {
-           
+
 
             var x = localStorage.getItem("loginUser");
 
@@ -148,7 +156,7 @@
     <script type="text/javascript">
      var arr=[];
         $(document).ready(function() {
-           
+
           // loadattribute();
             //loadConsumption();
             $("#myform").validate({
@@ -169,11 +177,13 @@
 
                 submitHandler: function(form) {
                     const obj = $(form).serializeArray();
+                    console.log(obj)
                     const token = JSON.parse(localStorage.getItem('loginUser'));
                     const user_id = token.id;
+                    var file_data = $('#product_image').prop('files')[0];
                     var form_data = new FormData(form);
+                    form_data.append("product_image", file_data);
                     form_data.append("user_id", user_id);
-
 
                     $.ajax({
                         url: "{{ url('api/v1/pro/update') }}",
@@ -190,7 +200,7 @@
                         data: form_data,
                         success: function(response) {
                             $(form)[0].reset()
-                            window.location = "{{ route('product.home') }}"
+                            //window.location = "{{ route('product.home') }}"
                         }
                     });
 
@@ -203,6 +213,7 @@
                   //  console.log(data)
                     $("#id").val(data.data.id)
                     $("#product_name").val(data.data.product_name)
+                    $("#bangla_name").val(data.data.bangla_name);
                     $("#product_unit").val(data.data.product_unit).attr('selected','selected');
                     $("#product_price").val(data.data.product_price);
                     $("#product_quantity").val(data.data.product_quantity);
@@ -230,7 +241,7 @@
             //     });
 
         });
-        
+
 
 
 
@@ -273,13 +284,13 @@
         //    // var result = [];
         //     var options = select && select.options;
         //     var html = '';
-           
+
         //     $.each(options,function(index,item){
-           
+
         //         if(item.selected)
         //         {
         //           let names = $(item).text();
-        //           html +=  `<label>${names}</label> 
+        //           html +=  `<label>${names}</label>
         //           <input type ="hidden" name ="raw_id[]" value ="${item.value}"/>
         //                         <div class="form-group row">
         //                             <label class="col-sm-12 col-md-2 col-form-label">Raw Unit</label>
@@ -301,14 +312,14 @@
         //                             <input class='form-control' type='text' placeholder='Stock' name='stock[]' />
         //                             </div>
         //                         </div>`;
-                                
+
         //         }
         //     });
         //     $('#outputArea').html(html);
         // }
 
 
-      
+
     </script>
 
 @endsection
