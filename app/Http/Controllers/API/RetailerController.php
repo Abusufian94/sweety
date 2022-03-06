@@ -134,8 +134,7 @@ class RetailerController extends Controller
          $soldProducts = new SoldProduct();
          $soldProducts->invoice_id = $invoices->id;
          $soldProducts->product_id = $item['product_id'];
-         $productPrice = Product::findOrFail($item['product_id']);
-         $soldProducts->product_price =$productPrice->product_price;
+         $soldProducts->product_price =$item['product_price'];
          $soldProducts->retail_id = $retailUser->retail_id;
          $soldProducts->quantity = $item['quantity'];
          $soldProducts->unit = $item['unit'];
@@ -311,7 +310,8 @@ public function genaratePdf($retail_id,$invoice_id,$products) {
     $update = Invoice::find($invoice_id);
     $update->file =  $filename;
     $update->save();
-    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
+    $paperSize=[0,0,297.00,420.00];
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->setPaper($paperSize, 'portrait')->save($path.$filename);
     return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
 }

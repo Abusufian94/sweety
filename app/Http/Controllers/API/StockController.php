@@ -559,7 +559,7 @@ class StockController extends Controller
                     "updated_on" => $record->updated_at,
                 );
             }
-            
+
             $retailUserList  = json_decode(json_encode($data_arr));
 
             if ($total_count > 0) {
@@ -848,7 +848,6 @@ class StockController extends Controller
 
         }
         $input = $request->all();
-
         $input['product_image'] = $new_name;
         $id = Product::create($input)->id;
 
@@ -1046,16 +1045,16 @@ class StockController extends Controller
 
               return response()->json(['stat' => true, 'message' => "Fetched all store ", 'totalStore'=>$totalCount ,'data' => $retailList]);
 
-             
-            
+
+
         } catch (Exception $e) {
-            
+
         }
 
-        
 
 
-          
+
+
 
        }
 
