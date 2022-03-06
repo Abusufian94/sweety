@@ -133,8 +133,7 @@ class RetailerController extends Controller
          $soldProducts = new SoldProduct();
          $soldProducts->invoice_id = $invoices->id;
          $soldProducts->product_id = $item['product_id'];
-         $productPrice = Product::findOrFail($item['product_id']);
-         $soldProducts->product_price =$productPrice->product_price;
+         $soldProducts->product_price =$item['product_price'];
          $soldProducts->retail_id = $retailUser->retail_id;
          $soldProducts->quantity = $item['quantity'];
          $soldProducts->unit = $item['unit'];

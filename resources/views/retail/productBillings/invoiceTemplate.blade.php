@@ -291,35 +291,34 @@ a {
                                                       @foreach ($sold_product as $key=>$product)
                                                             <tr>
                                                             <td>{{$key + 1}}.&nbsp;{{getProductName($product['product_id'])}}
-                                                            &nbsp;{{$product['quantity']}}({{$product['unit']}})
-                                                </td>
-                                                            
+                                                            &nbsp;{{$product['quantity']}}({{$product['unit']}})</td>
+                                                            <td class="alignright">Rs {{isset($product['product_price'])? number_format($product['product_price'], 2): 'N/A'}}</td>
                                                             <td class="alignright">Rs {{number_format($product['price'], 2)}}</td>
                                                         </tr>
                                                        @endforeach
                                                         <tr class="total">
                                                             <td class="alignright" width="80%">Total</td>
-                                                            <td class="alignright">Rs{{number_format($total_price, 2)}}</td>
+                                                            <td class="alignright">Rs {{number_format($total_price, 2)}}</td>
                                                         </tr>
-                                                       
+
                                                     </tbody></table>
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                              <tr class="total">
                                                            <td class="alignleft" width="80%"><i><h4>Thank you for shopping, please visit again</h4></i></td>
-                                                           
+
                                                         </tr>
                                                         <tr class="total">
                                                             <td class="alignleft" width="80%" style="color:grey;">
                                                            <i> Developed by :www.technoprosolution.com</i></td>
-                                                          
+
                                                         </tr>
-                                                    
+
                                         </tbody></table>
                                     </td>
                                 </tr>
-                               
-                               
+
+
                             </tbody></table>
                         </td>
                     </tr>

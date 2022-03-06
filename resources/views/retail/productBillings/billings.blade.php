@@ -281,7 +281,8 @@
                         product_id: value.id,
                         unit: value.unit,
                         quantity: 1,
-                        price: value.product_price,
+                        price: calculateprice,
+                        product_price: value.product_price,
                      }
 
                     html += `
@@ -341,7 +342,7 @@
          if(payloadIndex  == -1) {
                 payloads.push({
                         product_id: product_id,
-                        quantity: quantity,
+                        quantity: qty,
                         product_price: price,
                         price: result,
                         unit: mesurment
@@ -351,7 +352,7 @@
                 payloads.splice(payloadIndex,1);
                 payloads.push({
                         product_id: product_id,
-                        quantity: val,
+                        quantity: qty,
                         product_price: price,
                         price: result,
                         unit: mesurment,
