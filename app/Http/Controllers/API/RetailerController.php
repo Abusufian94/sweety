@@ -309,7 +309,8 @@ public function genaratePdf($retail_id,$invoice_id,$products) {
     $update = Invoice::find($invoice_id);
     $update->file =  $filename;
     $update->save();
-    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->save($path.$filename);
+    $paperSize=[0,0,297.00,420.00];
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->setPaper($paperSize, 'portrait')->save($path.$filename);
     return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
 }
