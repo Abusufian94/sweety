@@ -120,7 +120,11 @@
             let qty = $("#qty_"+product_id).val();
             let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
             var result = 0;
+            alert(val)
+            alert(unit)
+
             switch(mesurment){
+
                 case "KG":
                 result = (Number(val) * Number(price)) / 1000
                 break;
@@ -264,7 +268,7 @@
 
                 $.each(data, function(index, value) {
 
-                    let calculateprice  = (value.product_unit == 'gm' || value.product_unit == 'GM') ? ((1*1000) / value.product_price): (value.product_unit == 'kg' || value.product_unit == 'KG')?(1 * Number(value.product_price))/1000: value.product_price;
+                    let calculateprice  = (value.product_unit == 'gm' || value.product_unit == 'GM') ? ((1*1000) / value.product_price): (value.product_unit == 'kg' || value.product_unit == 'KG')?(Number(value.product_price)): value.product_price;
                     let quantity = (value.product_unit == 'gm') ? 100:1;
                     billings[index] = {
                         product_id : value.id,
@@ -318,10 +322,14 @@
         function unitCalculation(val,product_id,price,quantity) {
             let qty = $("#qty_"+product_id).val();
             let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
+            alert(mesurment);
+            alert(qty);
             let result;
-
+             result = (Number(qty) * 1000)/Number(price);
+             alert(result)
          if(mesurment == "GM"){
             result = (Number(qty) * 1000)/Number(price);
+
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
             $("#subtotal_"+product_id).val(result);
          } else {

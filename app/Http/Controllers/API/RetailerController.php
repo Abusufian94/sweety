@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Product;
-use App\Retailproduct;
+use App\RetailProduct;
 use App\RetailUser;
 use App\Invoice;
 use App\SoldProduct;
@@ -140,7 +140,7 @@ class RetailerController extends Controller
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
-         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
+         $retailProduct = RetailProduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
          $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
          $retailProduct->save();
          $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
@@ -317,7 +317,7 @@ public function genaratePdf($retail_id,$invoice_id,$products) {
 }
     public function checkQuantity(Request $request) {
        $productId = $request->product_id;
-       $retailProduct =  Retailproduct::where('product_id','=',$productId)->first();
+       $retailProduct =  RetailProduct::where('product_id','=',$productId)->first();
        if($retailProduct->quantity <= 0) {
          return response()->json(['stat'=>false,'message'=>"Quantity is not enough for create billing"]);
        }
