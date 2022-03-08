@@ -26,5 +26,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
+
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+ public function extendLayout()
+ {
+ 	 $role = $_COOKIE['loginUser'];
+        if($role==1)
+        {
+           $extend="admin";
+        }
+         if($role==2)
+        {
+           $extend="retailer";
+        }
+         if($role==3)
+        {
+           $extend="warehouse";
+        }
+       return $extend;
+ }
+
 }

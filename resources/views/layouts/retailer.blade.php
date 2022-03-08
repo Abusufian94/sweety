@@ -3,7 +3,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+	<title>Sweety</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('deskapp/vendors/images/logo.png')}}">
@@ -14,7 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 	<!-- Google Font -->
-	
+
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/core.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('deskapp/vendors/styles/icon-font.min.css')}}">
@@ -31,7 +31,7 @@
 <!-- 	<div class="pre-loader">
 		<div class="pre-loader-box">
 			<div class="loader-logo"><img src="{{ asset('deskapp/vendors/images/logo.gif')}}" alt=""></div>
-			
+
 		</div>
 	</div> -->
 
@@ -225,8 +225,8 @@
 						</ul>
 					</li>
 
-					
-					
+
+
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-house-11"></span><span class="mtext">PRODUCT</span>
@@ -240,13 +240,13 @@
 
 						</ul>
 
-						
+
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 							<span class="micon dw dw-calculator"></span><span class="mtext">BILLING</span>
 						</a>
-						
+
 						<ul class="submenu">
 							<li><a href="{{route('retail.product.billings')}}">  Billing</a></li>
 
@@ -255,11 +255,22 @@
 							<li><a href="{{route('retail.invoices')}}">Invoices</a></li>
 
 						</ul>
-						
+
 
 					</li>
-					
-				
+
+                    <li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle">
+							<span class="micon dw dw-calculator"></span><span class="mtext">Refund</span>
+						</a>
+
+						<ul class="submenu">
+							<li><a href="#">Refunds</a></li>
+
+						</ul>
+					</li>
+
+
 				</ul>
 				@yield('menu')
 			</div>
@@ -281,7 +292,7 @@
 			$(document).ready(function(){
 				var x = JSON.parse(localStorage.getItem("loginUser"));
 				$('.user-name').html(x.name);
-			
+
 
 		$(".logOut").click(function(){
 			localStorage.removeItem("loginUser");
@@ -324,7 +335,7 @@
 	<script src="{{ asset('deskapp/vendors/scripts/datatable-setting.js')}}"></script></body>
     <script src="{{asset('js/jquery.validate.min.js')}}"></script>
 
-	
+
 
 </body>
 </html>

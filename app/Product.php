@@ -21,7 +21,7 @@ class Product extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'product_unit', 'product_quantity','product_price','product_name','user_id','product_image',
+        'id', 'product_unit', 'product_quantity','product_price','product_name','bangla_name','user_id','product_image',
     ];
 
     public function users()

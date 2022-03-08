@@ -1,16 +1,18 @@
-@extends('layouts.retailer')
+@extends('layouts.'.$extend)
 @section('content')
     <div class="main-container">
         <div class="pd-ltr-20">
+        <h1>BILLING SECTION</h1>
+        <br>
+
          <input type="hidden" id= "unit"/>
             <div class="pd-20 card-box mb-30">
                 <form id="myform" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
                         <div class="col-sm-12 col-md-10">
                             <input type="text" onkeyup="getSuggestiveProduct(this.value)" id="search"
-                                class="typeahead form-control" placeholder="Search">
+                                class="typeahead form-control" placeholder="Search Sweets">
                         </div>
-
                     </div>
 
                     <div class="form-group row">
@@ -54,7 +56,7 @@
         }
     </style>
 
-
+      <script src="{{ asset('js/jquery-min.js') }}"></script>
     <script>
         async function getSuggestiveProduct(query) {
             var search = $("#search").val();
@@ -74,7 +76,12 @@
                 var html = ` <ul class="list-group" id="suggestion">`;
                 $.each(result.data.data, function(index, value) {
                     html +=
-                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'><img src ="${value.product_image_url}" height="30" width="30"><strong>${value.product_name}</strong><b>${value.quantity}</b></li></a>`
+                        `<a href="javascript:getproduct(${value.product_id})"><li class ='list'>
+                            <img src ="${value.product_image_url}" height="50" width="50">
+                            &nbsp;&nbsp;
+                            <strong>${value.product_name}</strong>
+                            [${value.quantity}]
+                            </li></a>`
                 });
                 html += `</ul>`;
                 $("#suggestion").html(html)
@@ -106,20 +113,32 @@
         var billings = [];
         var payloads = [];
         async function totalPrice(val, price, product_id,unit, quantity) {
-            let mesurment = !unit? $("#unit").val().toUpperCase(): unit.toUpperCase();
+            let qty = $("#qty_"+product_id).val();
+            let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
             var result = 0;
             switch(mesurment){
-                case "KG":
-                result = Number(val) * Number(price)
-                break;
+                // case "KG":
+                // result = (Number(price) / 1000) * val;
+                // break;
                 case "GM":
-                result = ((Number(val))/1000) * Number(price);
+                result = ((Number(price)) * qty)/1000;
                 break;
                 default:
-                result = Number(val) * Number(price)
+                result = Number(qty) * Number(price)
                 break;
             }
-            if(Number(val) < Number(quantity)) {
+            let totalCal = 0;
+            $(".subTotal").each(function(index,item){
+             let value = $(item).val();
+             totalCal = totalCal + Number(value);
+            });
+            $("#subtotal_"+product_id).val(result);
+            $("#grandtotal").text(totalCal.toFixed(2));
+            if(mesurment === "GM") {
+                quantity *= 1000;
+            }
+
+            if(Number(val) <= Number(quantity) && Number(val)>0) {
                 await checkQuantity(product_id);
             var path = "{{ url('api/v1/admin/suggestive-product') }}";
             const token = JSON.parse(localStorage.getItem('loginUser'));
@@ -138,9 +157,9 @@
                  product_image: response.data.data[0].product_image_url,
                 product_name: response.data.data[0].product_name,
                 product_price: response.data.data[0].product_price,
-                product_quantity: val,
+                product_quantity: qty,
                 total_price: result.toFixed(2),
-                product_unit: unit.toUpperCase(),
+                product_unit: mesurment,
             }
             index = billings.findIndex(el => el.product_id ===product_id);
             if(index == -1){
@@ -160,31 +179,38 @@
             if(payloadIndex  == -1) {
                 payloads.push({
                         product_id: response.data.data[0].product_id,
-                        quantity: val,
+                        quantity: qty,
+                        product_price: response.data.data[0].product_price,
                         price: result,
-                        unit: unit.toUpperCase()
+                        unit: mesurment
                      });
+
             } else  {
                 payloads.splice(payloadIndex,1);
                 payloads.push({
                         product_id: response.data.data[0].product_id,
-                        quantity: val,
+                        quantity: qty,
+                        product_price: response.data.data[0].product_price,
                         price: result,
-                        unit: unit.toUpperCase()
+                        unit: mesurment,
                      });
             }
             let grandTotal =  Number($("#total").val());
-            $("#grandtotal").html(`<i class="fa fa-inr">${grandTotal.toFixed(2)}</i>`);
+            $("#grandtotal").html(`${grandTotal.toFixed(2)}`);
             $("#total_" + product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
             $("#qty_"+product_id).removeClass('validator');
             $("#span_"+product_id).hide();
+            $("#bill").prop('disabled', false);
+
             } else {
-                $("#span_"+product_id).addClass('validator').text("Sorry no more product Available");
+                $("#span_"+product_id).addClass('validator').text("!! WRONG ENTRY !!");
                 $("#qty_"+product_id).addClass('validator');
                 $("#span_"+product_id).show();
                 $("#qty_"+product_id).blur(function() {
-                    $(this).focus()
+                    // $(this).focus()
+
                 });
+                $("#bill").prop('disabled', true);
             }
 
         }
@@ -237,7 +263,7 @@
 
                 $.each(data, function(index, value) {
 
-                    let calculateprice  = (value.product_unit == 'gm') ? ((value.product_price/1000) * 100): value.product_price;
+                    let calculateprice  = (value.product_unit == 'gm' || value.product_unit == 'GM') ? ((1000 / Number(value.product_price)) * 1): Number(value.product_price);
                     let quantity = (value.product_unit == 'gm') ? 100:1;
                     billings[index] = {
                         product_id : value.id,
@@ -248,27 +274,28 @@
                         total_price: calculateprice,
                         product_unit: value.product_unit.toUpperCase()
                     }
-                     sum = sum + Number(value.product_price);
+                     sum = sum + Number(calculateprice);
                      $("#total").val(sum);
                      payloads[index] = {
                         product_id: value.id,
                         unit: value.unit,
                         quantity: 1,
-                        price: value.product_price,
+                        price: calculateprice,
+                        product_price: value.product_price,
                      }
 
                     html += `
                 <tr id='prod_${value.product_id}' class="product">
                 <td>${index + 1}</td>
-                <td><img src="${value.product_image_url}" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 54.4px; height: 34px; margin: 9.4px 0px;"></td>
+                <td><img src="${value.product_image_url}" alt="14 Product Photography Tips to Make You Look Like a Pro" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb" data-noaft="1" style="width: 100px; height: 100px; margin: 9.4px 0px;"></td>
                 <td>${value.product_name}</td>
                 <td><i class="fa fa-inr">${value.product_price}</i> </td>
 
-                <td><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})"/><br/><small id='span_${value.product_id}'></small</td>
+                <td><input type="hidden" class='subTotal' id="subtotal_${value.product_id}" value="${value.product_price}"/><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})"/><br/><small id='span_${value.product_id}'></small</td>
 
-                <td><select onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''}>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} >GM</option>`:`<option>Pcs</option>`}</select></td>
-                <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice} </i></td>
-                <td><button type="button" class="btn btn-danger" id="bill" onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
+                <td><select id="quantitytype_${value.product_id}" onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price},${quantity},${value.quantity})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''} value='KG'>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} value ='GM' >GM</option>`:`<option>Pcs</option>`}</select></td>
+                <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice.toFixed(2)} </i></td>
+                <td><button type="button" class="btn btn-danger"  onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
                 </tr>
                 `;
 
@@ -277,9 +304,9 @@
                // $("#grandtotal").html(`<i class="fa fa-inr">${Number(total).toFixed(2)}</i>`)
                 html += `<tr>
                 <td colspan ='6'>Total</td>
-                <td colspan ='4' id ='grandtotal'><i class="fa fa-inr">${total.toFixed(2)}</i></td>
+                <td colspan ='4' ><i class="fa fa-inr" id ='grandtotal'>${total.toFixed(2)}</i></td>
                 <td></td>
-                </tr><tr><td colspan ='4'><button type="button" id = "bill" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
+                </tr><tr><td colspan ='4'><button type="button" id ="bill" class="btn btn-success" onclick ="saveBill()">Save<i class="fa-solid fa-floppy-disk"></i></button></td><td colspan ='6'></tr></tbody>
                 `;
 
             }
@@ -287,19 +314,73 @@
             $("#example1").html(html);
 
         }
-        function unitCalculation(val,unit,product_id,price) {
-         if(unit == "GM"){
-           let result = (100/1000) * Number(price);
-            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
-            $("#qty_"+ product_id).val(100);
+        function unitCalculation(val,product_id,price,quantity,originalQuantity) {
+            let qty = $("#qty_"+product_id).val();
+            let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
+            let result;
+            if(mesurment == "KG" && originalQuantity< qty )
+            {
+                $("#span_"+product_id).addClass('validator').text("!! WRONG ENTRY !!");
+                $("#qty_"+product_id).addClass('validator');
+                $("#span_"+product_id).show();
 
-         } else {
-            let result = 1 * Number(price);
-            console.log(result)
-            $("#qty_"+ product_id).val(1);
+                $("#bill").prop('disabled', true);
+            }
+            else{
+                $("#qty_"+product_id).removeClass('validator');
+                $("#span_"+product_id).hide();
+                $("#bill").prop('disabled', false);
+
+            }
+
+
+            console.log(originalQuantity);
+         if(mesurment == "GM"){
+         result =  ((Number(price)) * qty)/1000;
+            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+            $("#subtotal_"+product_id).val(result);
+         }
+         else if(mesurment == "KG"){
+            result = (Number(price)) * qty;
+            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+            $("#subtotal_"+product_id).val(result);
+         }
+         else {
+             result = (Number(qty) * Number(price)) / 1000;
+            $("#subtotal_"+product_id).val(result);
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
          }
-         $("#unit").val(unit);
+         //let subtotal = $("#subtotal_"+product_id).val();
+         let totalCal = 0;
+         $(".subTotal").each(function(index,item){
+             let value = $(item).val();
+             totalCal = totalCal + Number(value);
+         });
+         $("#total").val(totalCal.toFixed(2));
+         $("#grandtotal").text(totalCal.toFixed(2));
+         let payloadIndex = payloads.findIndex(el => el.product_id == product_id)
+
+         if(payloadIndex  == -1) {
+                payloads.push({
+                        product_id: product_id,
+                        quantity: qty,
+                        product_price: price,
+                        price: result,
+                        unit: mesurment
+                     });
+
+            } else  {
+                payloads.splice(payloadIndex,1);
+                payloads.push({
+                        product_id: product_id,
+                        quantity: qty,
+                        product_price: price,
+                        price: result,
+                        unit: mesurment,
+                     });
+            }
+
+
         }
         /** save bill details **/
         async function saveBill() {
