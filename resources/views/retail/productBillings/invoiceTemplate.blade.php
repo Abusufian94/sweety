@@ -1,4 +1,4 @@
-<!DOCTYPE>
+    <!DOCTYPE>
 <html>
 <head>
  <title>Invoice</title>
@@ -291,8 +291,8 @@ a {
                                                       @foreach ($sold_product as $key=>$product)
                                                             <tr>
                                                             <td>{{$key + 1}}.&nbsp;{{getProductName($product['product_id'])}}
-                                                            &nbsp;{{$product['quantity']}}({{$product['unit']}})</td>
-                                                            <td class="alignright">Rs {{isset($product['product_price'])? number_format($product['product_price'], 2): 'N/A'}}</td>
+                                                            &nbsp;{{$product['quantity']}}({{$product['unit']}}) &nbsp; &nbsp;&nbsp; &nbsp; {{isset($product['product_price'])? number_format($product['product_price'], 2): 'N/A'}}/{{$product['unit']}}</td>
+                                                          
                                                             <td class="alignright">Rs {{number_format($product['price'], 2)}}</td>
                                                         </tr>
                                                        @endforeach

@@ -13,7 +13,6 @@
                             <input type="text" onkeyup="getSuggestiveProduct(this.value)" id="search"
                                 class="typeahead form-control" placeholder="Search Sweets">
                         </div>
-
                     </div>
 
                     <div class="form-group row">
@@ -82,9 +81,6 @@
                             &nbsp;&nbsp;
                             <strong>${value.product_name}</strong>
                             [${value.quantity}]
-
-
-
                             </li></a>`
                 });
                 html += `</ul>`;
@@ -120,19 +116,15 @@
             let qty = $("#qty_"+product_id).val();
             let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
             var result = 0;
-            alert(val)
-            alert(unit)
-
             switch(mesurment){
-
-                case "KG":
-                result = (Number(val) * Number(price)) / 1000
-                break;
+                // case "KG":
+                // result = (Number(price) / 1000) * val;
+                // break;
                 case "GM":
-                result = (Number(val) * 1000) /  Number(price);
+                result = ((Number(price)) * qty)/1000;
                 break;
                 default:
-                result = Number(val) * Number(price)
+                result = Number(qty) * Number(price)
                 break;
             }
             let totalCal = 0;
@@ -142,8 +134,11 @@
             });
             $("#subtotal_"+product_id).val(result);
             $("#grandtotal").text(totalCal.toFixed(2));
+            if(mesurment === "GM") {
+                quantity *= 1000;
+            }
 
-            if(Number(val) < Number(quantity)) {
+            if(Number(val) <= Number(quantity) && Number(val)>0) {
                 await checkQuantity(product_id);
             var path = "{{ url('api/v1/admin/suggestive-product') }}";
             const token = JSON.parse(localStorage.getItem('loginUser'));
@@ -208,11 +203,11 @@
             $("#bill").prop('disabled', false);
 
             } else {
-                $("#span_"+product_id).addClass('validator').text("Sorry no more product Available");
+                $("#span_"+product_id).addClass('validator').text("!! WRONG ENTRY !!");
                 $("#qty_"+product_id).addClass('validator');
                 $("#span_"+product_id).show();
                 $("#qty_"+product_id).blur(function() {
-                    $(this).focus()
+                    // $(this).focus()
 
                 });
                 $("#bill").prop('disabled', true);
@@ -268,7 +263,7 @@
 
                 $.each(data, function(index, value) {
 
-                    let calculateprice  = (value.product_unit == 'gm' || value.product_unit == 'GM') ? ((1*1000) / value.product_price): (value.product_unit == 'kg' || value.product_unit == 'KG')?(Number(value.product_price)): value.product_price;
+                    let calculateprice  = (value.product_unit == 'gm' || value.product_unit == 'GM') ? ((1000 / Number(value.product_price)) * 1): Number(value.product_price);
                     let quantity = (value.product_unit == 'gm') ? 100:1;
                     billings[index] = {
                         product_id : value.id,
@@ -298,8 +293,8 @@
 
                 <td><input type="hidden" class='subTotal' id="subtotal_${value.product_id}" value="${value.product_price}"/><input type="number" id ="qty_${value.product_id}" value="${quantity}"  style="height: 34px" onkeyup="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})" onchange="totalPrice(this.value,${value.product_price},${value.product_id},'${value.product_unit}',${value.quantity})"/><br/><small id='span_${value.product_id}'></small</td>
 
-                <td><select id="quantitytype_${value.product_id}" onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price},${quantity})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''} value='KG'>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} value ='GM' >GM</option>`:`<option>Pcs</option>`}</select></td>
-                <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice} </i></td>
+                <td><select id="quantitytype_${value.product_id}" onchange = 'unitCalculation(this.value,${value.product_id},${value.product_price},${quantity},${value.quantity})'>${(value.product_unit == 'kg'||value.product_unit == 'gm')?`<option ${(value.product_unit == 'kg') ?'selected':''} value='KG'>KG</option><option ${(value.product_unit == 'gm') ?'selected':''} value ='GM' >GM</option>`:`<option>Pcs</option>`}</select></td>
+                <td id="total_${value.product_id}" class ="calculate" ><i class="fa fa-inr"> ${calculateprice.toFixed(2)} </i></td>
                 <td><button type="button" class="btn btn-danger"  onclick='remove(${value.product_id})'><i class="fa fa-trash"></i></button></td>
                 </tr>
                 `;
@@ -319,20 +314,38 @@
             $("#example1").html(html);
 
         }
-        function unitCalculation(val,product_id,price,quantity) {
+        function unitCalculation(val,product_id,price,quantity,originalQuantity) {
             let qty = $("#qty_"+product_id).val();
             let mesurment = $("#quantitytype_"+product_id).val().toUpperCase();
-            alert(mesurment);
-            alert(qty);
             let result;
-             result = (Number(qty) * 1000)/Number(price);
-             alert(result)
-         if(mesurment == "GM"){
-            result = (Number(qty) * 1000)/Number(price);
+            if(mesurment == "KG" && originalQuantity< qty )
+            {
+                $("#span_"+product_id).addClass('validator').text("!! WRONG ENTRY !!");
+                $("#qty_"+product_id).addClass('validator');
+                $("#span_"+product_id).show();
 
+                $("#bill").prop('disabled', true);
+            }
+            else{
+                $("#qty_"+product_id).removeClass('validator');
+                $("#span_"+product_id).hide();
+                $("#bill").prop('disabled', false);
+
+            }
+
+
+            console.log(originalQuantity);
+         if(mesurment == "GM"){
+         result =  ((Number(price)) * qty)/1000;
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
             $("#subtotal_"+product_id).val(result);
-         } else {
+         }
+         else if(mesurment == "KG"){
+            result = (Number(price)) * qty;
+            $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);
+            $("#subtotal_"+product_id).val(result);
+         }
+         else {
              result = (Number(qty) * Number(price)) / 1000;
             $("#subtotal_"+product_id).val(result);
             $("#total_"+product_id).html(`<i class="fa fa-inr"> ${result.toFixed(2)}</i>`);

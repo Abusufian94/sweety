@@ -145,6 +145,7 @@
                     },
                 },
                 destroy: true,
+
                 "columns": [{
                         "data": "id",
                         "orderable": false,
@@ -152,6 +153,7 @@
 
                             return i++;
                         },
+
 
 
 

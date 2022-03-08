@@ -140,7 +140,14 @@ class RetailerController extends Controller
          $soldProducts->unit = $item['unit'];
          $soldProducts->price = $item['price'];
          $soldProducts->save();
-         $retailProduct = RetailProduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
+
+         $retailProduct = Retailproduct::where('product_id','=',$item['product_id'])->where('retail_id',$retailUser->retail_id)->first();
+         $item['quantity']=number_format($item['quantity'],2,'.','');
+         if( $soldProducts->unit=="GM")
+         {
+            $item['quantity']=$item['quantity']/1000;
+         }
+
          $retailProduct->quantity = $retailProduct->quantity - $item['quantity'];
          $retailProduct->save();
          $url = $this->genaratePdf($retailUser->retail_id, $soldProducts->invoice_id, $product);
@@ -311,7 +318,7 @@ public function genaratePdf($retail_id,$invoice_id,$products) {
     $update->file =  $filename;
     $update->save();
     $paperSize=[0,0,297.00,420.00];
-    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->setPaper($paperSize, 'portrait')->save($path.$filename);
+    $pdf = PDF::loadView('retail.productBillings.invoiceTemplate', $data)->setPaper('A8', 'portrait')->save($path.$filename);
     return  asset('invoices/'.$filename);//response()->download($path.$filename, null, [], null);
 
 }
