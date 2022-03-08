@@ -1,14 +1,21 @@
-    <!DOCTYPE>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
- <title>Invoice</title>
-</head>
-<style>
+  <meta charset="utf-8">
+  <title>receipt</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+  <link rel="stylesheet" href="../paper.css">
+  <style>@page { size: 58mm 150mm }</style>
+ <style>
+    tr, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
 
 * {
     margin: 0;
     padding: 0;
-    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans- serif;
     box-sizing: border-box;
     font-size: 14px;
 }
@@ -27,7 +34,7 @@ body {
 
 /* Let's make sure all tables have defaults */
 table td {
-    vertical-align: top;
+/*   vertical-align: top;*/
 }
 
 /* -------------------------------------
@@ -266,23 +273,17 @@ a {
     }
 }
 </style>
-<table class="body-wrap">
-    <tbody><tr>
-        <td></td>
-        <td class="container" width="600">
-            <div class="content">
-                <table class="main" width="100%" cellpadding="0" cellspacing="0">
-                    <tbody><tr>
-                        <td class="content-wrap aligncenter">
-                            <table width="100%" cellpadding="0" cellspacing="0">
-                                <tbody>
-                                <tr>
-                                    <td class="content-block">
-                                        <table class="invoice">
-                                            <tbody><tr>
-                                                <td><h3>{{$Retailer_name}}</h3><br>
-                                                Address: {{$street_name}}<br>Invoice No :{{$Invoice_No}}<br>
-                                                Date : {{$created_at}} </td>
+</head>
+
+<body class="receipt">
+  <section class="sheet">
+
+   <table class="invoice">
+                                            <tbody><tr class="heaerTb">
+                                                <td>&nbsp;<b>{{strtoupper($Retailer_name)}}<b>
+                                                    {{$street_name}}
+                                                 {{$Invoice_No}}
+                                                Date:{{$created_at}} </td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -290,43 +291,21 @@ a {
                                                         <tbody>
                                                       @foreach ($sold_product as $key=>$product)
                                                             <tr>
-                                                            <td>{{$key + 1}}.&nbsp;{{getProductName($product['product_id'])}}
-                                                            &nbsp;{{$product['quantity']}}({{$product['unit']}}) &nbsp; &nbsp;&nbsp; &nbsp; {{isset($product['product_price'])? number_format($product['product_price'], 2): 'N/A'}}/{{$product['unit']}}</td>
+                                                            <td>ITEM {{$key + 1}}<small>&nbsp;{{getProductName($product['product_id'])}}|{{$product['quantity']}}({{$product['unit']}})|{{isset($product['product_price'])? number_format($product['product_price'], 2): 'N/A'}}/{{$product['unit']}}</small></td>
                                                           
-                                                            <td class="alignright">Rs {{number_format($product['price'], 2)}}</td>
+                                                            <td class="">{{number_format($product['price'], 2)}}/-</td>
                                                         </tr>
                                                        @endforeach
                                                         <tr class="total">
-                                                            <td class="alignright" width="80%">Total</td>
-                                                            <td class="alignright">Rs {{number_format($total_price, 2)}}</td>
+                                                            <td class="alignright" width="60%">Total:</td>
+                                                            <td class="">&nbsp;Rs.{{number_format($total_price, 2)}}/-</td>
                                                         </tr>
 
-                                                    </tbody></table>
+
+                                                    </tbody>
+                                                    <footer><small><i>Thank you for shopping. 
+                                                    <br>Please visit again</i></small></footer>
+                                                   </table>
                                                 </td>
                                             </tr>
-                                             <tr class="total">
-                                                           <td class="alignleft" width="80%"><i><h4>Thank you for shopping, please visit again</h4></i></td>
-
-                                                        </tr>
-                                                        <tr class="total">
-                                                            <td class="alignleft" width="80%" style="color:grey;">
-                                                           <i> Developed by :www.technoprosolution.com</i></td>
-
-                                                        </tr>
-
-                                        </tbody></table>
-                                    </td>
-                                </tr>
-
-
-                            </tbody></table>
-                        </td>
-                    </tr>
-                </tbody></table>
-              </div>
-        </td>
-        <td></td>
-    </tr>
-</tbody></table>
-
-</html>
+                                           </tbody></table></section></body></html>
